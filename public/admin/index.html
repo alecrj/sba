@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shallow Bay Advisors CMS</title>
 
+  <!-- Netlify Identity Widget -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
   <!-- Netlify CMS -->
   <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
 
@@ -87,38 +90,69 @@
   <div id="nc-root"></div>
 
   <script>
-    // Custom configuration and initialization
-    CMS.init({
-      config: {
-        load_config_file: true,
+    // Initialize Netlify Identity
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
 
-        // Custom collection icons
-        collections: [{
-          name: 'properties',
-          icon: 'building'
-        }, {
-          name: 'leads',
-          icon: 'users'
-        }, {
-          name: 'blog',
-          icon: 'file-text'
-        }, {
-          name: 'settings',
-          icon: 'settings'
-        }]
+    // Error handling and debugging
+    window.addEventListener('error', function(e) {
+      console.error('CMS Error:', e.error);
+
+      // Show a helpful error message instead of white screen
+      if (!document.getElementById('error-message')) {
+        const errorDiv = document.createElement('div');
+        errorDiv.id = 'error-message';
+        errorDiv.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: #f8f9fa;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          z-index: 9999;
+        `;
+        errorDiv.innerHTML = `
+          <div style="text-align: center; max-width: 500px; padding: 40px;">
+            <h1 style="color: #1E3A5F; margin-bottom: 20px;">CMS Loading Issue</h1>
+            <p style="color: #666; margin-bottom: 20px;">The CMS is having trouble loading. This usually means:</p>
+            <ul style="text-align: left; color: #666; margin-bottom: 30px;">
+              <li>Git Gateway needs to be enabled in Netlify</li>
+              <li>You need to be invited as a user</li>
+              <li>Your browser cache needs to be cleared</li>
+            </ul>
+            <button onclick="window.location.reload()" style="background: #1E3A5F; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer;">
+              Try Again
+            </button>
+          </div>
+        `;
+        document.body.appendChild(errorDiv);
       }
     });
 
-    // Add custom branding after CMS loads
-    CMS.registerEventListener({
-      name: 'preinit',
-      handler: () => {
-        console.log('Shallow Bay Advisors CMS initialized');
-      }
-    });
+    // Simple CMS initialization with better error handling
+    try {
+      CMS.init({
+        config: {
+          load_config_file: true
+        }
+      });
 
-    // Custom preview templates can be added here
-    // CMS.registerPreviewTemplate('properties', PropertyPreview);
+      console.log('Shallow Bay Advisors CMS loading...');
+
+    } catch (error) {
+      console.error('CMS initialization failed:', error);
+    }
   </script>
 </body>
 </html>

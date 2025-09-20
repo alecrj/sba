@@ -189,9 +189,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       }
     </style>
-    
+
+    <!-- Netlify Identity Widget for CMS Authentication -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
     <!-- Tailwind CSS is handled by Astro integration -->
-    
+
     <!-- GSAP for animations - temporarily disabled due to ScrollTrigger window property issue -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script> -->
@@ -382,6 +385,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       });
 
       console.log('Global language system loaded');
+
+      // Initialize Netlify Identity for CMS
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', user => {
+          if (!user) {
+            window.netlifyIdentity.on('login', () => {
+              document.location.href = '/admin/';
+            });
+          }
+        });
+      }
 
       // Mobile menu functionality
       function toggleMobileMenu() {
