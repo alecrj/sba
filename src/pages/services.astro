@@ -1,0 +1,351 @@
+---
+// Updated services page with improved mobile centering and better text sizing
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout 
+  title="Strategic Business Advisory Services | Shallow Bay Advisors"
+  description="Comprehensive business advisory services from strategic planning to implementation. Expert guidance to accelerate your growth."
+>
+  <Navigation />
+  
+  <main>
+    <!-- Hero Section - Matching Properties Page Structure -->
+    <section class="relative min-h-screen overflow-hidden flex items-start lg:items-center">
+      <!-- Video Background -->
+      <video 
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        class="absolute inset-0 w-full h-full object-cover"
+        poster="/warehouse-hero.jpg"
+      >
+        <source src="/videos/video2.mp4" type="video/mp4">
+        <!-- Fallback for browsers that don't support video -->
+      </video>
+      
+      <!-- Video Overlay -->
+      <div class="absolute inset-0 bg-black/60"></div>
+      
+      <!-- Gradient Overlay for extra depth -->
+      <div class="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-slate-800/60 to-slate-900/80"></div>
+      
+      <!-- Background Elements (subtle over video) -->
+      <div class="absolute inset-0">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-float-reverse"></div>
+      </div>
+      
+      <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 lg:pt-16 pb-8">
+        <div class="text-center">
+          <h1 class="text-3xl sm:text-4xl lg:text-6xl font-black text-white leading-tight tracking-tight mb-4 sm:mb-6 animate-on-scroll drop-shadow-2xl">
+            STRATEGIC BUSINESS
+            <span class="block bg-gradient-to-r from-primary-400 to-blue-400 bg-clip-text text-transparent">
+              ADVISORY SERVICES
+            </span>
+          </h1>
+          <p class="text-base sm:text-lg lg:text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed mb-2 animate-on-scroll drop-shadow-lg">
+            Complete industrial tenant concierge services across South Florida.
+          </p>
+          <p class="text-sm sm:text-base text-gray-300 leading-relaxed mb-6 sm:mb-8 max-w-3xl mx-auto animate-on-scroll drop-shadow-lg">
+            <span class="text-white font-semibold">Cost to tenant: $0. Landlords pay brokerage fees.</span>
+          </p>
+          
+          <!-- Service Quality Stats - Matching Properties Page -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 animate-on-scroll mt-8 sm:mt-12">
+            <div class="group text-center p-4 sm:p-6 lg:p-8 bg-white/10 backdrop-blur-xl rounded-2xl lg:rounded-3xl border border-white/20 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 hover:bg-white/15 relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500">
+              <div class="relative z-10">
+                <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-1 sm:mb-2 lg:mb-3 drop-shadow-lg group-hover:text-primary-200 transition-colors duration-300">
+                  100%
+                </div>
+                <div class="text-white/80 text-xs sm:text-sm font-semibold uppercase tracking-wider drop-shadow-sm">Free Service</div>
+              </div>
+            </div>
+            <div class="group text-center p-4 sm:p-6 lg:p-8 bg-white/10 backdrop-blur-xl rounded-2xl lg:rounded-3xl border border-white/20 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 hover:bg-white/15 relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500">
+              <div class="relative z-10">
+                <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-1 sm:mb-2 lg:mb-3 drop-shadow-lg group-hover:text-green-200 transition-colors duration-300">
+                  South FL
+                </div>
+                <div class="text-white/80 text-xs sm:text-sm font-semibold uppercase tracking-wider drop-shadow-sm">Coverage</div>
+              </div>
+            </div>
+            <div class="group text-center p-4 sm:p-6 lg:p-8 bg-white/10 backdrop-blur-xl rounded-2xl lg:rounded-3xl border border-white/20 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 hover:bg-white/15 relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500">
+              <div class="relative z-10">
+                <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-1 sm:mb-2 lg:mb-3 drop-shadow-lg group-hover:text-blue-200 transition-colors duration-300">
+                  Local
+                </div>
+                <div class="text-white/80 text-xs sm:text-sm font-semibold uppercase tracking-wider drop-shadow-sm">Expertise</div>
+              </div>
+            </div>
+            <div class="group text-center p-4 sm:p-6 lg:p-8 bg-white/10 backdrop-blur-xl rounded-2xl lg:rounded-3xl border border-white/20 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 hover:bg-white/15 relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500">
+              <div class="relative z-10">
+                <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-1 sm:mb-2 lg:mb-3 drop-shadow-lg group-hover:text-cyan-200 transition-colors duration-300">
+                  Fast
+                </div>
+                <div class="text-white/80 text-xs sm:text-sm font-semibold uppercase tracking-wider drop-shadow-sm">Turnarounds</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Services - Improved Text Sizing -->
+    <section class="py-24 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-16 animate-on-scroll">
+          <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+            Our 3-Step Process
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            From initial consultation to keys in hand, we provide comprehensive 
+            tenant representation to secure the perfect warehouse space for your business.
+          </p>
+        </div>
+
+        <!-- Services Grid - Improved Text Sizing -->
+        <div class="grid md:grid-cols-3 gap-8 lg:gap-12 stagger-children">
+          
+          <!-- Step 1: Discovery & Search -->
+          <div class="text-center p-6 sm:p-8 lg:p-10 rounded-3xl bg-white hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 border border-gray-100">
+            <div class="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-3xl flex items-center justify-center mx-auto mb-6 lg:mb-8 shadow-lg">
+              <span class="text-3xl font-black text-white">1</span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Discovery & Search</h3>
+            
+            <!-- Detailed breakdown - Improved Text Sizes -->
+            <div class="space-y-4 lg:space-y-5 text-left">
+              <div class="flex items-start space-x-3">
+                <div class="w-2 h-2 bg-primary-500 rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Needs Analysis</p>
+                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Power, clear height, loading, yard, office %, zoning, sprinkler, trailer parking requirements</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-3">
+                <div class="w-2 h-2 bg-primary-500 rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Market Access</p>
+                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">On-market + off-market outreach to owners and brokers for comprehensive coverage</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Evaluation & Negotiation -->
+          <div class="text-center p-6 sm:p-8 lg:p-10 rounded-3xl bg-white hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 border border-gray-100">
+            <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center mx-auto mb-6 lg:mb-8 shadow-lg">
+              <span class="text-3xl font-black text-white">2</span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Evaluation & Negotiation</h3>
+            
+            <!-- Detailed breakdown - Improved Text Sizes -->
+            <div class="space-y-4 lg:space-y-5 text-left">
+              <div class="flex items-start space-x-3">
+                <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Tours & Shortlist</p>
+                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Curated options, scheduled efficiently to maximize your time</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-3">
+                <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Financial Analysis</p>
+                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Market rent comps, OpEx/CAM review, escalation modeling</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-3">
+                <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Expert Negotiation</p>
+                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Base rent, free rent, tenant improvements, options, assignment/sublet terms</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Documentation & Move-In -->
+          <div class="text-center p-6 sm:p-8 lg:p-10 rounded-3xl bg-white hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 border border-gray-100">
+            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 lg:mb-8 shadow-lg">
+              <span class="text-3xl font-black text-white">3</span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Documentation & Move-In</h3>
+            
+            <!-- Detailed breakdown - Improved Text Sizes -->
+            <div class="space-y-4 lg:space-y-5 text-left">
+              <div class="flex items-start space-x-3">
+                <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Legal Support</p>
+                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">LOI strategy and lease term guidance (with your attorney) to protect your interests</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-3">
+                <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Move-In Coordination</p>
+                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Vendor intros for racking, security, utilities, and permits for smooth transition</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Property Types -->
+    <section class="py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-16 animate-on-scroll">
+          <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+            From 500 SF to 500,000 SF
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Any size, any stage: Start-ups, expansions, consolidations, relocations, renewals.
+          </p>
+        </div>
+
+        <!-- Property Types Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 stagger-children">
+          <div class="text-center p-8 bg-gray-50 rounded-3xl hover:bg-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+            <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+              </svg>
+            </div>
+            <div class="text-2xl font-bold text-primary-600 mb-2">Distribution</div>
+            <div class="text-gray-600 text-sm">High cube, dock high, multi-tenant facilities</div>
+          </div>
+          
+          <div class="text-center p-8 bg-gray-50 rounded-3xl hover:bg-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+            <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <div class="text-2xl font-bold text-green-600 mb-2">Manufacturing</div>
+            <div class="text-gray-600 text-sm">Production, assembly, processing facilities</div>
+          </div>
+          
+          <div class="text-center p-8 bg-gray-50 rounded-3xl hover:bg-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+              </svg>
+            </div>
+            <div class="text-2xl font-bold text-blue-600 mb-2">Flex/R&D</div>
+            <div class="text-gray-600 text-sm">Office/warehouse combinations</div>
+          </div>
+          
+          <div class="text-center p-8 bg-gray-50 rounded-3xl hover:bg-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+              </svg>
+            </div>
+            <div class="text-2xl font-bold text-purple-600 mb-2">Cold Storage</div>
+            <div class="text-gray-600 text-sm">Temperature-controlled facilities</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="relative py-24 bg-gradient-to-br from-primary-600 to-blue-700 overflow-hidden">
+      <!-- Background Image -->
+      <div class="absolute inset-0 z-0">
+        <img 
+          src="/images/uploads/trucks.png" 
+          alt="Industrial trucks" 
+          class="w-full h-full object-cover opacity-40"
+        />
+      </div>
+      
+      <!-- Background Overlay -->
+      <div class="absolute inset-0 z-10 bg-gradient-to-br from-primary-600/85 to-blue-700/85"></div>
+      
+      <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl sm:text-5xl font-bold text-white mb-6 animate-on-scroll">
+            Why Businesses Choose Our Process
+          </h2>
+          <p class="text-xl text-primary-100 max-w-3xl mx-auto animate-on-scroll">
+            Streamlined, efficient, and always in your best interests
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 stagger-children">
+          <div class="text-center p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-4">100% Free Service</h3>
+            <p class="text-primary-100 leading-relaxed">
+              Complete tenant concierge services at zero cost to you. Landlords pay all brokerage fees.
+            </p>
+          </div>
+
+          <div class="text-center p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-4">Efficient Process</h3>
+            <p class="text-primary-100 leading-relaxed">
+              Streamlined 3-step approach minimizes your time investment while maximizing results.
+            </p>
+          </div>
+
+          <div class="text-center p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-4">Expert Advocacy</h3>
+            <p class="text-primary-100 leading-relaxed">
+              Industrial-only focus with deep market knowledge and strong negotiation skills.
+            </p>
+          </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="text-center mt-16 animate-on-scroll">
+          <div class="inline-flex flex-col sm:flex-row gap-4">
+            <button 
+              onclick="openContactModal('services-cta')"
+              class="bg-white text-primary-600 px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-gray-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 transform"
+            >
+              Start Your Search Today
+            </button>
+            <a 
+              href="tel:954-937-9667" 
+              class="bg-white/10 backdrop-blur-sm text-white border-2 border-white/20 px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+            >
+              Call (954) 937-9667
+            </a>
+          </div>
+          <p class="text-primary-200 text-sm mt-4">
+            Free consultation • No obligation • Fast response
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,88 @@
+{
+  "$ref": "#/definitions/warehouses",
+  "definitions": {
+    "warehouses": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number"
+        },
+        "location": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "county": {
+          "type": "string",
+          "enum": [
+            "Miami-Dade",
+            "Palm Beach",
+            "Broward"
+          ]
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "availability": {
+          "type": "string",
+          "enum": [
+            "available",
+            "leased",
+            "pending"
+          ],
+          "default": "available"
+        },
+        "featured": {
+          "type": "boolean",
+          "default": false
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "metaTitle": {
+          "type": "string"
+        },
+        "metaDescription": {
+          "type": "string"
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "slug",
+        "price",
+        "size",
+        "location",
+        "address",
+        "description",
+        "createdAt"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

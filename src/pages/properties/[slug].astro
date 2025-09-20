@@ -1,0 +1,352 @@
+---
+// Dynamic Property Detail Page
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const warehouses = await getCollection('warehouses');
+  return warehouses.map((warehouse) => ({
+    params: { slug: warehouse.data.slug },
+    props: { warehouse },
+  }));
+}
+
+const { warehouse } = Astro.props;
+const { data } = warehouse;
+
+// Related properties (same county)
+const allWarehouses = await getCollection('warehouses');
+const relatedProperties = allWarehouses
+  .filter(w => w.data.county === data.county && w.data.slug !== data.slug && w.data.availability === 'available')
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title={`${data.title} | Warehouse for Lease | Shallow Bay Advisors`}
+  description={`${data.description} - ${data.size?.toLocaleString()} SF warehouse in ${data.location}. ${data.price} per SF. Available for immediate lease.`}
+  image={data.images?.[0]}
+>
+  <Navigation />
+
+  <main class="pt-20">
+    <!-- Property Hero Section -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+
+          <!-- Breadcrumb -->
+          <nav class="mb-8 text-sm">
+            <a href="/" class="text-sba-gray hover:text-sba-navy">Home</a>
+            <span class="text-sba-gray mx-2">></span>
+            <a href="/properties" class="text-sba-gray hover:text-sba-navy">Properties</a>
+            <span class="text-sba-gray mx-2">></span>
+            <span class="text-sba-navy font-semibold">{data.title}</span>
+          </nav>
+
+          <!-- Property Header -->
+          <div class="grid lg:grid-cols-2 gap-12 mb-16">
+
+            <!-- Property Images -->
+            <div class="space-y-4">
+              {data.images && data.images[0] && (
+                <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-neutral-100">
+                  <img
+                    src={data.images[0]}
+                    alt={data.title}
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
+              {data.images && data.images.length > 1 && (
+                <div class="grid grid-cols-3 gap-4">
+                  {data.images.slice(1, 4).map((image, index) => (
+                    <div class="aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100">
+                      <img
+                        src={image}
+                        alt={`${data.title} - Image ${index + 2}`}
+                        class="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <!-- Property Info -->
+            <div class="space-y-8">
+
+              <!-- Status Badge -->
+              <div>
+                <span class="bg-accent-green text-white px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-wider">
+                  Available Now
+                </span>
+              </div>
+
+              <!-- Title & Location -->
+              <div>
+                <h1 class="text-4xl md:text-5xl font-black text-sba-navy leading-tight mb-4">
+                  {data.title}
+                </h1>
+                <p class="text-xl text-sba-gray-dark font-mono uppercase tracking-wider">
+                  {data.address}
+                </p>
+              </div>
+
+              <!-- Key Stats -->
+              <div class="grid grid-cols-2 gap-6">
+                <div class="bg-sba-gray-light/20 rounded-2xl p-6 text-center">
+                  <div class="text-3xl font-black text-sba-navy mb-2">{data.price}</div>
+                  <div class="text-sm text-sba-gray uppercase tracking-wider font-semibold">Per SF/Year</div>
+                </div>
+                <div class="bg-sba-gray-light/20 rounded-2xl p-6 text-center">
+                  <div class="text-3xl font-black text-sba-navy mb-2">{data.size?.toLocaleString()}</div>
+                  <div class="text-sm text-sba-gray uppercase tracking-wider font-semibold">Square Feet</div>
+                </div>
+              </div>
+
+              <!-- CTAs -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <a href="/book" class="btn-primary rounded-xl py-4 text-center font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                  BOOK A TOUR
+                </a>
+                <a href="/contact" class="btn-secondary rounded-xl py-4 text-center font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                  GET INFO
+                </a>
+              </div>
+
+              <!-- Contact -->
+              <div class="border-t border-sba-gray-light pt-6">
+                <p class="text-sba-gray-dark mb-4">Need more information?</p>
+                <a href="/contact" class="text-sba-navy font-semibold hover:text-sba-navy-dark transition-colors duration-300">
+                  Contact our leasing team →
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Property Details -->
+    <section class="py-16 bg-neutral-50">
+      <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+
+          <div class="grid lg:grid-cols-3 gap-12">
+
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-12">
+
+              <!-- Description -->
+              <div>
+                <h2 class="text-3xl font-black text-sba-navy mb-6">Property Description</h2>
+                <div class="prose prose-lg max-w-none">
+                  <p class="text-sba-gray-dark leading-relaxed text-lg">
+                    {data.description}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Features -->
+              {data.features && data.features.length > 0 && (
+                <div>
+                  <h2 class="text-3xl font-black text-sba-navy mb-6">Property Features</h2>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {data.features.map(feature => (
+                      <div class="flex items-center space-x-3">
+                        <div class="w-2 h-2 bg-sba-navy rounded-full flex-shrink-0"></div>
+                        <span class="text-sba-gray-dark font-medium">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <!-- Location Details -->
+              <div>
+                <h2 class="text-3xl font-black text-sba-navy mb-6">Location Details</h2>
+                <div class="bg-white rounded-2xl p-8 border border-sba-gray-light">
+                  <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                      <h3 class="font-bold text-sba-navy mb-4">Address</h3>
+                      <p class="text-sba-gray-dark">{data.address}</p>
+                    </div>
+                    <div>
+                      <h3 class="font-bold text-sba-navy mb-4">County</h3>
+                      <p class="text-sba-gray-dark">{data.county}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-8">
+
+              <!-- Quick Facts -->
+              <div class="bg-white rounded-2xl p-8 border border-sba-gray-light">
+                <h3 class="text-xl font-black text-sba-navy mb-6">Quick Facts</h3>
+                <div class="space-y-4">
+                  <div class="flex justify-between items-center">
+                    <span class="text-sba-gray-dark">Size</span>
+                    <span class="font-semibold text-sba-navy">{data.size?.toLocaleString()} SF</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sba-gray-dark">Rate</span>
+                    <span class="font-semibold text-sba-navy">{data.price}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sba-gray-dark">Status</span>
+                    <span class="font-semibold text-accent-green">Available</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sba-gray-dark">Location</span>
+                    <span class="font-semibold text-sba-navy">{data.location}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contact Card -->
+              <div class="bg-sba-navy rounded-2xl p-8 text-white">
+                <h3 class="text-xl font-black mb-6">Interested in This Property?</h3>
+                <p class="text-sba-gray-light mb-6">
+                  Contact our commercial real estate experts to schedule a tour or get more information.
+                </p>
+                <div class="space-y-4">
+                  <a href="/book" class="block bg-white text-sba-navy text-center py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300">
+                    Schedule Tour
+                  </a>
+                  <a href="/contact" class="block border border-white text-center py-3 rounded-xl font-semibold hover:bg-white hover:text-sba-navy transition-all duration-300">
+                    Get Information
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Properties -->
+    {relatedProperties.length > 0 && (
+      <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+          <div class="max-w-6xl mx-auto">
+
+            <div class="text-center mb-12">
+              <h2 class="text-4xl font-black text-sba-navy mb-4">
+                Similar Properties
+              </h2>
+              <p class="text-xl text-sba-gray-dark">
+                Other available properties in {data.county}
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {relatedProperties.map((property) => (
+                <div class="card group overflow-hidden">
+                  {property.data.images && property.data.images[0] && (
+                    <div class="aspect-[4/3] overflow-hidden bg-neutral-100">
+                      <img
+                        src={property.data.images[0]}
+                        alt={property.data.title}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+                  <div class="p-6">
+                    <h3 class="text-xl font-black text-sba-navy mb-2 group-hover:text-sba-navy-dark transition-colors duration-200">
+                      {property.data.title}
+                    </h3>
+                    <p class="text-sba-gray-dark font-mono text-sm uppercase tracking-wider mb-4">
+                      {property.data.location}
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                      <div class="text-center">
+                        <div class="text-lg font-black text-sba-navy">{property.data.price}</div>
+                        <div class="text-xs text-sba-gray">Per SF/Year</div>
+                      </div>
+                      <div class="text-center">
+                        <div class="text-lg font-black text-sba-navy">{property.data.size?.toLocaleString()}</div>
+                        <div class="text-xs text-sba-gray">Square Feet</div>
+                      </div>
+                    </div>
+                    <a
+                      href={`/properties/${property.data.slug}`}
+                      class="btn-primary rounded-xl py-3 text-center text-sm hover:shadow-lg transition-all duration-200 block"
+                    >
+                      VIEW DETAILS
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-sba-navy text-white">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-4xl md:text-5xl font-black leading-tight mb-6">
+          Ready to Move Forward?
+        </h2>
+        <p class="text-xl text-sba-gray-light max-w-2xl mx-auto mb-12">
+          Schedule a tour of this property or speak with our leasing experts about your requirements.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <a href="/book" class="bg-white text-sba-navy px-12 py-5 rounded-2xl text-lg font-semibold hover:shadow-2xl transform hover:scale-105 transition-all duration-500">
+            SCHEDULE TOUR
+          </a>
+          <div class="flex items-center gap-4 text-sba-gray">
+            <span class="w-px h-8 bg-sba-gray"></span>
+            <span class="text-sm uppercase tracking-wider">OR</span>
+            <span class="w-px h-8 bg-sba-gray"></span>
+          </div>
+          <a href="/contact" class="text-white font-semibold text-lg hover:text-sba-gray-light transition-colors duration-300">
+            Contact Our Team
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* Prose styling for description */
+  .prose p {
+    margin-bottom: 1.5rem;
+  }
+
+  /* Image gallery hover effects */
+  .image-gallery img:hover {
+    transform: scale(1.05);
+  }
+
+  /* Smooth scroll for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+
+<script>
+  // Image gallery functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const galleryImages = document.querySelectorAll('.image-gallery img');
+
+    galleryImages.forEach(img => {
+      img.addEventListener('click', function() {
+        // Simple image expansion - in production you'd use a proper lightbox
+        console.log('Image clicked:', this.src);
+      });
+    });
+  });
+</script>

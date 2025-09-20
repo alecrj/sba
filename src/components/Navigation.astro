@@ -1,0 +1,228 @@
+---
+// 2025 SBA Navigation - Professional Advisory Firm
+const currentPath = Astro.url.pathname;
+
+// Helper function to check if current page is active
+const isActive = (path: string) => {
+  if (path === '/' && currentPath === '/') return true;
+  if (path !== '/' && currentPath.startsWith(path)) return true;
+  return false;
+};
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-b border-sba-gray-light shadow-sm">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-32 md:h-36 lg:h-40 xl:h-44">
+
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a href="/" class="flex items-center group">
+          <img
+            src="/images/uploads/sbalogo.png"
+            alt="Shallow Bay Advisors"
+            class="h-28 md:h-32 lg:h-36 xl:h-40 w-auto group-hover:scale-105 transition-transform duration-300"
+          />
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden lg:flex items-center space-x-12">
+        <a
+          href="/"
+          class={`text-sm font-semibold uppercase tracking-wider transition-all duration-200 hover:text-sba-navy ${
+            isActive('/')
+              ? 'text-sba-navy border-b-2 border-sba-navy'
+              : 'text-sba-gray-dark hover:text-sba-navy'
+          }`}
+        >
+          Home
+        </a>
+        <a
+          href="/properties"
+          class={`text-sm font-semibold uppercase tracking-wider transition-all duration-200 hover:text-sba-navy ${
+            isActive('/properties')
+              ? 'text-sba-navy border-b-2 border-sba-navy'
+              : 'text-sba-gray-dark hover:text-sba-navy'
+          }`}
+        >
+          Properties
+        </a>
+        <a
+          href="/book"
+          class={`text-sm font-semibold uppercase tracking-wider transition-all duration-200 hover:text-sba-navy ${
+            isActive('/book')
+              ? 'text-sba-navy border-b-2 border-sba-navy'
+              : 'text-sba-gray-dark hover:text-sba-navy'
+          }`}
+        >
+          Schedule Tour
+        </a>
+        <a
+          href="/about"
+          class={`text-sm font-semibold uppercase tracking-wider transition-all duration-200 hover:text-sba-navy ${
+            isActive('/about')
+              ? 'text-sba-navy border-b-2 border-sba-navy'
+              : 'text-sba-gray-dark hover:text-sba-navy'
+          }`}
+        >
+          About
+        </a>
+        <a
+          href="/contact"
+          class={`text-sm font-semibold uppercase tracking-wider transition-all duration-200 hover:text-sba-navy ${
+            isActive('/contact')
+              ? 'text-sba-navy border-b-2 border-sba-navy'
+              : 'text-sba-gray-dark hover:text-sba-navy'
+          }`}
+        >
+          Contact
+        </a>
+      </div>
+
+      <!-- Desktop CTA -->
+      <div class="hidden lg:block">
+        <a
+          href="/contact"
+          class="btn-primary rounded-xl px-6 py-3 text-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+        >
+          GET STARTED
+        </a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="lg:hidden">
+        <button
+          type="button"
+          id="mobile-menu-button"
+          class="text-sba-navy hover:text-sba-navy-dark focus:outline-none transition-colors duration-200 p-2"
+          aria-label="Toggle menu"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div id="mobile-menu" class="hidden lg:hidden">
+      <div class="pb-6 pt-2 space-y-1">
+        <a
+          href="/"
+          class={`block px-4 py-4 text-base font-semibold uppercase tracking-wider transition-all duration-200 rounded-xl ${
+            isActive('/')
+              ? 'text-sba-navy bg-sba-gray-light'
+              : 'text-sba-gray-dark hover:text-sba-navy hover:bg-sba-gray-light/50'
+          }`}
+        >
+          Home
+        </a>
+        <a
+          href="/properties"
+          class={`block px-4 py-4 text-base font-semibold uppercase tracking-wider transition-all duration-200 rounded-xl ${
+            isActive('/properties')
+              ? 'text-sba-navy bg-sba-gray-light'
+              : 'text-sba-gray-dark hover:text-sba-navy hover:bg-sba-gray-light/50'
+          }`}
+        >
+          Properties
+        </a>
+        <a
+          href="/book"
+          class={`block px-4 py-4 text-base font-semibold uppercase tracking-wider transition-all duration-200 rounded-xl ${
+            isActive('/book')
+              ? 'text-sba-navy bg-sba-gray-light'
+              : 'text-sba-gray-dark hover:text-sba-navy hover:bg-sba-gray-light/50'
+          }`}
+        >
+          Schedule Tour
+        </a>
+        <a
+          href="/about"
+          class={`block px-4 py-4 text-base font-semibold uppercase tracking-wider transition-all duration-200 rounded-xl ${
+            isActive('/about')
+              ? 'text-sba-navy bg-sba-gray-light'
+              : 'text-sba-gray-dark hover:text-sba-navy hover:bg-sba-gray-light/50'
+          }`}
+        >
+          About
+        </a>
+        <a
+          href="/contact"
+          class={`block px-4 py-4 text-base font-semibold uppercase tracking-wider transition-all duration-200 rounded-xl ${
+            isActive('/contact')
+              ? 'text-sba-navy bg-sba-gray-light'
+              : 'text-sba-gray-dark hover:text-sba-navy hover:bg-sba-gray-light/50'
+          }`}
+        >
+          Contact
+        </a>
+
+        <!-- Mobile CTA -->
+        <div class="pt-4">
+          <a
+            href="/contact"
+            class="btn-primary rounded-xl w-full py-4 text-center text-sm hover:shadow-lg transition-all duration-300 block"
+          >
+            GET STARTED
+          </a>
+        </div>
+
+        <!-- Mobile Phone -->
+        <div class="pt-2">
+          <a
+            href="tel:***-***-****"
+            class="btn-ghost rounded-xl w-full py-4 text-center text-sm hover:shadow-lg transition-all duration-300 block"
+          >
+            Call (***) ***-****
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+
+        // Toggle icon
+        const icon = mobileMenuButton.querySelector('svg path');
+        if (icon) {
+          if (mobileMenu.classList.contains('hidden')) {
+            icon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+          } else {
+            icon.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+          }
+        }
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!mobileMenuButton.contains(event.target as Node) && !mobileMenu.contains(event.target as Node)) {
+          mobileMenu.classList.add('hidden');
+          const icon = mobileMenuButton.querySelector('svg path');
+          if (icon) {
+            icon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+          }
+        }
+      });
+
+      // Close mobile menu on resize to desktop
+      window.addEventListener('resize', function() {
+        if (window.innerWidth >= 1024) {
+          mobileMenu.classList.add('hidden');
+          const icon = mobileMenuButton.querySelector('svg path');
+          if (icon) {
+            icon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+          }
+        }
+      });
+    }
+  });
+</script>

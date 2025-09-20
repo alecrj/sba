@@ -1,0 +1,522 @@
+---
+// Updated contact page with perfectly centered hero content for mobile
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+// Define types for warehouse options
+interface WarehouseOption {
+  title: string;
+  slug: string;
+}
+
+// Get warehouses for the form dropdown
+let allWarehouses: WarehouseOption[] = [];
+try {
+  const warehouseCollection = await getCollection('warehouses');
+  allWarehouses = warehouseCollection
+    .filter(w => w.data.availability === 'available')
+    .map(w => ({ title: w.data.title, slug: w.data.slug }));
+} catch (error) {
+  console.log('Could not load warehouses for dropdown');
+}
+
+// Form dropdown options (matching ContactModal exactly)
+const counties = [
+  'Miami-Dade County',
+  'Broward County', 
+  'Palm Beach County'
+];
+
+const priceRanges = [
+  '$1,000-3,000/month',
+  '$3,000-5,000/month',
+  '$5,000-10,000/month',
+  '$10,000-20,000/month',
+  '$20,000-50,000/month',
+  '$50,000+/month',
+  'Negotiable'
+];
+
+const sqftRanges = [
+  '500-2,000 SF',
+  '2,000-5,000 SF',
+  '5,000-10,000 SF',
+  '10,000-25,000 SF',
+  '25,000-50,000 SF',
+  '50,000-100,000 SF',
+  '100,000+ SF'
+];
+---
+
+<BaseLayout 
+  title="Contact Shallow Bay Advisors | Commercial Real Estate Experts"
+  description="Find your perfect warehouse space in South Florida. Free tenant representation across Miami-Dade, Broward & Palm Beach counties."
+>
+  <Navigation />
+  
+  <main>
+    <!-- Hero Section - Matching Services Page Structure for Mobile Headlines -->
+    <section class="relative min-h-screen overflow-hidden flex items-start lg:items-center">
+      <!-- Background Elements -->
+      <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-float-reverse"></div>
+        <div class="absolute inset-0 bg-pattern-dots opacity-10"></div>
+      </div>
+      
+      <!-- Hero Content Layout -->
+      <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-32 lg:pt-16 pb-4 sm:pb-8">
+        <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          
+          <!-- Left Column: Hero Content -->
+          <div class="text-center lg:text-left">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-white leading-tight tracking-tight mb-3 sm:mb-6 drop-shadow-2xl">
+              FIND YOUR PERFECT
+              <span class="block bg-gradient-to-r from-sba-navy to-accent-blue bg-clip-text text-transparent">
+                WAREHOUSE SPACE
+              </span>
+            </h1>
+            
+            <p class="text-base sm:text-lg lg:text-xl text-gray-200 max-w-4xl mx-auto lg:mx-0 leading-snug mb-1.5 sm:mb-2 drop-shadow-lg">
+              Free tenant concierge service across Miami-Dade, Broward & Palm Beach counties
+            </p>
+            
+            <p class="text-sm sm:text-base text-gray-300 leading-snug mb-2 sm:mb-4 max-w-3xl mx-auto lg:mx-0 animate-on-scroll drop-shadow-lg">
+              Our fee is paid by landlords.
+              From 500 SF to 500,000 SF—we'll find qualified options and negotiate on your behalf.
+            </p>
+
+            <!-- Value Props -->
+            <div class="space-y-1 sm:space-y-2 mb-3 sm:mb-6">
+              <div class="flex items-start justify-center lg:justify-start space-x-3" style="align-items: flex-start !important;">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" style="margin-top: 0.25rem !important; flex-shrink: 0 !important;" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-white font-medium text-sm sm:text-base leading-snug">100% free service—no retainer, no obligation</span>
+              </div>
+              <div class="flex items-start justify-center lg:justify-start space-x-3" style="align-items: flex-start !important;">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" style="margin-top: 0.25rem !important; flex-shrink: 0 !important;" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-white font-medium text-sm sm:text-base leading-snug">Deep market knowledge and proven landlord relationships</span>
+              </div>
+              <div class="flex items-start justify-center lg:justify-start space-x-3" style="align-items: flex-start !important;">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" style="margin-top: 0.25rem !important; flex-shrink: 0 !important;" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-white font-medium text-sm sm:text-base leading-snug">From 500 SF to 500,000 SF warehouses across South Florida</span>
+              </div>
+            </div>
+
+            <!-- CTAs -->
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+              <button 
+                onclick="openContactModal('hero')"
+                class="bg-white text-sba-navy px-6 py-3 sm:px-8 sm:py-4 rounded-2xl text-base sm:text-lg font-bold hover:bg-gray-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 transform"
+              >
+                Work With Us
+              </button>
+              <a 
+                href="tel:954-937-9667" 
+                class="bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 px-6 py-3 sm:px-8 sm:py-4 rounded-2xl text-base sm:text-lg font-bold hover:bg-white/20 hover:border-white/50 transition-all duration-300 text-center"
+              >
+                Call (954) 937-9667
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column: Intake Form -->
+          <div class="flex justify-center lg:justify-end">
+            <div class="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 p-4 lg:p-5 xl:p-6 w-full max-w-md">
+              <div class="text-center mb-3 lg:mb-4 xl:mb-5">
+                <h2 class="text-lg lg:text-xl xl:text-xl font-bold text-white mb-1 lg:mb-2">Tell Us What You Need</h2>
+                <p class="text-white/80 text-xs lg:text-sm xl:text-sm">We'll get back to you within 24 hours with qualified options.</p>
+              </div>
+              
+              <form 
+                id="contact-hero-form"
+                name="warehouse-inquiry-hero" 
+                class="space-y-3"
+              >
+                <input type="hidden" name="source" value="contact-page" />
+                <input type="hidden" name="warehouse_id" id="contact-warehouse-id" />
+                
+                <!-- Name & Email Row -->
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-white/90 text-xs xl:text-sm font-medium mb-1 xl:mb-2">Name *</label>
+                    <input 
+                      type="text" 
+                      name="name" 
+                      required
+                      class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-sba-navy focus:border-transparent"
+                      placeholder="Your name"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-white/90 text-xs xl:text-sm font-medium mb-1 xl:mb-2">Email *</label>
+                    <input 
+                      type="email" 
+                      name="email" 
+                      required
+                      class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-sba-navy focus:border-transparent"
+                      placeholder="Your email"
+                    />
+                  </div>
+                </div>
+
+                <!-- Phone & Company Row -->
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-white/90 text-xs xl:text-sm font-medium mb-1 xl:mb-2">Phone</label>
+                    <input 
+                      type="tel" 
+                      name="phone"
+                      class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-sba-navy focus:border-transparent"
+                      placeholder="Your phone"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-white/90 text-xs xl:text-sm font-medium mb-1 xl:mb-2">Company</label>
+                    <input 
+                      type="text" 
+                      name="company"
+                      class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-sba-navy focus:border-transparent"
+                      placeholder="Company name"
+                    />
+                  </div>
+                </div>
+
+                <!-- Property Interest & County Row -->
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-white/90 text-xs xl:text-sm font-medium mb-1 xl:mb-2">Property Interest *</label>
+                    <select 
+                      id="contact-property-select"
+                      name="property_interest" 
+                      required
+                      class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sba-navy focus:border-transparent [&>option]:bg-gray-800 [&>option]:text-white"
+                    >
+                      <option value="" class="bg-gray-800 text-white">Select property...</option>
+                      <option value="any" class="bg-gray-800 text-white">Any Available Property</option>
+                      {allWarehouses.map(warehouse => (
+                        <option value={warehouse.title} data-warehouse-id={warehouse.slug} class="bg-gray-800 text-white">
+                          {warehouse.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-white/90 text-xs xl:text-sm font-medium mb-1 xl:mb-2">County</label>
+                    <select 
+                      name="county"
+                      class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sba-navy focus:border-transparent [&>option]:bg-gray-800 [&>option]:text-white"
+                    >
+                      <option value="" class="bg-gray-800 text-white">Select county...</option>
+                      <option value="any" class="bg-gray-800 text-white">Any County</option>
+                      {counties.map(county => (
+                        <option value={county} class="bg-gray-800 text-white">{county}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Size & Price Range Row -->
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-white/90 text-xs xl:text-sm font-medium mb-1 xl:mb-2">Size (SF)</label>
+                    <select 
+                      name="size_needed"
+                      class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sba-navy focus:border-transparent [&>option]:bg-gray-800 [&>option]:text-white"
+                    >
+                      <option value="" class="bg-gray-800 text-white">Select size...</option>
+                      {sqftRanges.map(range => (
+                        <option value={range} class="bg-gray-800 text-white">{range}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-white/90 text-xs xl:text-sm font-medium mb-1 xl:mb-2">Monthly Budget</label>
+                    <select 
+                      name="price_range"
+                      class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sba-navy focus:border-transparent [&>option]:bg-gray-800 [&>option]:text-white"
+                    >
+                      <option value="" class="bg-gray-800 text-white">Select monthly budget...</option>
+                      {priceRanges.map(range => (
+                        <option value={range} class="bg-gray-800 text-white">{range}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Requirements -->
+                <div>
+                  <label class="block text-white/90 text-xs xl:text-sm font-medium mb-1 xl:mb-2">Tell us more about your needs</label>
+                  <textarea 
+                    name="message"
+                    rows="3"
+                    class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-sba-navy focus:border-transparent resize-none"
+                    placeholder="Loading docks, clear height, special features, timeline, budget, location preferences..."
+                  ></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button 
+                  type="submit"
+                  class="w-full bg-white text-sba-navy px-6 py-3 rounded-lg text-sm xl:text-base font-bold hover:bg-gray-50 transition-colors duration-300"
+                >
+                  Get Matched With Warehouses
+                </button>
+                
+                <p class="text-xs text-white/60 text-center">
+                  Free service • Landlords pay our fees • No obligation
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Information Section -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">Multiple Ways to Connect</h2>
+          <p class="text-lg text-gray-600">Choose the communication method that works best for you</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- Phone -->
+          <a 
+            href="tel:954-937-9667"
+            class="group text-center p-6 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-pointer"
+          >
+            <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition-colors duration-200">
+              <svg class="w-8 h-8 text-green-600 group-hover:text-green-700 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-green-700 transition-colors duration-200">Call Direct</h3>
+            <div class="text-green-600 hover:text-green-700 font-medium text-lg group-hover:text-green-800 transition-colors duration-200">
+              (954) 937-9667
+            </div>
+            <p class="text-gray-500 text-sm mt-1 group-hover:text-gray-600 transition-colors duration-200">Available 7 days a week</p>
+          </a>
+
+          <!-- Email -->
+          <a 
+            href="mailto:info@warehouselocating.com"
+            class="group text-center p-6 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-pointer"
+          >
+            <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors duration-200">
+              <svg class="w-8 h-8 text-blue-600 group-hover:text-blue-700 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors duration-200">Email Us</h3>
+            <div class="text-blue-600 hover:text-blue-700 font-medium group-hover:text-blue-800 transition-colors duration-200">
+              info@warehouselocating.com
+            </div>
+            <p class="text-gray-500 text-sm mt-1 group-hover:text-gray-600 transition-colors duration-200">Fast response guaranteed</p>
+          </a>
+
+          <!-- Form -->
+          <button 
+            onclick="openContactModal('multiple-ways-form')"
+            class="group text-center p-6 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-pointer w-full"
+          >
+            <div class="w-16 h-16 bg-sba-gray-light rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-sba-gray transition-colors duration-200">
+              <svg class="w-8 h-8 text-sba-navy group-hover:text-sba-navy-dark transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-sba-navy transition-colors duration-200">Fill Out Form</h3>
+            <div class="text-sba-navy hover:text-sba-navy-dark font-medium group-hover:text-sba-navy-dark transition-colors duration-200">
+              Get Matched Today
+            </div>
+            <p class="text-gray-500 text-sm mt-1 group-hover:text-gray-600 transition-colors duration-200">Quick form with all your requirements</p>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="relative py-16 overflow-hidden">
+      <!-- Background Image -->
+      <div class="absolute inset-0">
+        <img 
+          src="/images/uploads/wareint.png" 
+          alt="Warehouse interior" 
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gray-900/80"></div>
+      </div>
+      
+      <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-white mb-4">Frequently Asked Questions</h2>
+          <p class="text-lg text-gray-300">Quick answers to common questions about our service</p>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-xl">
+            <h3 class="text-lg font-semibold text-white mb-3">How much does your service cost?</h3>
+            <p class="text-gray-300">Our service is completely free to tenants. Landlords pay all brokerage fees, so you get expert representation at zero cost.</p>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-xl">
+            <h3 class="text-lg font-semibold text-white mb-3">How quickly can you find options?</h3>
+            <p class="text-gray-300">We typically provide qualified warehouse options within 24 hours of receiving your requirements. Tours can usually be scheduled within 2-3 business days.</p>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-xl">
+            <h3 class="text-lg font-semibold text-white mb-3">What areas do you cover?</h3>
+            <p class="text-gray-300">We specialize in industrial properties throughout South Florida, including Miami-Dade, Broward, and Palm Beach counties.</p>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-xl">
+            <h3 class="text-lg font-semibold text-white mb-3">Do you handle lease negotiations?</h3>
+            <p class="text-gray-300">Yes, we handle all lease negotiations on your behalf, ensuring you get the best possible terms and protecting your interests throughout the process.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+  }
+
+  .animate-on-scroll.animated {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-reverse {
+    animation: float 6s ease-in-out infinite reverse;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(1deg); }
+  }
+
+  .bg-pattern-dots {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+</style>
+
+<script>
+  // Scroll-triggered animations
+  const animateOnScroll = () => {
+    const elements = document.querySelectorAll('.animate-on-scroll');
+    
+    elements.forEach(element => {
+      const elementTop = element.getBoundingClientRect().top;
+      const elementVisible = 150;
+      
+      if (elementTop < window.innerHeight - elementVisible) {
+        element.classList.add('animated');
+      }
+    });
+  };
+
+  // Run on page load and scroll
+  window.addEventListener('scroll', animateOnScroll);
+  window.addEventListener('load', animateOnScroll);
+  
+  // Initial check
+  animateOnScroll();
+
+  // Handle contact hero form submission via process-lead function
+  console.log('Contact page JavaScript loading...');
+  
+  function setupContactForm() {
+    console.log('Setting up contact form...');
+    const contactHeroForm = document.getElementById('contact-hero-form') as HTMLFormElement | null;
+    const contactPropertySelect = document.getElementById('contact-property-select') as HTMLSelectElement | null;
+    const contactWarehouseIdField = document.getElementById('contact-warehouse-id') as HTMLInputElement | null;
+
+    console.log('Contact form elements found:', { 
+      form: !!contactHeroForm, 
+      select: !!contactPropertySelect, 
+      hiddenField: !!contactWarehouseIdField 
+    });
+
+    // Update warehouse_id when property selection changes
+    if (contactPropertySelect && contactWarehouseIdField) {
+      contactPropertySelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const warehouseId = selectedOption.getAttribute('data-warehouse-id') || '';
+        contactWarehouseIdField.value = warehouseId;
+      });
+    }
+
+    // Handle form submission
+    if (contactHeroForm) {
+      console.log('Adding submit handler to contact form');
+    contactHeroForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitButton = this.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+      if (!submitButton) return;
+      const originalText = submitButton.textContent;
+      
+      try {
+        submitButton.textContent = 'Submitting...';
+        submitButton.disabled = true;
+        
+        const formData = new FormData(contactHeroForm);
+        const data = Object.fromEntries(formData.entries());
+        data.source = 'contact_hero_form';
+        
+        const response = await fetch('/.netlify/functions/process-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          console.log('Contact form submission successful, redirecting to success page');
+          window.location.href = '/success';
+        } else {
+          const errorText = await response.text();
+          console.error('Contact form submission failed:', response.status, errorText);
+          throw new Error(`Form submission failed: ${response.status} ${errorText}`);
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
+        submitButton.textContent = 'Error - Try Again';
+        setTimeout(() => {
+          submitButton.textContent = originalText;
+          submitButton.disabled = false;
+        }, 3000);
+      }
+    });
+  } else {
+    console.log('Contact form not found!');
+  }
+}
+
+// Try to set up immediately
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupContactForm);
+} else {
+  setupContactForm();
+}
+</script>

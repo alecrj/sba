@@ -1,0 +1,12 @@
+{
+  "id": "lead-001",
+  "name": "John Smith",
+  "email": "john.smith@example.com", 
+  "phone": "(555) 123-4567",
+  "company": "ABC Logistics",
+  "propertyInterested": "10,000 SF warehouse in Miami",
+  "message": "Looking for a warehouse space for our expanding distribution center. Need loading docks and good highway access.",
+  "source": "website",
+  "createdAt": "2025-01-12T10:30:00Z",
+  "status": "new"
+}

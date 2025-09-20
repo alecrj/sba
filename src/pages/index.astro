@@ -1,0 +1,1258 @@
+---
+// Shallow Bay Advisors - Commercial Real Estate Brokerage
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+// Property types for search filters
+const propertyTypes = [
+  "Warehouse",
+  "Distribution Center",
+  "Manufacturing",
+  "Flex Space",
+  "Office/Warehouse",
+  "Cold Storage"
+];
+
+// Location options
+const locations = [
+  "Miami-Dade County",
+  "Broward County",
+  "Palm Beach County",
+  "All South Florida"
+];
+
+// Size ranges
+const sizeRanges = [
+  "Under 5,000 SF",
+  "5,000 - 10,000 SF",
+  "10,000 - 25,000 SF",
+  "25,000 - 50,000 SF",
+  "50,000 - 100,000 SF",
+  "100,000+ SF"
+];
+
+// Services offered
+const services = [
+  {
+    title: "Tenant Representation",
+    description: "Find the perfect warehouse or industrial space for your business needs.",
+    features: ["Market Analysis", "Site Selection", "Lease Negotiation"],
+    icon: "building"
+  },
+  {
+    title: "Landlord Representation",
+    description: "Maximize occupancy and value for your commercial properties.",
+    features: ["Property Marketing", "Tenant Screening", "Market Positioning"],
+    icon: "key"
+  },
+  {
+    title: "Investment Sales",
+    description: "Expert guidance for buying and selling commercial real estate.",
+    features: ["Property Valuation", "Market Insights", "Transaction Management"],
+    icon: "chart"
+  }
+];
+---
+
+<BaseLayout
+  title="Commercial Real Estate Brokerage | Shallow Bay Advisors"
+  description="South Florida's premier commercial real estate brokerage. Find warehouse and industrial space with live inventory, instant property search, and expert guidance."
+>
+  <Navigation />
+
+  <!-- HERO SECTION - Property Search Focus -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-white via-neutral-50 to-sba-gray-light/30 pt-32 pb-20">
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-6xl mx-auto">
+
+        <!-- Main Hero Content -->
+        <div class="text-center mb-16 animate-fade-in">
+          <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-sba-navy leading-tight tracking-tighter mb-8">
+            Find Your Perfect
+            <span class="block gradient-sba">Industrial Space</span>
+          </h1>
+          <p class="text-xl md:text-2xl text-sba-gray-dark max-w-4xl mx-auto leading-relaxed mb-12">
+            South Florida's premier commercial real estate brokerage. Search warehouse and industrial properties with live inventory.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PROPERTIES SECTION - Airbnb Style -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="max-w-7xl mx-auto">
+
+        <!-- Section Header -->
+        <div class="text-center mb-16 animate-fade-in">
+          <h2 class="text-4xl md:text-6xl font-black text-sba-navy leading-tight tracking-tighter mb-6">
+            Featured Properties
+          </h2>
+          <p class="text-xl text-sba-gray-dark max-w-3xl mx-auto leading-relaxed">
+            Explore our premium warehouse and industrial spaces across South Florida
+          </p>
+        </div>
+
+        <!-- Property Grid - Airbnb Style -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
+
+          <!-- Property Card 1 -->
+          <a href="/properties/doral-warehouse-25k" class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group animate-slide-up cursor-pointer block">
+            <div class="relative">
+              <img
+                src="/images/uploads/warehouse1.png"
+                alt="Modern Warehouse in Doral"
+                class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-sba-navy shadow-sm">
+                Available Now
+              </div>
+              <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white">
+                25,000 SF
+              </div>
+              <button class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110" onclick="event.preventDefault(); event.stopPropagation();">
+                <svg class="w-4 h-4 text-sba-navy" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="p-5 flex flex-col h-48">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1 line-clamp-1">
+                    Premium Warehouse - Doral
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-3">
+                    Miami-Dade County • 25,000 SF
+                  </p>
+                </div>
+                <div class="flex items-center gap-1 text-sm ml-2">
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  <span class="font-semibold text-gray-900">4.9</span>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">
+                Modern distribution facility with dock-high loading, 32' clear height, and excellent highway access.
+              </p>
+
+              <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">Dock High</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">32' Clear</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">+3</span>
+              </div>
+
+              <div class="flex items-center justify-between mt-auto">
+                <div>
+                  <span class="text-lg font-bold text-gray-900">$8.50</span>
+                  <span class="text-sm text-gray-600">/SF/year</span>
+                </div>
+                <span class="text-sm text-sba-navy font-semibold">View Details →</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Property Card 2 -->
+          <a href="/properties/fort-lauderdale-distribution-50k" class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group animate-slide-up cursor-pointer block" style="animation-delay: 0.1s;">
+            <div class="relative">
+              <img
+                src="/images/uploads/warehouse2.png"
+                alt="Distribution Center in Fort Lauderdale"
+                class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div class="absolute top-3 left-3 bg-orange-500/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white shadow-sm">
+                Coming Soon
+              </div>
+              <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white">
+                50,000 SF
+              </div>
+              <button class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110" onclick="event.preventDefault(); event.stopPropagation();">
+                <svg class="w-4 h-4 text-sba-navy" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="p-5 flex flex-col h-48">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1 line-clamp-1">
+                    Distribution Hub - Fort Lauderdale
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-3">
+                    Broward County • 50,000 SF
+                  </p>
+                </div>
+                <div class="flex items-center gap-1 text-sm ml-2">
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  <span class="font-semibold text-gray-900">4.8</span>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">
+                State-of-the-art distribution center with cross-dock capability, 36' clear height, and rail access.
+              </p>
+
+              <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">Cross Dock</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">36' Clear</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">+4</span>
+              </div>
+
+              <div class="flex items-center justify-between mt-auto">
+                <div>
+                  <span class="text-lg font-bold text-gray-900">$9.25</span>
+                  <span class="text-sm text-gray-600">/SF/year</span>
+                </div>
+                <span class="text-sm text-sba-navy font-semibold">View Details →</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Property Card 3 -->
+          <a href="/properties/west-palm-beach-flex-15k" class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group animate-slide-up cursor-pointer block" style="animation-delay: 0.2s;">
+            <div class="relative">
+              <img
+                src="/images/uploads/warehouse3.png"
+                alt="Flex Space in West Palm Beach"
+                class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-sba-navy shadow-sm">
+                Available Now
+              </div>
+              <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white">
+                15,000 SF
+              </div>
+              <button class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110" onclick="event.preventDefault(); event.stopPropagation();">
+                <svg class="w-4 h-4 text-sba-navy" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="p-5 flex flex-col h-48">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1 line-clamp-1">
+                    Flex Space - West Palm Beach
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-3">
+                    Palm Beach County • 15,000 SF
+                  </p>
+                </div>
+                <div class="flex items-center gap-1 text-sm ml-2">
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  <span class="font-semibold text-gray-900">4.7</span>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">
+                Versatile flex space with office and warehouse combination, perfect for growing businesses.
+              </p>
+
+              <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">Office/Warehouse</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">24' Clear</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">+2</span>
+              </div>
+
+              <div class="flex items-center justify-between mt-auto">
+                <div>
+                  <span class="text-lg font-bold text-gray-900">$12.00</span>
+                  <span class="text-sm text-gray-600">/SF/year</span>
+                </div>
+                <span class="text-sm text-sba-navy font-semibold">View Details →</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Property Card 4 -->
+          <a href="/properties/hialeah-manufacturing-75k" class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group animate-slide-up cursor-pointer block" style="animation-delay: 0.3s;">
+            <div class="relative">
+              <img
+                src="/images/uploads/warehouse4.png"
+                alt="Manufacturing Facility in Hialeah"
+                class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-sba-navy shadow-sm">
+                Available Now
+              </div>
+              <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white">
+                75,000 SF
+              </div>
+              <button class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110" onclick="event.preventDefault(); event.stopPropagation();">
+                <svg class="w-4 h-4 text-sba-navy" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="p-5 flex flex-col h-48">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1 line-clamp-1">
+                    Manufacturing - Hialeah
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-3">
+                    Miami-Dade County • 75,000 SF
+                  </p>
+                </div>
+                <div class="flex items-center gap-1 text-sm ml-2">
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  <span class="font-semibold text-gray-900">4.6</span>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">
+                Heavy manufacturing facility with overhead cranes, 40' clear height, and 480V power.
+              </p>
+
+              <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">Overhead Cranes</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">40' Clear</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">+5</span>
+              </div>
+
+              <div class="flex items-center justify-between mt-auto">
+                <div>
+                  <span class="text-lg font-bold text-gray-900">$7.75</span>
+                  <span class="text-sm text-gray-600">/SF/year</span>
+                </div>
+                <span class="text-sm text-sba-navy font-semibold">View Details →</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Property Card 5 -->
+          <a href="/properties/pompano-cold-storage-30k" class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group animate-slide-up cursor-pointer block" style="animation-delay: 0.4s;">
+            <div class="relative">
+              <img
+                src="/images/uploads/warehouse5.png"
+                alt="Cold Storage in Pompano Beach"
+                class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div class="absolute top-3 left-3 bg-orange-500/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white shadow-sm">
+                Coming Soon
+              </div>
+              <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white">
+                30,000 SF
+              </div>
+              <button class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110" onclick="event.preventDefault(); event.stopPropagation();">
+                <svg class="w-4 h-4 text-sba-navy" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="p-5 flex flex-col h-48">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1 line-clamp-1">
+                    Cold Storage - Pompano Beach
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-3">
+                    Broward County • 30,000 SF
+                  </p>
+                </div>
+                <div class="flex items-center gap-1 text-sm ml-2">
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  <span class="font-semibold text-gray-900">4.8</span>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">
+                Temperature-controlled facility with -10°F freezer and 35°F cooler sections.
+              </p>
+
+              <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">-10°F Freezer</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">35°F Cooler</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">+3</span>
+              </div>
+
+              <div class="flex items-center justify-between mt-auto">
+                <div>
+                  <span class="text-lg font-bold text-gray-900">$15.50</span>
+                  <span class="text-sm text-gray-600">/SF/year</span>
+                </div>
+                <span class="text-sm text-sba-navy font-semibold">View Details →</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Property Card 6 -->
+          <a href="/properties/medley-office-warehouse-20k" class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group animate-slide-up cursor-pointer block" style="animation-delay: 0.5s;">
+            <div class="relative">
+              <img
+                src="/images/uploads/warehouse6.png"
+                alt="Office Warehouse in Medley"
+                class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-sba-navy shadow-sm">
+                Available Now
+              </div>
+              <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white">
+                20,000 SF
+              </div>
+              <button class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110" onclick="event.preventDefault(); event.stopPropagation();">
+                <svg class="w-4 h-4 text-sba-navy" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="p-5 flex flex-col h-48">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1 line-clamp-1">
+                    Office/Warehouse - Medley
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-3">
+                    Miami-Dade County • 20,000 SF
+                  </p>
+                </div>
+                <div class="flex items-center gap-1 text-sm ml-2">
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  <span class="font-semibold text-gray-900">4.7</span>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">
+                Modern office warehouse with showroom space, perfect for distribution and headquarters operations.
+              </p>
+
+              <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">Office</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">Showroom</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">+4</span>
+              </div>
+
+              <div class="flex items-center justify-between mt-auto">
+                <div>
+                  <span class="text-lg font-bold text-gray-900">$11.25</span>
+                  <span class="text-sm text-gray-600">/SF/year</span>
+                </div>
+                <span class="text-sm text-sba-navy font-semibold">View Details →</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Property Card 7 -->
+          <a href="/properties/doral-logistics-hub-100k" class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group animate-slide-up cursor-pointer block" style="animation-delay: 0.6s;">
+            <div class="relative">
+              <img
+                src="/images/uploads/warehouse7.png"
+                alt="Logistics Hub in Doral"
+                class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-sba-navy shadow-sm">
+                Available Now
+              </div>
+              <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white">
+                100,000 SF
+              </div>
+              <div class="absolute bottom-3 left-3 bg-accent-green/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white">
+                Featured
+              </div>
+              <button class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110" onclick="event.preventDefault(); event.stopPropagation();">
+                <svg class="w-4 h-4 text-sba-navy" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="p-5 flex flex-col h-48">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1 line-clamp-1">
+                    Logistics Hub - Doral
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-3">
+                    Miami-Doral • 100,000 SF
+                  </p>
+                </div>
+                <div class="flex items-center gap-1 text-sm ml-2">
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  <span class="font-semibold text-gray-900">4.9</span>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">
+                Class A distribution facility with automated systems, 42' clear height, and direct airport access.
+              </p>
+
+              <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">Automated</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">42' Clear</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">+6</span>
+              </div>
+
+              <div class="flex items-center justify-between mt-auto">
+                <div>
+                  <span class="text-lg font-bold text-gray-900">$10.75</span>
+                  <span class="text-sm text-gray-600">/SF/year</span>
+                </div>
+                <span class="text-sm text-sba-navy font-semibold">View Details →</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Property Card 8 -->
+          <a href="/properties/boca-tech-warehouse-35k" class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group animate-slide-up cursor-pointer block" style="animation-delay: 0.7s;">
+            <div class="relative">
+              <img
+                src="/images/uploads/warehouse8.png"
+                alt="Tech Warehouse in Boca Raton"
+                class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div class="absolute top-3 left-3 bg-orange-500/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white shadow-sm">
+                Coming Soon
+              </div>
+              <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white">
+                35,000 SF
+              </div>
+              <div class="absolute bottom-3 left-3 bg-accent-blue/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-white">
+                Pre-Lease
+              </div>
+              <button class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110" onclick="event.preventDefault(); event.stopPropagation();">
+                <svg class="w-4 h-4 text-sba-navy" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="p-5 flex flex-col h-48">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1 line-clamp-1">
+                    Tech Warehouse - Boca Raton
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-3">
+                    Palm Beach County • 35,000 SF
+                  </p>
+                </div>
+                <div class="flex items-center gap-1 text-sm ml-2">
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  <span class="font-semibold text-gray-900">4.8</span>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">
+                Modern tech-enabled facility with smart systems, fiber optic ready, and sustainable design.
+              </p>
+
+              <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">Smart Systems</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">Fiber Ready</span>
+                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">+4</span>
+              </div>
+
+              <div class="flex items-center justify-between mt-auto">
+                <div>
+                  <span class="text-lg font-bold text-gray-900">$13.25</span>
+                  <span class="text-sm text-gray-600">/SF/year</span>
+                </div>
+                <span class="text-sm text-sba-navy font-semibold">View Details →</span>
+              </div>
+            </div>
+          </a>
+
+        </div>
+
+        <!-- Bottom CTA -->
+        <div class="text-center animate-fade-in">
+          <p class="text-sba-gray-dark mb-6 text-lg">
+            Explore hundreds more properties in our portfolio
+          </p>
+          <a href="/properties" class="btn-primary rounded-2xl text-lg px-12 py-5 hover:shadow-2xl transform hover:scale-105 transition-all duration-500">
+            VIEW ALL PROPERTIES
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROPERTY SEARCH SECTION -->
+  <section class="py-20 bg-gradient-to-br from-white via-neutral-50 to-sba-gray-light/30">
+    <div class="container mx-auto px-4">
+      <div class="max-w-6xl mx-auto">
+
+        <!-- Property Search Interface -->
+        <div class="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-sba-gray-light mb-16 animate-slide-up">
+          <h2 class="text-2xl font-bold text-sba-navy mb-8 text-center">Search Available Properties</h2>
+
+          <form class="space-y-6">
+            <div class="grid md:grid-cols-3 gap-6">
+              <!-- Property Type -->
+              <div>
+                <label class="block text-sm font-semibold text-sba-gray-dark mb-3">Property Type</label>
+                <select class="w-full px-4 py-3 border border-sba-gray-light rounded-xl focus:ring-2 focus:ring-sba-navy focus:border-transparent">
+                  <option value="">All Types</option>
+                  {propertyTypes.map(type => (
+                    <option value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+
+              <!-- Location -->
+              <div>
+                <label class="block text-sm font-semibold text-sba-gray-dark mb-3">Location</label>
+                <select class="w-full px-4 py-3 border border-sba-gray-light rounded-xl focus:ring-2 focus:ring-sba-navy focus:border-transparent">
+                  <option value="">All Locations</option>
+                  {locations.map(location => (
+                    <option value={location}>{location}</option>
+                  ))}
+                </select>
+              </div>
+
+              <!-- Size -->
+              <div>
+                <label class="block text-sm font-semibold text-sba-gray-dark mb-3">Size Range</label>
+                <select class="w-full px-4 py-3 border border-sba-gray-light rounded-xl focus:ring-2 focus:ring-sba-navy focus:border-transparent">
+                  <option value="">Any Size</option>
+                  {sizeRanges.map(range => (
+                    <option value={range}>{range}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="/properties" class="btn-primary rounded-xl px-8 py-4 text-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                SEARCH PROPERTIES
+              </a>
+              <a href="/book" class="btn-secondary rounded-xl px-8 py-4 text-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                BOOK A TOUR
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center animate-slide-up">
+          <div>
+            <div class="text-3xl font-black text-sba-navy mb-2">Licensed</div>
+            <div class="text-sba-gray-dark">Florida Real Estate Brokerage</div>
+          </div>
+          <div>
+            <div class="text-3xl font-black text-sba-navy mb-2">South Florida</div>
+            <div class="text-sba-gray-dark">Market Coverage</div>
+          </div>
+          <div>
+            <div class="text-3xl font-black text-sba-navy mb-2">Expert</div>
+            <div class="text-sba-gray-dark">Industrial Specialists</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES SECTION -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="max-w-6xl mx-auto">
+
+        <!-- Section Header -->
+        <div class="text-center mb-20 animate-fade-in">
+          <h2 class="text-4xl md:text-6xl font-black text-sba-navy leading-tight tracking-tighter mb-6">
+            Our Services
+          </h2>
+          <p class="text-xl text-sba-gray-dark max-w-3xl mx-auto leading-relaxed">
+            Comprehensive commercial real estate services for South Florida's industrial market
+          </p>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="grid service-cards gap-8 mb-16">
+          {services.map((service, index) => (
+            <div class="card-feature rounded-3xl group animate-slide-up" style={`animation-delay: ${index * 0.2}s;`}>
+              <!-- Service Icon -->
+              <div class="w-16 h-16 bg-sba-navy rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300">
+                {service.icon === 'building' && (
+                  <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l7-3 7 3z"/>
+                  </svg>
+                )}
+                {service.icon === 'key' && (
+                  <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                  </svg>
+                )}
+                {service.icon === 'chart' && (
+                  <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                  </svg>
+                )}
+              </div>
+
+              <!-- Service Content -->
+              <h3 class="text-2xl font-bold text-sba-navy mb-4 group-hover:text-sba-navy-dark transition-colors duration-300">
+                {service.title}
+              </h3>
+              <p class="text-sba-gray-dark leading-relaxed mb-6">
+                {service.description}
+              </p>
+
+              <!-- Service Features -->
+              <div class="space-y-3 mb-8">
+                {service.features.map(feature => (
+                  <div class="flex items-center text-sm">
+                    <div class="w-2 h-2 bg-sba-navy rounded-full mr-3 flex-shrink-0"></div>
+                    <span class="text-sba-gray-dark font-medium">{feature}</span>
+                  </div>
+                ))}
+              </div>
+
+              <!-- Learn More Link -->
+              <a href="/contact" class="inline-flex items-center text-sba-navy font-semibold hover:text-sba-navy-dark transition-colors duration-300 group-hover:translate-x-2 transform transition-transform duration-300">
+                Get Started
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </a>
+            </div>
+          ))}
+        </div>
+
+        <!-- View Properties CTA -->
+        <div class="text-center animate-fade-in">
+          <a href="/properties" class="btn-primary rounded-2xl text-lg px-12 py-5 hover:shadow-2xl transform hover:scale-105 transition-all duration-500">
+            VIEW ALL PROPERTIES
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- MARKET COVERAGE SECTION -->
+  <section class="py-20 bg-gradient-to-br from-neutral-50 to-sba-gray-light/20">
+    <div class="container mx-auto px-4">
+      <div class="max-w-6xl mx-auto">
+
+        <!-- Section Header -->
+        <div class="text-center mb-16 animate-fade-in">
+          <h2 class="text-4xl md:text-6xl font-black text-sba-navy leading-tight tracking-tighter mb-6">
+            South Florida Coverage
+          </h2>
+          <p class="text-xl text-sba-gray-dark max-w-3xl mx-auto leading-relaxed">
+            Comprehensive market knowledge across all major South Florida industrial markets
+          </p>
+        </div>
+
+        <!-- Markets Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div class="glass rounded-2xl p-8 text-center hover:shadow-xl transition-all duration-500 hover:-translate-y-1 group animate-scale-in">
+            <div class="w-16 h-16 bg-sba-navy rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-sba-navy mb-4 group-hover:text-sba-navy-dark transition-colors duration-300">
+              Miami-Dade County
+            </h3>
+            <p class="text-sba-gray-dark leading-relaxed">
+              Doral, Hialeah, Medley, and surrounding industrial corridors
+            </p>
+          </div>
+
+          <div class="glass rounded-2xl p-8 text-center hover:shadow-xl transition-all duration-500 hover:-translate-y-1 group animate-scale-in" style="animation-delay: 0.1s;">
+            <div class="w-16 h-16 bg-sba-navy rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-sba-navy mb-4 group-hover:text-sba-navy-dark transition-colors duration-300">
+              Broward County
+            </h3>
+            <p class="text-sba-gray-dark leading-relaxed">
+              Fort Lauderdale, Pompano Beach, and major industrial parks
+            </p>
+          </div>
+
+          <div class="glass rounded-2xl p-8 text-center hover:shadow-xl transition-all duration-500 hover:-translate-y-1 group animate-scale-in" style="animation-delay: 0.2s;">
+            <div class="w-16 h-16 bg-sba-navy rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-sba-navy mb-4 group-hover:text-sba-navy-dark transition-colors duration-300">
+              Palm Beach County
+            </h3>
+            <p class="text-sba-gray-dark leading-relaxed">
+              West Palm Beach, Riviera Beach, and emerging markets
+            </p>
+          </div>
+        </div>
+
+        <!-- Contact CTA -->
+        <div class="text-center animate-fade-in">
+          <p class="text-sba-gray-dark mb-6">
+            Ready to find your next industrial space in South Florida?
+          </p>
+          <a href="/contact" class="btn-secondary rounded-2xl text-lg px-12 py-5 hover:shadow-xl transform hover:scale-105 transition-all duration-500">
+            CONTACT US TODAY
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="py-20 bg-sba-navy relative overflow-hidden">
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-4xl mx-auto text-center animate-fade-in">
+        <h2 class="text-4xl md:text-6xl font-black text-white leading-tight tracking-tighter mb-8">
+          Ready to Find Your
+          <span class="block text-sba-gray">Perfect Space?</span>
+        </h2>
+        <p class="text-xl text-sba-gray-light max-w-2xl mx-auto leading-relaxed mb-12">
+          Let our commercial real estate experts help you find the ideal warehouse or industrial space in South Florida.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <a href="/book" class="bg-white text-sba-navy px-12 py-5 rounded-2xl text-lg font-semibold hover:shadow-2xl transform hover:scale-105 transition-all duration-500">
+            BOOK A TOUR
+          </a>
+          <div class="flex items-center gap-4 text-sba-gray-light">
+            <span class="w-px h-8 bg-sba-gray"></span>
+            <span class="text-sm uppercase tracking-wider">OR</span>
+            <span class="w-px h-8 bg-sba-gray"></span>
+          </div>
+          <a href="/contact" class="text-white font-semibold text-lg hover:text-sba-gray-light transition-colors duration-300">
+            Contact Us Today
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Advanced animations */
+  .animate-fade-in {
+    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Animated Background Grid */
+  .animated-grid {
+    background-image:
+      linear-gradient(rgba(30, 58, 95, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30, 58, 95, 0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 20s linear infinite;
+  }
+
+  @keyframes gridMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(60px, 60px); }
+  }
+
+  /* Interactive Floating Orbs */
+  .floating-orbs {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(2px);
+    opacity: 0.4;
+    animation: floatOrb 8s ease-in-out infinite;
+  }
+
+  .orb-1 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(30, 58, 95, 0.15) 0%, transparent 70%);
+    top: 20%;
+    right: 15%;
+    animation-delay: 0s;
+  }
+
+  .orb-2 {
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(139, 145, 153, 0.2) 0%, transparent 70%);
+    bottom: 30%;
+    left: 10%;
+    animation-delay: -3s;
+  }
+
+  .orb-3 {
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(30, 58, 95, 0.1) 0%, transparent 70%);
+    top: 60%;
+    right: 40%;
+    animation-delay: -6s;
+  }
+
+  .orb-4 {
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(139, 145, 153, 0.15) 0%, transparent 70%);
+    top: 10%;
+    left: 20%;
+    animation-delay: -9s;
+  }
+
+  @keyframes floatOrb {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(20px, -30px) scale(1.1); }
+    50% { transform: translate(-15px, -20px) scale(0.9); }
+    75% { transform: translate(25px, 10px) scale(1.05); }
+  }
+
+  /* Particle System */
+  .particle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: rgba(30, 58, 95, 0.3);
+    border-radius: 50%;
+    animation: particle-float 6s linear infinite;
+  }
+
+  @keyframes particle-float {
+    0% {
+      opacity: 0;
+      transform: translateY(100vh) scale(0);
+    }
+    10% {
+      opacity: 1;
+      transform: translateY(90vh) scale(1);
+    }
+    90% {
+      opacity: 1;
+      transform: translateY(-10vh) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-20vh) scale(0);
+    }
+  }
+
+  /* Enhanced Card Interactions */
+  .card-feature {
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .card-feature::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(30, 58, 95, 0.05), rgba(139, 145, 153, 0.05));
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  .card-feature:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(30, 58, 95, 0.25);
+  }
+
+  .card-feature:hover::before {
+    opacity: 1;
+  }
+
+  /* Glassmorphism enhancement */
+  .glass {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+  }
+
+  /* Enhanced Typography */
+  .gradient-sba {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6b 50%, #8b9199 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+  }
+
+  .gradient-sba::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6b 50%, #8b9199 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shimmer 3s ease-in-out infinite;
+    opacity: 0;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Micro-interactions for metrics */
+  .metric-item {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .metric-item:hover {
+    transform: translateY(-5px);
+  }
+
+  .metric-item:hover .metric-value {
+    animation: pulse-glow 1s ease-in-out;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { text-shadow: none; }
+    50% { text-shadow: 0 0 20px rgba(30, 58, 95, 0.5); }
+  }
+
+  /* Advanced button effects */
+  .btn-primary, .btn-secondary {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::before, .btn-secondary::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  .btn-primary:hover::before, .btn-secondary:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+</style>
+
+<script>
+  // Advanced Interactive Effects System
+  document.addEventListener('DOMContentLoaded', () => {
+
+    // Particle System
+    function createParticleSystem() {
+      const container = document.getElementById('particles');
+      if (!container) return;
+
+      function createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+
+        // Random horizontal position
+        particle.style.left = Math.random() * 100 + '%';
+
+        // Random animation duration
+        particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+
+        // Random delay
+        particle.style.animationDelay = Math.random() * 2 + 's';
+
+        if (container) container.appendChild(particle);
+
+        // Remove after animation
+        setTimeout(() => {
+          if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+          }
+        }, 8000);
+      }
+
+      // Create particles periodically
+      setInterval(createParticle, 1500);
+
+      // Create initial particles
+      for (let i = 0; i < 5; i++) {
+        setTimeout(createParticle, i * 300);
+      }
+    }
+
+    // Mouse-following effects for orbs
+    function initMouseEffects() {
+      let mouseX = 0;
+      let mouseY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX / window.innerWidth;
+        mouseY = e.clientY / window.innerHeight;
+
+        const orbs = document.querySelectorAll('.orb');
+        orbs.forEach((orb, index) => {
+          const factor = (index + 1) * 0.02;
+          const x = (mouseX - 0.5) * factor * 100;
+          const y = (mouseY - 0.5) * factor * 100;
+
+          (orb as HTMLElement).style.transform = `translate(${x}px, ${y}px)`;
+        });
+      });
+    }
+
+    // Advanced scroll-triggered animations
+    function initScrollAnimations() {
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-in');
+
+            // Add staggered animations for children
+            const children = entry.target.querySelectorAll('.card-feature, .metric-item');
+            children.forEach((child, index) => {
+              setTimeout(() => {
+                (child as HTMLElement).style.opacity = '1';
+                (child as HTMLElement).style.transform = 'translateY(0)';
+              }, index * 100);
+            });
+          }
+        });
+      }, observerOptions);
+
+      // Observe elements for animation
+      const animateElements = document.querySelectorAll('.animate-on-scroll, .card-feature, .glass, section');
+      animateElements.forEach((el) => observer.observe(el));
+    }
+
+    // Magnetic button effects
+    function initMagneticButtons() {
+      const buttons = document.querySelectorAll('.btn-primary, .btn-secondary');
+
+      buttons.forEach(button => {
+        button.addEventListener('mouseenter', function(e) {
+          const rect = this.getBoundingClientRect();
+          const relX = e.clientX - rect.left;
+          const relY = e.clientY - rect.top;
+
+          this.style.transform = `translate(${(relX - rect.width/2) * 0.1}px, ${(relY - rect.height/2) * 0.1}px) scale(1.05)`;
+        });
+
+        button.addEventListener('mouseleave', function() {
+          this.style.transform = 'translate(0, 0) scale(1)';
+        });
+
+        button.addEventListener('mousemove', function(e) {
+          const rect = this.getBoundingClientRect();
+          const relX = e.clientX - rect.left;
+          const relY = e.clientY - rect.top;
+
+          this.style.transform = `translate(${(relX - rect.width/2) * 0.1}px, ${(relY - rect.height/2) * 0.1}px) scale(1.05)`;
+        });
+      });
+    }
+
+    // Counter animation for metrics
+    function animateCounters() {
+      const counters = document.querySelectorAll('.metric-value');
+
+      const animateValue = (obj, start, end, duration) => {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+          if (!startTimestamp) startTimestamp = timestamp;
+          const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+          const value = Math.floor(progress * (end - start) + start);
+          obj.innerHTML = obj.innerHTML.replace(/\d+/, value);
+          if (progress < 1) {
+            window.requestAnimationFrame(step);
+          }
+        };
+        window.requestAnimationFrame(step);
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const text = entry.target.textContent;
+            const number = parseInt(text.replace(/\D/g, ''));
+            if (number) {
+              animateValue(entry.target, 0, number, 2000);
+              observer.unobserve(entry.target);
+            }
+          }
+        });
+      });
+
+      counters.forEach(counter => observer.observe(counter));
+    }
+
+    // Initialize all effects
+    createParticleSystem();
+    initMouseEffects();
+    initScrollAnimations();
+    initMagneticButtons();
+    animateCounters();
+
+    // Performance optimization: reduce animations on mobile
+    if (window.innerWidth < 768) {
+      document.querySelectorAll('.orb, .particle-container').forEach(el => {
+        el.style.display = 'none';
+      });
+    }
+  });
+</script>

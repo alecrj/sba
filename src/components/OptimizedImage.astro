@@ -1,0 +1,39 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  width?: number;
+  height?: number;
+}
+
+const {
+  src,
+  alt,
+  class: className = '',
+  loading = 'lazy',
+  width = 800,
+  height = 600,
+} = Astro.props;
+
+// For CMS images (public folder), we'll use regular img tag with high-quality rendering
+const isPublicImage = src && src.startsWith('/images/');
+---
+
+{isPublicImage ? (
+  <img
+    src={src}
+    alt={alt}
+    loading={loading}
+    class={`high-quality-image ${className}`}
+    width={width}
+    height={height}
+    decoding="async"
+    style="image-rendering: auto; image-rendering: -webkit-optimize-contrast;"
+  />
+) : (
+  <div class={`bg-gray-200 flex items-center justify-center ${className}`}>
+    <span class="text-gray-500">No image available</span>
+  </div>
+)}

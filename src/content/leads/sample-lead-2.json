@@ -1,0 +1,12 @@
+{
+  "id": "lead-002", 
+  "name": "Sarah Johnson",
+  "email": "sarah@techstartup.com",
+  "phone": "(555) 987-6543",
+  "company": "TechStartup Inc",
+  "propertyInterested": "5,000 SF modern space",
+  "message": "Need flexible warehouse space for our tech company's inventory and shipping operations.",
+  "source": "website",
+  "createdAt": "2025-01-11T15:45:00Z",
+  "status": "contacted"
+}

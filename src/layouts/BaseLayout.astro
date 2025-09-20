@@ -1,0 +1,157 @@
+---
+// Clean BaseLayout with proper TypeScript and GSAP integration
+import ContactModal from '../components/ContactModal.astro';
+
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: string;
+}
+
+const { 
+  title, 
+  description = "South Florida's premier industrial real estate platform. Find warehouse space fast with live inventory and instant tour booking.",
+  image = "/shallow-bay-hero.jpg",
+  type = "website" 
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.url)} />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(image, Astro.url)} />
+    
+    <!-- Premium Fonts - 2025 Billion Dollar Company -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@300;400;500;600;700;800;900&family=General+Sans:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Premium Typography for Billion-Dollar Brokerage -->
+    <style>
+      :root {
+        --font-primary: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        --font-display: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        --font-mono: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+      }
+
+      body {
+        font-family: var(--font-primary);
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        letter-spacing: -0.01em;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+      }
+
+      .font-display {
+        font-family: var(--font-display);
+      }
+
+      .font-mono {
+        font-family: var(--font-mono);
+      }
+    </style>
+    
+    <!-- Tailwind CSS is handled by Astro integration -->
+    
+    <!-- GSAP for animations - temporarily disabled due to ScrollTrigger window property issue -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script> -->
+    <!-- ScrollToPlugin temporarily removed due to compatibility issues -->
+    
+    <!-- Tailwind config is handled by tailwind.config.mjs -->
+    <!-- Cache bust: Force fresh deployment on 2025-09-11 -->
+    <meta name="build-version" content="2025-09-11-hero-fix-v2" />
+    
+    <!-- Critical CSS to prevent FOUC -->
+    <style>
+      /* Prevent flash of white/blank content */
+      main section:first-child {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      }
+    </style>
+  </head>
+  
+  <body class="font-inter antialiased">
+    <slot />
+    
+    <!-- Contact Modal - Include at the end of body -->
+    <ContactModal />
+    
+    <!-- GSAP Initialization and Animation Scripts - temporarily disabled -->
+    <script is:inline>
+      // GSAP animations temporarily disabled due to ScrollTrigger compatibility issues
+      // Will re-enable with proper error handling after forms are working
+      console.log('GSAP animations disabled - forms should work now');
+
+      // Mobile menu functionality
+      function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        if (menu) {
+          menu.classList.toggle('hidden');
+        }
+      }
+
+      // Make mobile menu function globally available
+      window.toggleMobileMenu = toggleMobileMenu;
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(event) {
+        const menu = document.getElementById('mobile-menu');
+        const button = event.target.closest('[aria-label="Open menu"]');
+        
+        if (menu && !menu.contains(event.target) && !button) {
+          menu.classList.add('hidden');
+        }
+      });
+
+      // Smooth scroll for anchor links
+      document.addEventListener('click', function(event) {
+        const target = event.target.closest('a[href^="#"]');
+        if (target) {
+          event.preventDefault();
+          const id = target.getAttribute('href').substring(1);
+          const element = document.getElementById(id);
+          if (element) {
+            element.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

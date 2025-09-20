@@ -1,0 +1,5 @@
+# Netlify CMS Admin Routes
+/admin/*  /admin/index.html  200
+
+# SPA Routes for Astro
+/*    /index.html   200

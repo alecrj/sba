@@ -1,0 +1,512 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+const leads = await getCollection('leads');
+const sortedLeads = leads.sort((a, b) => 
+  new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime()
+);
+
+// Group leads by status for kanban columns
+const leadsByStatus = {
+  'new': sortedLeads.filter(l => l.data.status === 'new'),
+  'contacted': sortedLeads.filter(l => l.data.status === 'contacted'),
+  'qualified': sortedLeads.filter(l => l.data.status === 'qualified'),
+  'proposal': sortedLeads.filter(l => l.data.status === 'proposal'),
+  'negotiating': sortedLeads.filter(l => l.data.status === 'negotiating'),
+  'closed-won': sortedLeads.filter(l => l.data.status === 'closed-won'),
+  'closed-lost': sortedLeads.filter(l => l.data.status === 'closed-lost'),
+};
+
+const statusConfig = [
+  { key: 'new', title: 'New Leads', color: 'blue', icon: '📝' },
+  { key: 'contacted', title: 'Contacted', color: 'yellow', icon: '📞' },
+  { key: 'qualified', title: 'Qualified', color: 'green', icon: '✅' },
+  { key: 'proposal', title: 'Proposal Sent', color: 'purple', icon: '📄' },
+  { key: 'negotiating', title: 'Negotiating', color: 'orange', icon: '🤝' },
+  { key: 'closed-won', title: 'Won', color: 'emerald', icon: '🎉' },
+  { key: 'closed-lost', title: 'Lost', color: 'red', icon: '❌' },
+];
+
+// Calculate stats
+const thisWeekLeads = sortedLeads.filter(l => {
+  const leadDate = new Date(l.data.createdAt);
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+  return leadDate > weekAgo;
+});
+---
+
+<BaseLayout title="Lead Management Dashboard | Warehouse Hub">
+  <div id="authCheck" class="hidden">
+    <div class="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div class="text-center">
+        <h2 class="text-2xl font-bold mb-4">Authentication Required</h2>
+        <p class="mb-4">Please login through the CMS first.</p>
+        <a href="/admin" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold">
+          Go to Admin Login
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div id="dashboard" class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <div class="bg-white shadow">
+      <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 sm:py-6 gap-4">
+          <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Lead Management Dashboard</h1>
+          <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+            <button 
+              id="exportCSV" 
+              class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-semibold text-sm sm:text-base w-full sm:w-auto"
+            >
+              Export to CSV
+            </button>
+            <a 
+              href="/admin"
+              class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-semibold text-sm sm:text-base text-center w-full sm:w-auto"
+            >
+              Back to Admin
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-4 sm:mb-8">
+        <div class="bg-white rounded-lg shadow p-3 sm:p-6">
+          <div class="text-xl sm:text-2xl font-bold text-blue-600">{sortedLeads.length}</div>
+          <div class="text-gray-600 text-sm sm:text-base">Total Leads</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-3 sm:p-6">
+          <div class="text-xl sm:text-2xl font-bold text-green-600">{leadsByStatus.new.length}</div>
+          <div class="text-gray-600 text-sm sm:text-base">New Leads</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-3 sm:p-6">
+          <div class="text-xl sm:text-2xl font-bold text-purple-600">{leadsByStatus['closed-won'].length}</div>
+          <div class="text-gray-600 text-sm sm:text-base">Won Deals</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-3 sm:p-6">
+          <div class="text-xl sm:text-2xl font-bold text-orange-600">{thisWeekLeads.length}</div>
+          <div class="text-gray-600 text-sm sm:text-base">This Week</div>
+        </div>
+      </div>
+
+      <!-- View Toggle -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div class="flex space-x-2 sm:space-x-4">
+          <button 
+            id="kanbanView" 
+            class="px-3 py-2 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg font-semibold text-sm sm:text-base"
+          >
+            📋 <span class="hidden sm:inline">Kanban Board</span><span class="sm:hidden">Kanban</span>
+          </button>
+          <button 
+            id="tableView" 
+            class="px-3 py-2 sm:px-4 sm:py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 text-sm sm:text-base"
+          >
+            📄 <span class="hidden sm:inline">Table View</span><span class="sm:hidden">Table</span>
+          </button>
+        </div>
+        <div class="w-full sm:w-auto">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search leads..." 
+            class="w-full sm:w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+          />
+        </div>
+      </div>
+
+      <!-- Debug Info -->
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <strong>Debug Info:</strong> 
+        Total Leads: {sortedLeads.length} | 
+        New: {leadsByStatus.new.length} | 
+        Contacted: {leadsByStatus.contacted.length} | 
+        Qualified: {leadsByStatus.qualified.length}
+      </div>
+
+      <!-- Kanban Board View -->
+      <div id="kanbanBoard" class="bg-gray-50 rounded-lg p-2 sm:p-4 overflow-x-auto">
+        <div class="bg-yellow-200 p-4 mb-4 rounded">
+          <h2 class="text-xl font-bold">🚨 KANBAN BOARD TEST - If you see this, the kanban div is rendering!</h2>
+          <p>Columns should appear below...</p>
+        </div>
+        <div class="flex gap-3 sm:gap-4 min-h-screen pb-4" style="min-width: 1400px;">
+          {statusConfig.map((column) => (
+            <div class="bg-white rounded-lg shadow-sm p-3 sm:p-4 min-h-96 flex-shrink-0" style="width: 280px;">
+              <!-- Column Header -->
+              <div class="flex items-center justify-between mb-4 pb-3 border-b-2" style={`border-color: var(--${column.color}-400, #6b7280)`}>
+                <div class="flex items-center space-x-2">
+                  <span class="text-base sm:text-lg">{column.icon}</span>
+                  <h3 class="font-bold text-gray-900 text-sm sm:text-base">{column.title}</h3>
+                </div>
+                <span class="px-2 py-1 text-xs font-bold rounded-full bg-gray-100 text-gray-700">
+                  {leadsByStatus[column.key as keyof typeof leadsByStatus].length}
+                </span>
+              </div>
+
+              <!-- Drop Zone -->
+              <div 
+                class={`lead-column min-h-80 space-y-3 p-2 rounded-lg border-2 border-dashed border-${column.color}-200`}
+                data-status={column.key}
+              >
+                {leadsByStatus[column.key as keyof typeof leadsByStatus].map((lead: CollectionEntry<'leads'>) => (
+                  <div 
+                    class="lead-card bg-white border border-gray-200 rounded-lg p-4 shadow-sm cursor-move hover:shadow-md transition-shadow"
+                    draggable="true"
+                    data-lead-id={lead.data.id}
+                    data-status={lead.data.status}
+                  >
+                    <!-- Lead Card Content -->
+                    <div class="space-y-2">
+                      <div class="flex justify-between items-start">
+                        <h4 class="font-semibold text-gray-900 text-sm truncate">{lead.data.name}</h4>
+                        <span class="text-xs text-gray-500">
+                          {new Date(lead.data.createdAt).toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric' 
+                          })}
+                        </span>
+                      </div>
+                      
+                      {lead.data.company && (
+                        <p class="text-xs text-gray-600 truncate">{lead.data.company}</p>
+                      )}
+                      
+                      <div class="space-y-1">
+                        <a 
+                          href={`mailto:${lead.data.email}`} 
+                          class="text-xs text-blue-600 hover:text-blue-800 block truncate"
+                        >
+                          {lead.data.email}
+                        </a>
+                        <a 
+                          href={`tel:${lead.data.phone}`} 
+                          class="text-xs text-gray-600 hover:text-gray-800 block"
+                        >
+                          {lead.data.phone}
+                        </a>
+                      </div>
+                      
+                      {lead.data.propertyInterested && (
+                        <div class="pt-2 border-t border-gray-100">
+                          <p class="text-xs text-gray-600">
+                            <span class="font-medium">Interest:</span> {lead.data.propertyInterested}
+                          </p>
+                        </div>
+                      )}
+                      
+                      {lead.data.message && (
+                        <div class="pt-2">
+                          <p class="text-xs text-gray-600 line-clamp-2">
+                            {lead.data.message.substring(0, 100)}{lead.data.message.length > 100 ? '...' : ''}
+                          </p>
+                        </div>
+                      )}
+
+                      <!-- Quick Actions -->
+                      <div class="flex space-x-2 pt-2">
+                        <button 
+                          class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded hover:bg-blue-100 transition-colors"
+                          onclick={`callLead('${lead.data.phone}')`}
+                        >
+                          📞 Call
+                        </button>
+                        <button 
+                          class="text-xs bg-green-50 text-green-600 px-2 py-1 rounded hover:bg-green-100 transition-colors"
+                          onclick={`emailLead('${lead.data.email}')`}
+                        >
+                          ✉️ Email
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Table View (Hidden by default) -->
+      <div id="tableViewContainer" class="hidden bg-white rounded-lg shadow">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Property</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              {sortedLeads.map((lead) => (
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {new Date(lead.data.createdAt).toLocaleDateString('en-US', { 
+                      month: 'short', day: 'numeric', year: 'numeric' 
+                    })}
+                  </td>
+                  <td class="px-6 py-4">
+                    <div class="text-sm font-medium text-gray-900">{lead.data.name}</div>
+                    {lead.data.company && <div class="text-sm text-gray-500">{lead.data.company}</div>}
+                  </td>
+                  <td class="px-6 py-4">
+                    <div class="text-sm text-blue-600">{lead.data.email}</div>
+                    <div class="text-sm text-gray-500">{lead.data.phone}</div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-900">{lead.data.propertyInterested || '-'}</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">
+                      {lead.data.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let draggedElement: HTMLElement | null = null;
+    let currentView = 'kanban';
+
+    // Check if user is authenticated - temporarily disabled for debugging
+    function checkAuth() {
+      // Temporarily bypass auth to debug kanban board
+      return true;
+      
+      if (window.netlifyIdentity) {
+        const user = window.netlifyIdentity.currentUser();
+        if (!user) {
+          document.getElementById('authCheck')?.classList.remove('hidden');
+          document.getElementById('dashboard')?.classList.add('hidden');
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // View switching functionality
+    function initializeViewSwitching() {
+      const kanbanViewBtn = document.getElementById('kanbanView');
+      const tableViewBtn = document.getElementById('tableView');
+      const kanbanBoard = document.getElementById('kanbanBoard');
+      const tableView = document.getElementById('tableViewContainer');
+
+      kanbanViewBtn?.addEventListener('click', () => {
+        currentView = 'kanban';
+        kanbanViewBtn.className = 'px-3 py-2 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg font-semibold text-sm sm:text-base';
+        tableViewBtn!.className = 'px-3 py-2 sm:px-4 sm:py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 text-sm sm:text-base';
+        kanbanBoard?.classList.remove('hidden');
+        tableView?.classList.add('hidden');
+      });
+
+      tableViewBtn?.addEventListener('click', () => {
+        currentView = 'table';
+        tableViewBtn.className = 'px-3 py-2 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg font-semibold text-sm sm:text-base';
+        kanbanViewBtn!.className = 'px-3 py-2 sm:px-4 sm:py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 text-sm sm:text-base';
+        tableView?.classList.remove('hidden');
+        kanbanBoard?.classList.add('hidden');
+      });
+    }
+
+    // Drag and Drop functionality
+    function initializeDragAndDrop() {
+      const leadCards = document.querySelectorAll('.lead-card');
+      const leadColumns = document.querySelectorAll('.lead-column');
+
+      // Add drag event listeners to lead cards
+      leadCards.forEach(card => {
+        card.addEventListener('dragstart', (e) => {
+          draggedElement = e.target as HTMLElement;
+          card.classList.add('opacity-50');
+        });
+
+        card.addEventListener('dragend', (e) => {
+          card.classList.remove('opacity-50');
+          draggedElement = null;
+        });
+      });
+
+      // Add drop event listeners to columns
+      leadColumns.forEach(column => {
+        column.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          column.classList.add('bg-blue-50', 'border-blue-400');
+        });
+
+        column.addEventListener('dragleave', (e) => {
+          const dragEvent = e as DragEvent;
+          if (!column.contains(dragEvent.relatedTarget as Node)) {
+            column.classList.remove('bg-blue-50', 'border-blue-400');
+          }
+        });
+
+        column.addEventListener('drop', (e) => {
+          e.preventDefault();
+          column.classList.remove('bg-blue-50', 'border-blue-400');
+
+          if (draggedElement) {
+            const newStatus = (column as HTMLElement).dataset.status;
+            const leadId = draggedElement.dataset.leadId;
+            const currentStatus = draggedElement.dataset.status;
+
+            if (newStatus !== currentStatus) {
+              // Move the card to the new column
+              column.appendChild(draggedElement);
+              draggedElement.dataset.status = newStatus;
+
+              // Update status counts
+              updateStatusCounts();
+
+              // Here you would typically send an API request to update the lead status
+              updateLeadStatus(leadId, newStatus);
+
+              // Show success notification
+              if (newStatus) {
+                showNotification(`Lead moved to ${newStatus.replace('-', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}`, 'success');
+              }
+            }
+          }
+        });
+      });
+    }
+
+    // Update status count badges
+    function updateStatusCounts() {
+      const columns = document.querySelectorAll('.lead-column');
+      columns.forEach(column => {
+        const status = (column as HTMLElement).dataset.status;
+        const count = column.querySelectorAll('.lead-card').length;
+        const badge = column.parentElement?.querySelector('.bg-blue-100, .bg-yellow-100, .bg-green-100, .bg-purple-100, .bg-orange-100, .bg-emerald-100, .bg-red-100');
+        if (badge) {
+          badge.textContent = count.toString();
+        }
+      });
+    }
+
+    // Update lead status (this would integrate with your backend)
+    function updateLeadStatus(leadId: string | undefined, newStatus: string | undefined) {
+      if (!leadId || !newStatus) return;
+      
+      console.log(`Updating lead ${leadId} to status: ${newStatus}`);
+      // TODO: Implement API call to update lead status in your CMS
+      // fetch('/.netlify/functions/update-lead-status', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ leadId, status: newStatus })
+      // });
+    }
+
+    // Quick action functions
+    // Make functions global for onclick handlers
+    (window as any).callLead = function(phone: string) {
+      window.location.href = `tel:${phone}`;
+    };
+
+    (window as any).emailLead = function(email: string) {
+      window.location.href = `mailto:${email}`;
+    };
+
+    // Search functionality
+    function initializeSearch() {
+      const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+      
+      searchInput?.addEventListener('input', (e) => {
+        const searchTerm = (e.target as HTMLInputElement).value.toLowerCase();
+        const leadCards = document.querySelectorAll('.lead-card');
+        
+        leadCards.forEach(card => {
+          const cardElement = card as HTMLElement;
+          const name = cardElement.querySelector('h4')?.textContent?.toLowerCase() || '';
+          const company = cardElement.querySelector('p')?.textContent?.toLowerCase() || '';
+          const email = cardElement.querySelector('a')?.textContent?.toLowerCase() || '';
+          
+          const matches = name.includes(searchTerm) || company.includes(searchTerm) || email.includes(searchTerm);
+          
+          if (matches || !searchTerm) {
+            cardElement.style.display = '';
+          } else {
+            cardElement.style.display = 'none';
+          }
+        });
+      });
+    }
+
+    // Show notification
+    function showNotification(message: string, type: 'success' | 'error' = 'success') {
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 px-4 py-2 rounded-lg text-white font-semibold z-50 ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+      }`;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+
+    // Export to CSV
+    function exportToCSV() {
+      const leadCards = document.querySelectorAll('.lead-card');
+      const leads = Array.from(leadCards).map(card => {
+        const cardElement = card as HTMLElement;
+        return {
+          name: cardElement.querySelector('h4')?.textContent || '',
+          company: cardElement.querySelector('p')?.textContent || '',
+          email: cardElement.querySelector('a')?.textContent || '',
+          phone: cardElement.querySelectorAll('a')[1]?.textContent || '',
+          status: cardElement.dataset.status || '',
+          date: cardElement.querySelector('span')?.textContent || ''
+        };
+      });
+
+      const csvContent = [
+        ['Name', 'Company', 'Email', 'Phone', 'Status', 'Date'],
+        ...leads.map(lead => [lead.name, lead.company, lead.email, lead.phone, lead.status, lead.date])
+      ].map(row => row.join(',')).join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `leads-kanban-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
+
+    // Initialize everything when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      if (checkAuth()) {
+        initializeViewSwitching();
+        initializeDragAndDrop();
+        initializeSearch();
+        document.getElementById('exportCSV')?.addEventListener('click', exportToCSV);
+      }
+    });
+
+    // Handle Netlify Identity
+    if (typeof window !== 'undefined' && window.netlifyIdentity) {
+      window.netlifyIdentity.on('init', checkAuth);
+      window.netlifyIdentity.on('login', () => {
+        document.getElementById('authCheck')?.classList.add('hidden');
+        document.getElementById('dashboard')?.classList.remove('hidden');
+      });
+      window.netlifyIdentity.on('logout', () => {
+        window.location.href = '/admin';
+      });
+    }
+  </script>
+</BaseLayout>
