@@ -2,7 +2,7 @@
 title: warehouse 1
 type: warehouse
 location: location test
-county: Miami-Dade
+county: Broward
 price: price per sq ft test
 size: sq footage test
 available: true
