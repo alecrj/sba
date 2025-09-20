@@ -1,5 +1,6 @@
 ---
 title: test pal beach
+type: warehouse
 location: palm beach
 county: Palm Beach
 price: "50"
@@ -9,7 +10,10 @@ featured: true
 image: /images/uploads/sbalogo.png
 gallery:
   - /images/uploads/sbalogo.png
-address: 100 st
+street_address: 100 st
+city: Palm Beach
+state: FL
+zip_code: "33480"
 features:
   - office inside
   - Highway Access

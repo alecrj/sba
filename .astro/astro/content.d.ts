@@ -157,6 +157,13 @@ declare module 'astro:content' {
   render(): Render[".md"];
 }>;
 "properties": {
+"test-pal-beach.md": {
+	id: "test-pal-beach.md";
+  slug: "test-pal-beach";
+  body: string;
+  collection: "properties";
+  data: InferEntrySchema<"properties">
+} & { render(): Render[".md"] };
 "warehouse-1.md": {
 	id: "warehouse-1.md";
   slug: "warehouse-1";

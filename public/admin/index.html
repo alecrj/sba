@@ -123,10 +123,7 @@
               }
             });
 
-            // Initialize address features after CMS loads
-            setTimeout(() => {
-              initializeAddressFeatures();
-            }, 2000);
+            // CMS loaded successfully
 
             console.log('Shallow Bay Advisors CMS initialized successfully');
           } catch (error) {
@@ -172,112 +169,6 @@
         document.body.appendChild(errorDiv);
       }
 
-      // Address features function
-      function initializeAddressFeatures() {
-        console.log('Initializing address features...');
-
-        // Enhanced address input with helpful formatting
-        function enhanceAddressInputs() {
-          const addressInputs = document.querySelectorAll('input[name="address"], input[id*="address"]');
-
-          addressInputs.forEach(input => {
-            if (!input.dataset.enhanced) {
-              console.log('Enhancing address field');
-
-              // Add helpful placeholder
-              input.placeholder = 'Enter full street address (e.g., 123 Main St, Miami, FL 33101)';
-
-              // Add input formatting help
-              input.addEventListener('blur', function() {
-                const value = this.value.trim();
-                if (value && !value.includes(',')) {
-                  // Suggest proper formatting if no commas found
-                  const hint = document.createElement('div');
-                  hint.style.cssText = 'color: #f59e0b; font-size: 12px; margin-top: 4px;';
-                  hint.textContent = 'Tip: Include city and state for best results (e.g., "123 Main St, Miami, FL")';
-
-                  // Remove existing hints
-                  const existingHint = this.parentNode.querySelector('.address-hint');
-                  if (existingHint) existingHint.remove();
-
-                  hint.className = 'address-hint';
-                  this.parentNode.appendChild(hint);
-
-                  // Remove hint after 5 seconds
-                  setTimeout(() => hint.remove(), 5000);
-                }
-              });
-
-              input.dataset.enhanced = 'true';
-            }
-          });
-        }
-
-        // Check if Google Places API is available for full autocomplete
-        if (typeof google !== 'undefined' && google.maps && google.maps.places) {
-          console.log('Google Places API available - enabling full autocomplete');
-
-          function attachAutocomplete() {
-            const addressInputs = document.querySelectorAll('input[name="address"], input[id*="address"]');
-
-            addressInputs.forEach(input => {
-              if (!input.dataset.autocompleteInitialized) {
-                const autocomplete = new google.maps.places.Autocomplete(input, {
-                  types: ['address'],
-                  componentRestrictions: { country: 'us' },
-                  fields: ['formatted_address', 'geometry', 'address_components']
-                });
-
-                autocomplete.addListener('place_changed', function() {
-                  const place = autocomplete.getPlace();
-                  if (place.formatted_address) {
-                    input.value = place.formatted_address;
-                    input.dispatchEvent(new Event('input', { bubbles: true }));
-                  }
-                });
-
-                input.dataset.autocompleteInitialized = 'true';
-              }
-            });
-          }
-
-          attachAutocomplete();
-        } else {
-          console.log('Google Places API not available - using enhanced formatting');
-          enhanceAddressInputs();
-        }
-
-        // Monitor for new form fields (when editing properties)
-        const observer = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.addedNodes.length) {
-              setTimeout(() => {
-                if (typeof google !== 'undefined' && google.maps && google.maps.places) {
-                  // Re-run autocomplete attachment
-                  const addressInputs = document.querySelectorAll('input[name="address"], input[id*="address"]');
-                  addressInputs.forEach(input => {
-                    if (!input.dataset.autocompleteInitialized) {
-                      const autocomplete = new google.maps.places.Autocomplete(input, {
-                        types: ['address'],
-                        componentRestrictions: { country: 'us' },
-                        fields: ['formatted_address', 'geometry', 'address_components']
-                      });
-                      input.dataset.autocompleteInitialized = 'true';
-                    }
-                  });
-                } else {
-                  enhanceAddressInputs();
-                }
-              }, 500);
-            }
-          });
-        });
-
-        observer.observe(document.body, {
-          childList: true,
-          subtree: true
-        });
-      }
 
       // Global error handler
       window.addEventListener('error', function(e) {

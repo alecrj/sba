@@ -52,7 +52,10 @@ collections:
         hint: "Upload multiple photos (unlimited)"
 
       # Location Details
-      - { label: "Full Address", name: "address", widget: "string", hint: "Start typing address for autocomplete suggestions" }
+      - { label: "Street Address", name: "street_address", widget: "string", hint: "Street number and name (e.g., 123 Main Street)", required: false }
+      - { label: "City", name: "city", widget: "string", hint: "City name (e.g., Miami, Doral)", required: false }
+      - { label: "State", name: "state", widget: "string", default: "FL", hint: "State abbreviation", required: false }
+      - { label: "ZIP Code", name: "zip_code", widget: "string", hint: "5-digit ZIP code", required: false }
 
       # Property Features
       - label: "Property Features"

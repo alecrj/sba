@@ -18,7 +18,10 @@ gallery:
 contact_name: contact name test
 contact_email: contact email test
 contact_phone: contact phone test
-address: address test
+street_address: address test
+city: Miami
+state: FL
+zip_code: "33101"
 lease_term: lease term test
 clear_height: clear height test
 loading_docks: 1234
