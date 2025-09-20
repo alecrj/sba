@@ -123,7 +123,10 @@
               }
             });
 
-            // CMS loaded successfully
+            // Fix visibility issues after CMS loads
+            setTimeout(() => {
+              fixCMSVisibility();
+            }, 3000);
 
             console.log('Shallow Bay Advisors CMS initialized successfully');
           } catch (error) {
@@ -169,6 +172,69 @@
         document.body.appendChild(errorDiv);
       }
 
+      // Fix CMS visibility issues with JavaScript
+      function fixCMSVisibility() {
+        console.log('Fixing CMS visibility issues...');
+
+        // Fix all select elements
+        const selects = document.querySelectorAll('select');
+        selects.forEach(select => {
+          select.style.color = '#374151';
+          select.style.backgroundColor = 'white';
+          select.style.border = '1px solid #d1d5db';
+        });
+
+        // Fix sort dropdown specifically
+        const sortElements = document.querySelectorAll('[class*="sort"], [class*="Sort"], [aria-label*="sort"], [aria-label*="Sort"]');
+        sortElements.forEach(element => {
+          element.style.color = '#374151';
+          element.style.backgroundColor = 'white';
+
+          // Fix child elements too
+          const children = element.querySelectorAll('*');
+          children.forEach(child => {
+            if (child.tagName === 'SELECT' || child.tagName === 'OPTION') {
+              child.style.color = '#374151';
+              child.style.backgroundColor = 'white';
+            }
+          });
+        });
+
+        // Fix any white text elements
+        const whiteTextElements = document.querySelectorAll('[style*="color: white"], [style*="color: #fff"], [style*="color: rgb(255, 255, 255)"]');
+        whiteTextElements.forEach(element => {
+          if (element.tagName === 'SELECT' || element.tagName === 'OPTION' ||
+              element.classList.toString().includes('sort') ||
+              element.classList.toString().includes('filter')) {
+            element.style.color = '#374151';
+            element.style.backgroundColor = 'white';
+          }
+        });
+
+        // Monitor for changes and reapply fixes
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.addedNodes.length) {
+              setTimeout(() => {
+                const newSelects = document.querySelectorAll('select');
+                newSelects.forEach(select => {
+                  if (select.style.color === 'white' || select.style.color === '#fff' || select.style.color === 'rgb(255, 255, 255)') {
+                    select.style.color = '#374151';
+                    select.style.backgroundColor = 'white';
+                  }
+                });
+              }, 500);
+            }
+          });
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['style', 'class']
+        });
+      }
 
       // Global error handler
       window.addEventListener('error', function(e) {
