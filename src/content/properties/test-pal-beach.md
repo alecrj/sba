@@ -1,0 +1,21 @@
+---
+title: test pal beach
+location: palm beach
+county: Palm Beach
+price: "50"
+size: "10000"
+available: true
+featured: true
+image: /images/uploads/sbalogo.png
+gallery:
+  - /images/uploads/sbalogo.png
+address: 100 st
+features:
+  - office inside
+  - Highway Access
+clear_height: 24 ft
+loading_docks: 4
+year_built: 1880
+lease_term: "3"
+date: 2025-09-20T23:00:57.380Z
+---
