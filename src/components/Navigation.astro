@@ -14,7 +14,7 @@ const isActive = (path: string) => {
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
 
-      <!-- Logo -->
+      <!-- Logo (Left) -->
       <div class="flex-shrink-0">
         <a href="/" class="flex items-center group">
           <img
@@ -25,67 +25,76 @@ const isActive = (path: string) => {
         </a>
       </div>
 
-      <!-- Desktop Navigation -->
-      <div class="hidden lg:flex items-center space-x-8">
-        <a
-          href="/"
-          class={`text-sm font-medium transition-colors duration-200 ${
-            isActive('/')
-              ? 'text-gray-900'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
-        >
-          Home
-        </a>
-        <a
-          href="/properties"
-          class={`text-sm font-medium transition-colors duration-200 ${
-            isActive('/properties')
-              ? 'text-gray-900'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
-        >
-          Properties
-        </a>
-        <a
-          href="/warehouses"
-          class={`text-sm font-medium transition-colors duration-200 ${
-            isActive('/warehouses')
-              ? 'text-gray-900'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
-        >
-          Warehouses
-        </a>
-        <a
-          href="/about"
-          class={`text-sm font-medium transition-colors duration-200 ${
-            isActive('/about')
-              ? 'text-gray-900'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
-        >
-          About
-        </a>
-        <a
-          href="/contact"
-          class={`text-sm font-medium transition-colors duration-200 ${
-            isActive('/contact')
-              ? 'text-gray-900'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
-        >
-          Contact
-        </a>
+      <!-- Center Navigation (Desktop) -->
+      <div class="hidden lg:flex items-center justify-center flex-1">
+        <div class="flex items-center space-x-8">
+          <a
+            href="/"
+            class={`text-sm font-medium transition-colors duration-200 px-4 py-2 rounded-full hover:bg-gray-50 ${
+              isActive('/')
+                ? 'text-gray-900 bg-gray-100'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+            data-translate="nav_home"
+          >
+            Home
+          </a>
+          <a
+            href="/properties"
+            class={`text-sm font-medium transition-colors duration-200 px-4 py-2 rounded-full hover:bg-gray-50 ${
+              isActive('/properties') || isActive('/warehouses')
+                ? 'text-gray-900 bg-gray-100'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+            data-translate="nav_properties"
+          >
+            Properties
+          </a>
+          <a
+            href="/about"
+            class={`text-sm font-medium transition-colors duration-200 px-4 py-2 rounded-full hover:bg-gray-50 ${
+              isActive('/about')
+                ? 'text-gray-900 bg-gray-100'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+            data-translate="nav_about"
+          >
+            About
+          </a>
+        </div>
       </div>
 
-      <!-- Desktop CTA -->
+      <!-- Right Side: Language Selector + CTA Button -->
       <div class="hidden lg:flex items-center space-x-4">
+        <!-- Language Selector -->
+        <div class="relative">
+          <button
+            type="button"
+            id="language-button"
+            class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-full border border-gray-300 transition-all duration-200"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+            </svg>
+            <span data-translate="nav_language">English</span>
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <!-- Language Dropdown (hidden by default) -->
+          <div id="language-dropdown" class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-xl border border-gray-200 py-2 hidden z-50">
+            <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200" data-lang="en">English</a>
+            <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200" data-lang="es">Español</a>
+          </div>
+        </div>
+
+        <!-- Book Consultation Button -->
         <a
-          href="/contact"
-          class="btn btn-primary"
+          href="/book-consultation"
+          class="bg-sba-navy text-white px-6 py-2.5 text-sm font-semibold rounded-full hover:bg-sba-navy-dark transition-all duration-300 shadow-md hover:shadow-lg"
+          data-translate="nav_book_consultation"
         >
-          Get Started
+          Book Consultation
         </a>
       </div>
 
@@ -114,28 +123,20 @@ const isActive = (path: string) => {
               ? 'text-gray-900 bg-gray-50'
               : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
           }`}
+          data-translate="nav_home"
         >
           Home
         </a>
         <a
           href="/properties"
           class={`block px-4 py-3 text-base font-medium transition-colors duration-200 rounded-lg ${
-            isActive('/properties')
+            isActive('/properties') || isActive('/warehouses')
               ? 'text-gray-900 bg-gray-50'
               : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
           }`}
+          data-translate="nav_properties"
         >
           Properties
-        </a>
-        <a
-          href="/warehouses"
-          class={`block px-4 py-3 text-base font-medium transition-colors duration-200 rounded-lg ${
-            isActive('/warehouses')
-              ? 'text-gray-900 bg-gray-50'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-          }`}
-        >
-          Warehouses
         </a>
         <a
           href="/about"
@@ -144,27 +145,31 @@ const isActive = (path: string) => {
               ? 'text-gray-900 bg-gray-50'
               : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
           }`}
+          data-translate="nav_about"
         >
           About
         </a>
-        <a
-          href="/contact"
-          class={`block px-4 py-3 text-base font-medium transition-colors duration-200 rounded-lg ${
-            isActive('/contact')
-              ? 'text-gray-900 bg-gray-50'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-          }`}
-        >
-          Contact
-        </a>
+
+        <!-- Mobile Language Selector -->
+        <div class="pt-4 border-t border-gray-200">
+          <div class="flex items-center justify-between px-4 py-3">
+            <span class="text-sm font-medium text-gray-600">Language</span>
+            <div class="flex items-center gap-2">
+              <button class="text-sm text-gray-900 font-medium" data-lang="en" data-translate="nav_language">English</button>
+              <span class="text-gray-400">|</span>
+              <button class="text-sm text-gray-600 hover:text-gray-900" data-lang="es">Español</button>
+            </div>
+          </div>
+        </div>
 
         <!-- Mobile CTA -->
         <div class="pt-4">
           <a
-            href="/contact"
-            class="btn btn-primary w-full block text-center"
+            href="/book-consultation"
+            class="bg-sba-navy text-white w-full block text-center px-6 py-3 text-sm font-semibold rounded-lg hover:bg-sba-navy-dark transition-all duration-300"
+            data-translate="nav_book_consultation"
           >
-            Get Started
+            Book Consultation
           </a>
         </div>
       </div>
@@ -212,6 +217,58 @@ const isActive = (path: string) => {
             icon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
           }
         }
+      });
+    }
+
+    // Wait for global translation system to be available
+    function waitForGlobalTranslations(callback) {
+      if (window.translatePage) {
+        callback();
+      } else {
+        setTimeout(() => waitForGlobalTranslations(callback), 100);
+      }
+    }
+
+    // Language selector functionality
+    const languageButton = document.getElementById('language-button');
+    const languageDropdown = document.getElementById('language-dropdown');
+
+    if (languageButton && languageDropdown) {
+      languageButton.addEventListener('click', function() {
+        languageDropdown.classList.toggle('hidden');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!languageButton.contains(event.target) && !languageDropdown.contains(event.target)) {
+          languageDropdown.classList.add('hidden');
+        }
+      });
+
+      // Handle language selection
+      waitForGlobalTranslations(() => {
+        const languageLinks = languageDropdown.querySelectorAll('a[data-lang]');
+        languageLinks.forEach(link => {
+          link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const selectedLang = this.getAttribute('data-lang');
+
+            // Use global translation function
+            window.translatePage(selectedLang);
+
+            // Close dropdown
+            languageDropdown.classList.add('hidden');
+          });
+        });
+
+        // Handle mobile language buttons
+        const mobileLangButtons = document.querySelectorAll('button[data-lang]');
+        mobileLangButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const selectedLang = this.getAttribute('data-lang');
+            window.translatePage(selectedLang);
+          });
+        });
       });
     }
   });

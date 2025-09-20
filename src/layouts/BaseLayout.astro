@@ -216,11 +216,172 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Contact Modal - Include at the end of body -->
     <ContactModal />
     
-    <!-- GSAP Initialization and Animation Scripts - temporarily disabled -->
+    <!-- Global Language System -->
     <script is:inline>
-      // GSAP animations temporarily disabled due to ScrollTrigger compatibility issues
-      // Will re-enable with proper error handling after forms are working
-      console.log('GSAP animations disabled - forms should work now');
+      // Global Translations Database
+      window.SBATranslations = {
+        en: {
+          // Navigation
+          nav_home: "Home",
+          nav_properties: "Properties",
+          nav_book_consultation: "Book Consultation",
+          nav_about: "About",
+          nav_contact: "Contact",
+          nav_get_started: "Get Started",
+          nav_language: "English",
+
+          // Homepage
+          hero_title: "Find Your Perfect Warehouse Space",
+          hero_subtitle: "South Florida's premier industrial real estate platform. Discover available warehouse space with live inventory and instant tour booking.",
+          hero_cta: "Explore Properties",
+          hero_cta_secondary: "Book Consultation",
+
+          // Search
+          search_placeholder: "Search by location, size, or features...",
+          search_button: "Search",
+
+          // Counties
+          county_miami_dade: "Miami-Dade County",
+          county_broward: "Broward County",
+          county_palm_beach: "Palm Beach County",
+
+          // Property details
+          property_sqft: "sq ft",
+          property_monthly: "/month",
+          property_available: "Available Now",
+          property_view_details: "View Details",
+
+          // Booking page
+          booking_title: "Book Your Consultation",
+          booking_subtitle: "Schedule a meeting with our commercial real estate experts",
+          booking_form_name: "Full Name",
+          booking_form_email: "Email Address",
+          booking_form_phone: "Phone Number",
+          booking_form_company: "Company/Organization",
+          booking_form_consultation_type: "Consultation Type",
+          booking_form_date: "Preferred Date",
+          booking_form_time: "Preferred Time",
+          booking_form_requirements: "Space Requirements",
+          booking_form_submit: "Schedule Consultation",
+
+          // About page
+          about_title: "About Shallow Bay Advisors",
+          about_subtitle: "Your trusted partner in South Florida commercial real estate",
+
+          // Contact
+          contact_title: "Contact Us",
+          contact_subtitle: "Get in touch with our team",
+
+          // Common
+          loading: "Loading...",
+          error: "Error",
+          success: "Success",
+          back: "Back",
+          next: "Next",
+          submit: "Submit",
+          cancel: "Cancel",
+          close: "Close"
+        },
+
+        es: {
+          // Navigation
+          nav_home: "Inicio",
+          nav_properties: "Propiedades",
+          nav_book_consultation: "Reservar Consulta",
+          nav_about: "Acerca de",
+          nav_contact: "Contacto",
+          nav_get_started: "Comenzar",
+          nav_language: "Español",
+
+          // Homepage
+          hero_title: "Encuentra tu Espacio de Almacén Perfecto",
+          hero_subtitle: "La plataforma líder de bienes raíces industriales del sur de Florida. Descubre espacios de almacén disponibles con inventario en vivo y reservas instantáneas de tours.",
+          hero_cta: "Explorar Propiedades",
+          hero_cta_secondary: "Reservar Consulta",
+
+          // Search
+          search_placeholder: "Buscar por ubicación, tamaño o características...",
+          search_button: "Buscar",
+
+          // Counties
+          county_miami_dade: "Condado de Miami-Dade",
+          county_broward: "Condado de Broward",
+          county_palm_beach: "Condado de Palm Beach",
+
+          // Property details
+          property_sqft: "pies²",
+          property_monthly: "/mes",
+          property_available: "Disponible Ahora",
+          property_view_details: "Ver Detalles",
+
+          // Booking page
+          booking_title: "Reserva tu Consulta",
+          booking_subtitle: "Programa una reunión con nuestros expertos en bienes raíces comerciales",
+          booking_form_name: "Nombre Completo",
+          booking_form_email: "Correo Electrónico",
+          booking_form_phone: "Número de Teléfono",
+          booking_form_company: "Empresa/Organización",
+          booking_form_consultation_type: "Tipo de Consulta",
+          booking_form_date: "Fecha Preferida",
+          booking_form_time: "Hora Preferida",
+          booking_form_requirements: "Requisitos de Espacio",
+          booking_form_submit: "Programar Consulta",
+
+          // About page
+          about_title: "Acerca de Shallow Bay Advisors",
+          about_subtitle: "Tu socio de confianza en bienes raíces comerciales del sur de Florida",
+
+          // Contact
+          contact_title: "Contáctanos",
+          contact_subtitle: "Ponte en contacto con nuestro equipo",
+
+          // Common
+          loading: "Cargando...",
+          error: "Error",
+          success: "Éxito",
+          back: "Atrás",
+          next: "Siguiente",
+          submit: "Enviar",
+          cancel: "Cancelar",
+          close: "Cerrar"
+        }
+      };
+
+      // Global translation function
+      window.translateElement = function(element, lang) {
+        const key = element.getAttribute('data-translate');
+        if (key && window.SBATranslations[lang] && window.SBATranslations[lang][key]) {
+          element.textContent = window.SBATranslations[lang][key];
+        }
+      };
+
+      // Global page translation function
+      window.translatePage = function(lang) {
+        // Update all elements with data-translate attribute
+        const elements = document.querySelectorAll('[data-translate]');
+        elements.forEach(element => {
+          window.translateElement(element, lang);
+        });
+
+        // Store language preference
+        localStorage.setItem('selectedLanguage', lang);
+
+        // Update document language attribute
+        document.documentElement.lang = lang;
+
+        // Trigger custom event for other components to listen to
+        window.dispatchEvent(new CustomEvent('languageChanged', { detail: { language: lang } }));
+      };
+
+      // Auto-translate on page load
+      window.addEventListener('DOMContentLoaded', function() {
+        const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+        if (savedLang !== 'en') {
+          window.translatePage(savedLang);
+        }
+      });
+
+      console.log('Global language system loaded');
 
       // Mobile menu functionality
       function toggleMobileMenu() {

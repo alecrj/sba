@@ -1,405 +1,129 @@
+# Shallow Bay Advisors CMS Configuration
 backend:
   name: git-gateway
   branch: main
 
-# Media optimized for high-quality images
-media_folder: "public/images/warehouses"
-public_folder: "/images/warehouses"
-
 # Site configuration
-site_url: https://laec.netlify.app
-display_url: https://laec.netlify.app
-logo_url: /favicon.svg
+site_url: https://shabay.netlify.app
+display_url: https://shabay.netlify.app
+logo_url: https://shabay.netlify.app/images/uploads/sbalogo.png
 
-# Mobile-optimized workflow
-publish_mode: simple
-editor:
-  preview: false  # Disabled for better mobile performance
+# Media and public folders
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
 
-# Mobile-friendly interface
-search: false  # Simplified for mobile
-show_preview_links: false
+# Publishing workflow
+publish_mode: editorial_workflow
 
-# Collections (UPDATED for CRM integration)
+# Collections
 collections:
-  # WAREHOUSE COLLECTION (Keep exactly as is - no changes)
-  - name: "warehouses"
-    label: "🏢 Properties"
-    label_singular: "Property"
-    folder: "src/content/warehouses"
+  # Properties Collection
+  - name: "properties"
+    label: "Properties"
+    folder: "src/content/properties"
     create: true
     slug: "{{slug}}"
-    extension: "json"
-    format: "json"
-    summary: "{{title}} • {{county}} • {{availability}}"
-    sortable_fields: ['title', 'county', 'availability', 'featured', 'createdAt']
-    
-    # Mobile view filters
-    view_filters:
-      - label: "✅ Available Now"
-        field: availability
-        pattern: "available"
-      - label: "⭐ Featured Properties"
-        field: featured
-        pattern: true
-      - label: "⏳ Pending Lease"
-        field: availability
-        pattern: "pending"
-      - label: "🔒 Leased Properties"
-        field: availability
-        pattern: "leased"
-      - label: "🏖️ Miami-Dade"
-        field: county
-        pattern: "Miami-Dade"
-      - label: "🌴 Palm Beach"
-        field: county
-        pattern: "Palm Beach"
-      - label: "🏢 Broward"
-        field: county
-        pattern: "Broward"
-    
-    # Mobile view groups
-    view_groups:
-      - label: "By Status"
-        field: availability
-      - label: "By County"
-        field: county
-    
-    # Mobile-first fields
+    editor:
+      preview: false
     fields:
-      # Essential Property Info (always visible)
-      - label: "🏢 Property Title"
-        name: "title"
-        widget: "string"
-        required: true
-        hint: "e.g., 'Downtown Logistics Center'"
-        
-      - label: "🔗 URL Slug"
-        name: "slug"
-        widget: "string"
-        required: true
-        hint: "URL-friendly version (e.g., 'downtown-logistics-center')"
-        pattern: ['^[a-z0-9-]+$', "Only lowercase letters, numbers, and dashes"]
-        
-      - label: "💰 Price"
-        name: "price"
-        widget: "string"
-        required: true
-        hint: "e.g., '$12/sq ft/year' or 'Contact for pricing'"
-        
-      - label: "📐 Size (sq ft)"
-        name: "size"
-        widget: "number"
-        required: true
-        value_type: "int"
-        min: 1000
-        max: 1000000
-        step: 1000
-        hint: "Total square footage"
-        
-      # ENHANCED ADDRESS FIELDS - CLEAR AND ORGANIZED
-      - label: "🏠 Street Address"
-        name: "address"
-        widget: "string"
-        required: true
-        hint: "Complete street address (e.g., '1234 Industrial Blvd, Suite 100')"
-        pattern: ['^.{5,}$', "Please enter a complete street address"]
-        
-      - label: "🏙️ City"
-        name: "city"
-        widget: "string"
-        required: true
-        hint: "City name (e.g., 'Hollywood', 'Miami', 'Fort Lauderdale')"
-        
-      - label: "🗺️ State"
-        name: "state"
-        widget: "select"
-        required: true
-        default: "FL"
-        options:
-          - { label: "Florida", value: "FL" }
-          - { label: "Georgia", value: "GA" }
-          - { label: "Alabama", value: "AL" }
-          - { label: "South Carolina", value: "SC" }
-          - { label: "North Carolina", value: "NC" }
-        hint: "Select the state"
-        
-      - label: "📮 ZIP Code"
-        name: "zipCode"
-        widget: "string"
-        required: true
-        hint: "5-digit ZIP code (e.g., '33021')"
-        pattern: ['^[0-9]{5}$', "Please enter a 5-digit ZIP code"]
-        
-      - label: "🏛️ County"
-        name: "county"
-        widget: "select"
-        required: true
-        options:
-          - { label: "Miami-Dade County", value: "Miami-Dade" }
-          - { label: "Palm Beach County", value: "Palm Beach" }
-          - { label: "Broward County", value: "Broward" }
-        hint: "Select the county where this property is located"
-        
-      # Keep this for backward compatibility with existing properties
-      - label: "📍 Legacy Location (for existing properties)"
-        name: "location"
-        widget: "string"
-        required: false
-        hint: "Legacy field - will be auto-generated from city/state for new properties"
-        
-      - label: "✨ Key Features"
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Property Type", name: "type", widget: "select", options: ["warehouse", "office", "industrial", "flex-space", "distribution"] }
+      - { label: "Location", name: "location", widget: "string" }
+      - { label: "County", name: "county", widget: "select", options: ["Miami-Dade", "Broward", "Palm Beach"] }
+      - { label: "Price per sqft", name: "price", widget: "string", hint: "e.g., $8.50" }
+      - { label: "Square Footage", name: "size", widget: "string", hint: "e.g., 25,000" }
+      - { label: "Available", name: "available", widget: "boolean", default: true }
+      - { label: "Featured Property", name: "featured", widget: "boolean", default: false, required: false }
+      - { label: "Description", name: "description", widget: "text", required: false }
+      - { label: "Property Image", name: "image", widget: "image", required: false }
+      - label: "Features"
         name: "features"
         widget: "list"
-        required: true
-        allow_add: true
-        min: 3
-        max: 10
-        default: ["Loading Docks", "24/7 Access", "Security System"]
-        hint: "Add key features (loading docks, ceiling height, etc.)"
-        field:
-          label: "Feature"
-          name: "feature"
-          widget: "string"
-        
-      # 🎯 HIGH-QUALITY IMAGES (FIXED FOR NO BLUR)
-      - label: "📸 Property Images"
-        name: "images"
+        field: { label: "Feature", name: "feature", widget: "string" }
+        default: ["Dock High", "Highway Access"]
+      - label: "Additional Images"
+        name: "gallery"
         widget: "list"
-        required: true
-        allow_add: true
-        min: 1
-        max: 10
-        hint: "Upload high-quality photos (recommended: 1920x1080 or higher)"
-        summary: "Photo {{fields.image}}"
-        field:
-          label: "Image"
-          name: "image"
-          widget: "image"
-          # THIS PREVENTS THE BLURRY COMPRESSION:
-          media_library:
-            config:
-              max_file_size: 10000000  # 10MB for high quality
-              multiple: false
-              choose_url: false
-              # These settings preserve image quality:
-              default_transformations: []  # No automatic compression
-              manual_transformations: []   # No manual compression
-              
-      - label: "📝 Description"
-        name: "description"
-        widget: "text"
-        required: true
-        hint: "Detailed property description highlighting benefits and amenities"
-        
-      - label: "🔄 Availability Status"
-        name: "availability"
-        widget: "select"
-        required: true
-        default: "available"
-        options:
-          - { label: "✅ Available Now", value: "available" }
-          - { label: "⏳ Pending Lease", value: "pending" }
-          - { label: "🔒 Leased", value: "leased" }
-        hint: "Current leasing status"
-        
-      - label: "⭐ Featured Property"
-        name: "featured"
-        widget: "boolean"
-        default: false
-        hint: "Show prominently on homepage"
-        
-      - label: "📅 Date Listed"
-        name: "createdAt"
-        widget: "datetime"
-        default: ""
-        format: "YYYY-MM-DD"
-        time_format: false
-        required: true
-        
-      # SEO (Optional - collapsed by default)
-      - label: "🔍 SEO Settings"
-        name: "seo"
-        widget: "object"
-        collapsed: true
+        field: { label: "Image", name: "image", widget: "image" }
         required: false
-        fields:
-          - label: "Meta Title"
-            name: "metaTitle"
-            widget: "string"
-            required: false
-            hint: "Custom title for search engines (optional)"
-            
-          - label: "Meta Description"
-            name: "metaDescription"
-            widget: "text"
-            required: false
-            hint: "Description for search results (optional)"
+      - { label: "Contact Name", name: "contact_name", widget: "string", required: false }
+      - { label: "Contact Email", name: "contact_email", widget: "string", required: false }
+      - { label: "Contact Phone", name: "contact_phone", widget: "string", required: false }
+      - { label: "Address", name: "address", widget: "string", required: false }
+      - { label: "Lease Term", name: "lease_term", widget: "string", required: false, hint: "e.g., 5 years" }
+      - { label: "Clear Height", name: "clear_height", widget: "string", required: false, hint: "e.g., 32 feet" }
+      - { label: "Loading Docks", name: "loading_docks", widget: "number", required: false }
+      - { label: "Parking Spaces", name: "parking", widget: "number", required: false }
+      - { label: "Year Built", name: "year_built", widget: "number", required: false }
+      - { label: "Listing Date", name: "date", widget: "datetime", default: "{{now}}" }
 
-  # NEW: LEAD MANAGEMENT COLLECTION (CRM Integration)
+  # Leads Collection
   - name: "leads"
-    label: "🎯 Lead Management"
-    label_singular: "Lead"
-    folder: "content/leads"
-    create: false  # Leads are created automatically by the system
-    delete: false  # Prevent accidental deletion
-    slug: "{{slug}}"
-    extension: "md"
-    format: "frontmatter"
-    summary: "{{name}} • {{email}} • {{status}} • {{submitted_date}}"
-    sortable_fields: ['submitted_date', 'status', 'name', 'priority', 'warehouse_interest']
-    
-    # Lead status filters for easy management
-    view_filters:
-      - label: "🆕 New Leads"
-        field: status
-        pattern: "new"
-      - label: "📞 Contacted"
-        field: status
-        pattern: "contacted" 
-      - label: "✅ Qualified"
-        field: status
-        pattern: "qualified"
-      - label: "📅 Viewing Scheduled"
-        field: status
-        pattern: "viewing_scheduled"
-      - label: "💼 Negotiating"
-        field: status
-        pattern: "negotiating"
-      - label: "🎉 Closed Won"
-        field: status
-        pattern: "closed_won"
-      - label: "❌ Closed Lost"
-        field: status
-        pattern: "closed_lost"
-      - label: "🔥 High Priority"
-        field: priority
-        pattern: "high"
-      - label: "⚡ Urgent"
-        field: priority
-        pattern: "urgent"
-    
-    # Group leads by status and priority
-    view_groups:
-      - label: "By Status"
-        field: status
-      - label: "By Priority"
-        field: priority
-      - label: "By Source"
-        field: source
-    
-    # Lead management fields
+    label: "Leads & Inquiries"
+    folder: "src/content/leads"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{hour}}-{{minute}}"
+    editor:
+      preview: false
     fields:
-      - label: "👤 Lead Name"
-        name: "name"
-        widget: "string"
-        hint: "Lead's full name"
-        
-      - label: "📧 Email Address"
-        name: "email"
-        widget: "string"
-        hint: "Lead's email address"
-        
-      - label: "📱 Phone Number"
-        name: "phone"
-        widget: "string"
-        required: false
-        hint: "Lead's phone number"
-        
-      - label: "🏢 Company"
-        name: "company"
-        widget: "string"
-        required: false
-        hint: "Lead's company name"
-        
-      - label: "🏗️ Warehouse Interest"
-        name: "warehouse_interest"
-        widget: "string"
-        required: false
-        hint: "Which warehouse/property they're interested in"
-        
-      - label: "🆔 Warehouse ID"
-        name: "warehouse_id"
-        widget: "string"
-        required: false
-        hint: "Internal warehouse identifier"
-        
-      - label: "💰 Budget Range"
-        name: "budget_range"
-        widget: "string"
-        required: false
-        hint: "Lead's budget range"
-        
-      - label: "⏰ Timeline"
-        name: "timeline"
-        widget: "string"
-        required: false
-        hint: "When they need the space"
-        
-      - label: "💬 Message"
-        name: "message"
-        widget: "text"
-        required: false
-        hint: "Lead's initial message/requirements"
-        
-      - label: "📊 Status"
-        name: "status"
-        widget: "select"
-        default: "new"
-        options:
-          - { label: "🆕 New", value: "new" }
-          - { label: "📞 Contacted", value: "contacted" }
-          - { label: "✅ Qualified", value: "qualified" }
-          - { label: "📅 Viewing Scheduled", value: "viewing_scheduled" }
-          - { label: "💼 Negotiating", value: "negotiating" }
-          - { label: "🎉 Closed Won", value: "closed_won" }
-          - { label: "❌ Closed Lost", value: "closed_lost" }
-        hint: "Current status of this lead"
-        
-      - label: "📍 Source"
-        name: "source"
-        widget: "select"
-        default: "website_form"
-        options:
-          - { label: "🌐 Website Form", value: "website_form" }
-          - { label: "📱 Modal Form", value: "modal_form" }
-          - { label: "🏠 Property Page", value: "property_page" }
-          - { label: "📞 Phone Call", value: "phone_call" }
-          - { label: "📧 Email", value: "email" }
-          - { label: "👥 Referral", value: "referral" }
-          - { label: "🚶 Walk-in", value: "walk_in" }
-        hint: "How did this lead come to us?"
-        
-      - label: "📅 Submitted Date"
-        name: "submitted_date"
-        widget: "datetime"
-        hint: "When the lead first contacted us"
-        
-      - label: "🔥 Priority"
-        name: "priority"
-        widget: "select"
-        default: "medium"
-        options:
-          - { label: "🟢 Low", value: "low" }
-          - { label: "🟡 Medium", value: "medium" }
-          - { label: "🔴 High", value: "high" }
-          - { label: "⚡ Urgent", value: "urgent" }
-        hint: "Priority level for follow-up"
-        
-      - label: "📅 Follow Up Date"
-        name: "follow_up_date"
-        widget: "datetime"
-        required: false
-        hint: "When to follow up with this lead"
-        
-      - label: "📝 Notes"
-        name: "notes"
-        widget: "text"
-        required: false
-        hint: "Internal notes about conversations, next steps, etc."
-        
-      - label: "📄 Lead Details"
-        name: "body"
-        widget: "markdown"
-        required: false
-        hint: "Additional lead information and conversation history"
+      - { label: "Lead ID", name: "title", widget: "string", default: "Lead {{now}}" }
+      - { label: "Lead Type", name: "type", widget: "select", options: ["consultation", "property-inquiry", "general-inquiry", "contact-form"] }
+      - { label: "Status", name: "status", widget: "select", options: ["new", "contacted", "qualified", "proposal-sent", "closed-won", "closed-lost"], default: "new" }
+      - { label: "Priority", name: "priority", widget: "select", options: ["low", "medium", "high", "urgent"], default: "medium" }
+      - { label: "Full Name", name: "name", widget: "string" }
+      - { label: "Email", name: "email", widget: "string" }
+      - { label: "Phone", name: "phone", widget: "string", required: false }
+      - { label: "Company", name: "company", widget: "string", required: false }
+      - { label: "Property Interest", name: "property_interest", widget: "string", required: false }
+      - { label: "Space Requirements", name: "space_requirements", widget: "text", required: false }
+      - { label: "Budget Range", name: "budget", widget: "string", required: false }
+      - { label: "Timeline", name: "timeline", widget: "string", required: false }
+      - { label: "Message/Notes", name: "message", widget: "text", required: false }
+      - { label: "Source", name: "source", widget: "select", options: ["website", "referral", "cold-call", "email-campaign", "social-media", "trade-show", "other"], default: "website" }
+      - { label: "Consultation Date", name: "consultation_date", widget: "datetime", required: false }
+      - { label: "Consultation Time", name: "consultation_time", widget: "string", required: false }
+      - { label: "Follow-up Date", name: "follow_up_date", widget: "datetime", required: false }
+      - { label: "Internal Notes", name: "internal_notes", widget: "text", required: false }
+      - { label: "Date Created", name: "date", widget: "datetime", default: "{{now}}" }
+
+  # Blog Posts (Optional)
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    editor:
+      preview: true
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "string" }
+      - { label: "Author", name: "author", widget: "string", default: "Shallow Bay Advisors" }
+      - { label: "Featured Image", name: "image", widget: "image", required: false }
+      - { label: "Tags", name: "tags", widget: "list", field: { label: "Tag", name: "tag", widget: "string" }, required: false }
+      - { label: "Category", name: "category", widget: "select", options: ["commercial-real-estate", "warehouse", "industrial", "market-insights", "tips", "news"], default: "commercial-real-estate" }
+      - { label: "Featured Post", name: "featured", widget: "boolean", default: false }
+      - { label: "Publish Date", name: "date", widget: "datetime", default: "{{now}}" }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  # Site Settings
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - name: "general"
+        label: "General Settings"
+        file: "src/content/settings/general.yml"
+        fields:
+          - { label: "Site Title", name: "site_title", widget: "string", default: "Shallow Bay Advisors" }
+          - { label: "Site Description", name: "site_description", widget: "text", default: "South Florida's premier commercial real estate advisors" }
+          - { label: "Contact Email", name: "contact_email", widget: "string" }
+          - { label: "Contact Phone", name: "contact_phone", widget: "string" }
+          - { label: "Office Address", name: "office_address", widget: "text" }
+          - { label: "Business Hours", name: "business_hours", widget: "text", default: "Monday - Friday: 9AM - 6PM" }
+          - { label: "Social Media Links", name: "social_links", widget: "object", fields: [
+              { label: "LinkedIn", name: "linkedin", widget: "string", required: false },
+              { label: "Twitter", name: "twitter", widget: "string", required: false },
+              { label: "Facebook", name: "facebook", widget: "string", required: false },
+              { label: "Instagram", name: "instagram", widget: "string", required: false }
+            ]}
+          - { label: "Google Analytics ID", name: "google_analytics", widget: "string", required: false }
+          - { label: "Site Logo", name: "logo", widget: "image", required: false }

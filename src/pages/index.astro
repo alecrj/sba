@@ -186,11 +186,11 @@ const countyStats = Object.entries(countyData).map(([county, properties]) => ({
 
         <!-- Page Title -->
         <div class="text-center mb-8">
-          <h1 class="font-display text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
-            Find warehouse space in South Florida
+          <h1 class="font-display text-3xl lg:text-4xl font-bold text-gray-900 mb-3" data-translate="hero_title">
+            Find Your Perfect Warehouse Space
           </h1>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-            Professional commercial real estate across Miami-Dade, Broward, and Palm Beach counties
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto" data-translate="hero_subtitle">
+            South Florida's premier industrial real estate platform. Discover available warehouse space with live inventory and instant tour booking.
           </p>
         </div>
 
@@ -254,7 +254,7 @@ const countyStats = Object.entries(countyData).map(([county, properties]) => ({
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                   </svg>
-                  Search Properties
+                  <span data-translate="search_button">Search</span>
                 </button>
               </div>
 
@@ -273,7 +273,7 @@ const countyStats = Object.entries(countyData).map(([county, properties]) => ({
           <!-- County Header -->
           <div class="flex items-end justify-between mb-10">
             <div>
-              <h2 class="font-display text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+              <h2 class="font-display text-3xl lg:text-4xl font-bold text-gray-900 mb-2" data-translate={`county_${county.toLowerCase().replace('-', '_')}`}>
                 {county} County
               </h2>
               <p class="text-gray-600 text-lg">
@@ -385,11 +385,11 @@ const countyStats = Object.entries(countyData).map(([county, properties]) => ({
           Let us help you find exactly what your business needs.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/contact" class="btn btn-primary px-8 py-4">
-            Speak with an Expert
+          <a href="/book-consultation" class="btn btn-primary px-8 py-4" data-translate="hero_cta_secondary">
+            Book Consultation
           </a>
-          <a href="/warehouses" class="btn btn-outline px-8 py-4">
-            View All Listings
+          <a href="/properties" class="btn btn-outline px-8 py-4" data-translate="hero_cta">
+            Explore Properties
           </a>
         </div>
       </div>
