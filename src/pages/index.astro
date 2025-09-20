@@ -1,11 +1,25 @@
 ---
-// Professional Warehouse Discovery Platform - County-Based Layout
+// Professional Warehouse Discovery Platform - County-Based Layout with CMS Integration
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
 
-// County-organized warehouse data
-const countyData = {
+// Get all properties from CMS
+const allProperties = await getCollection('properties');
+
+// Filter available properties and organize by county
+const availableProperties = allProperties.filter(property => property.data.available);
+
+// Organize properties by county
+const countyData: Record<string, typeof availableProperties> = {
+  'Miami-Dade': availableProperties.filter(p => p.data.county === 'Miami-Dade'),
+  'Broward': availableProperties.filter(p => p.data.county === 'Broward'),
+  'Palm Beach': availableProperties.filter(p => p.data.county === 'Palm Beach')
+};
+
+// Fallback hardcoded data (in case no CMS properties exist yet)
+const fallbackCountyData = {
   'Miami-Dade': [
     {
       id: 'doral-logistics-hub',
@@ -164,11 +178,33 @@ const countyData = {
   ]
 };
 
+// Use CMS data if available, otherwise fallback
+const displayCountyData = allProperties.length > 0 ? countyData : fallbackCountyData;
+
+// Helper function to get property data (handles both CMS and fallback formats)
+function getPropertyData(property: any) {
+  // If it's a CMS property, return the data object
+  if (property.data) {
+    return {
+      id: property.slug,
+      title: property.data.title,
+      location: property.data.location,
+      price: property.data.price,
+      size: property.data.size,
+      image: property.data.image || 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop&auto=format',
+      features: property.data.features || [],
+      available: property.data.available
+    };
+  }
+  // Otherwise it's fallback data, return as-is
+  return property;
+}
+
 // Calculate totals for each county
-const countyStats = Object.entries(countyData).map(([county, properties]) => ({
+const countyStats = Object.entries(displayCountyData).map(([county, properties]) => ({
   county,
   total: properties.length,
-  available: properties.filter(p => p.available).length
+  available: properties.filter(p => p.available || p.data?.available).length
 }));
 ---
 
@@ -266,7 +302,7 @@ const countyStats = Object.entries(countyData).map(([county, properties]) => ({
     </section>
 
     <!-- County-Based Warehouse Listings -->
-    {Object.entries(countyData).map(([county, properties]) => (
+    {Object.entries(displayCountyData).map(([county, properties]) => (
       <section class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -277,7 +313,7 @@ const countyStats = Object.entries(countyData).map(([county, properties]) => ({
                 {county} County
               </h2>
               <p class="text-gray-600 text-lg">
-                {properties.filter(p => p.available).length} warehouses available
+                {properties.filter(p => p.available || p.data?.available).length} warehouses available
               </p>
             </div>
             <a
@@ -293,28 +329,30 @@ const countyStats = Object.entries(countyData).map(([county, properties]) => ({
 
           <!-- Warehouse Grid - 5 per row on desktop -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-            {properties.map((warehouse) => (
+            {properties.map((warehouse) => {
+              const prop = getPropertyData(warehouse);
+              return (
               <a
-                href={`/warehouses/${warehouse.id}`}
+                href={`/warehouses/${prop.id}`}
                 class="card overflow-hidden group block hover:shadow-xl transition-all duration-300"
               >
 
                 <!-- Warehouse Image -->
                 <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
                   <img
-                    src={warehouse.image}
-                    alt={warehouse.title}
+                    src={prop.image}
+                    alt={prop.title}
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
 
                   <!-- Availability Badge -->
                   <div class="absolute top-4 left-4">
                     <span class={`px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg backdrop-blur-sm ${
-                      warehouse.available
+                      prop.available
                         ? 'bg-emerald-500 text-white'
                         : 'bg-gray-800 text-white'
                     }`}>
-                      {warehouse.available ? 'Available' : 'Leased'}
+                      {prop.available ? 'Available' : 'Leased'}
                     </span>
                   </div>
 
@@ -332,23 +370,23 @@ const countyStats = Object.entries(countyData).map(([county, properties]) => ({
                   <!-- Title & Location -->
                   <div class="mb-4">
                     <h3 class="font-semibold text-gray-900 mb-1.5 line-clamp-1 text-base">
-                      {warehouse.title}
+                      {prop.title}
                     </h3>
                     <p class="text-sm text-gray-600 font-medium">
-                      {warehouse.location}, {county}
+                      {prop.location}, {county}
                     </p>
                   </div>
 
                   <!-- Features -->
                   <div class="flex items-center gap-1.5 mb-4">
-                    {warehouse.features.slice(0, 2).map((feature) => (
+                    {prop.features.slice(0, 2).map((feature) => (
                       <span class="px-2.5 py-1 bg-gray-50 text-gray-700 text-xs rounded-lg font-medium border border-gray-200">
                         {feature}
                       </span>
                     ))}
-                    {warehouse.features.length > 2 && (
+                    {prop.features.length > 2 && (
                       <span class="px-2.5 py-1 bg-primary/10 text-primary text-xs rounded-lg font-medium border border-primary/20">
-                        +{warehouse.features.length - 2}
+                        +{prop.features.length - 2}
                       </span>
                     )}
                   </div>
@@ -356,18 +394,19 @@ const countyStats = Object.entries(countyData).map(([county, properties]) => ({
                   <!-- Pricing & Size -->
                   <div class="flex items-baseline justify-between">
                     <div>
-                      <span class="font-bold text-gray-900 text-lg">{warehouse.price}/SF</span>
+                      <span class="font-bold text-gray-900 text-lg">{prop.price}/SF</span>
                       <span class="text-sm text-gray-500 ml-1">per year</span>
                     </div>
                     <span class="text-sm font-semibold text-primary bg-primary/10 px-2 py-1 rounded-lg">
-                      {warehouse.size} SF
+                      {prop.size} SF
                     </span>
                   </div>
 
                 </div>
 
               </a>
-            ))}
+              );
+            })}
           </div>
 
         </div>
