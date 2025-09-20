@@ -55,7 +55,7 @@ button {
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   border: none;
   border-radius: 6px;
-  color: white;
+  color: white !important;
   font-weight: 600;
   padding: 0.75rem 1.5rem;
   cursor: pointer;
@@ -65,6 +65,27 @@ button {
 button:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+  color: white !important;
+}
+
+/* Force white text on all blue elements */
+.css-1mw1pdk,
+.css-1mw1pdk:hover,
+.css-1mw1pdk:focus,
+.css-1mw1pdk:active,
+[class*="Button"],
+[class*="button"] {
+  color: white !important;
+}
+
+/* Blue backgrounds should have white text */
+[style*="background: rgb(59, 130, 246)"],
+[style*="background-color: rgb(59, 130, 246)"],
+[style*="background: #3b82f6"],
+[style*="background-color: #3b82f6"],
+.css-primary,
+.css-blue {
+  color: white !important;
 }
 
 /* Success states */
