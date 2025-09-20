@@ -72,7 +72,7 @@ collections:
       - { label: "Lease Term", name: "lease_term", widget: "string", required: false, hint: "Available lease duration (e.g., 5 years)" }
 
       # System Fields
-      - { label: "Listing Date", name: "date", widget: "datetime", default: "{{now}}" }
+      - { label: "Listing Date", name: "date", widget: "datetime" }
 
   # Leads Collection
   - name: "leads"
@@ -101,7 +101,7 @@ collections:
       - { label: "Consultation Time", name: "consultation_time", widget: "string", required: false }
       - { label: "Follow-up Date", name: "follow_up_date", widget: "datetime", required: false }
       - { label: "Internal Notes", name: "internal_notes", widget: "text", required: false }
-      - { label: "Date Created", name: "date", widget: "datetime", default: "{{now}}" }
+      - { label: "Date Created", name: "date", widget: "datetime" }
 
   # Blog Posts (Optional)
   - name: "blog"
@@ -119,7 +119,7 @@ collections:
       - { label: "Tags", name: "tags", widget: "list", field: { label: "Tag", name: "tag", widget: "string" }, required: false }
       - { label: "Category", name: "category", widget: "select", options: ["commercial-real-estate", "warehouse", "industrial", "market-insights", "tips", "news"], default: "commercial-real-estate" }
       - { label: "Featured Post", name: "featured", widget: "boolean", default: false }
-      - { label: "Publish Date", name: "date", widget: "datetime", default: "{{now}}" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
       - { label: "Body", name: "body", widget: "markdown" }
 
   # Site Settings
