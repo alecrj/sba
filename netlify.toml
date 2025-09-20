@@ -8,7 +8,7 @@
 [[plugins]]
   package = "netlify-plugin-submit-sitemap"
   [plugins.inputs]
-    baseUrl = "https://laec.netlify.app"
+    baseUrl = "https://shabay.netlify.app"
     sitemapPath = "/sitemap-index.xml"
 
 # Headers for security
