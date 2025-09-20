@@ -88,6 +88,46 @@ button:hover {
   color: white !important;
 }
 
+/* Publish button and action buttons */
+button[type="submit"],
+button[aria-label*="publish"],
+button[aria-label*="Publish"],
+.css-publish,
+.css-action-button,
+[class*="publish"],
+[class*="Publish"] {
+  color: white !important;
+  background: #10b981 !important;
+}
+
+button[type="submit"]:hover,
+button[aria-label*="publish"]:hover,
+button[aria-label*="Publish"]:hover {
+  color: white !important;
+  background: #059669 !important;
+}
+
+/* White background buttons need dark text */
+[style*="background: white"],
+[style*="background-color: white"],
+[style*="background: #fff"],
+[style*="background-color: #fff"],
+[style*="background: rgb(255, 255, 255)"] {
+  color: #374151 !important;
+}
+
+/* Ensure all buttons have proper contrast */
+button,
+[role="button"] {
+  color: white !important;
+}
+
+/* Override any white-on-white combinations */
+button[style*="color: white"][style*="background: white"],
+button[style*="color: #fff"][style*="background: #fff"] {
+  color: #374151 !important;
+}
+
 /* Success states */
 .css-success {
   background: #10b981;
