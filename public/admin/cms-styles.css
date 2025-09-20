@@ -128,6 +128,94 @@ button[style*="color: #fff"][style*="background: #fff"] {
   color: #374151 !important;
 }
 
+/* Status button and dropdown fixes */
+.css-status-button,
+[class*="status"],
+[class*="Status"],
+.css-workflow-status,
+[aria-label*="status"],
+[aria-label*="Status"] {
+  background: #374151 !important;
+  color: white !important;
+  border: 1px solid #6b7280 !important;
+}
+
+/* Top bar status button */
+.css-1ojzwlr button,
+.css-1ojzwlr [role="button"],
+header button,
+header [role="button"] {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+header button:hover,
+header [role="button"]:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Dropdown menus */
+.css-dropdown,
+.css-menu,
+[role="menu"],
+[role="listbox"],
+.css-select-menu,
+[class*="dropdown"],
+[class*="menu"] {
+  background: white !important;
+  color: #374151 !important;
+  border: 1px solid #d1d5db !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Dropdown menu items */
+.css-dropdown button,
+.css-menu button,
+[role="menu"] button,
+[role="listbox"] button,
+[role="option"],
+.css-menu-item,
+[class*="dropdown"] button,
+[class*="menu"] button {
+  color: #374151 !important;
+  background: transparent !important;
+}
+
+.css-dropdown button:hover,
+.css-menu button:hover,
+[role="menu"] button:hover,
+[role="listbox"] button:hover,
+[role="option"]:hover,
+.css-menu-item:hover,
+[class*="dropdown"] button:hover,
+[class*="menu"] button:hover {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+}
+
+/* Publish button dropdown specifically */
+button[aria-label*="publish"] + *,
+button[aria-label*="Publish"] + *,
+.css-publish + * {
+  background: white !important;
+  color: #374151 !important;
+}
+
+button[aria-label*="publish"] + * button,
+button[aria-label*="Publish"] + * button,
+.css-publish + * button {
+  color: #374151 !important;
+  background: transparent !important;
+}
+
+button[aria-label*="publish"] + * button:hover,
+button[aria-label*="Publish"] + * button:hover,
+.css-publish + * button:hover {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+}
+
 /* Success states */
 .css-success {
   background: #10b981;
