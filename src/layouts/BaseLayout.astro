@@ -46,41 +46,144 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(image, Astro.url)} />
     
-    <!-- Premium Fonts - 2025 Billion Dollar Company -->
+    <!-- Modern Typography System - Airbnb Inspired -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@300;400;500;600;700;800;900&family=General+Sans:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Premium Typography for Billion-Dollar Brokerage -->
+    <!-- Typography System -->
     <style>
       :root {
-        --font-primary: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-        --font-display: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-        --font-mono: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+        --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        --font-display: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+        /* Color System */
+        --color-primary: #FF385C;
+        --color-dark: #222222;
+        --color-gray-dark: #717171;
+        --color-gray-medium: #B0B0B0;
+        --color-gray-light: #F7F7F7;
+        --color-border: #DDDDDD;
+
+        /* Spacing System */
+        --space-xs: 0.25rem;
+        --space-sm: 0.5rem;
+        --space-md: 1rem;
+        --space-lg: 1.5rem;
+        --space-xl: 2rem;
+        --space-2xl: 3rem;
+
+        /* Border Radius */
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --radius-xl: 24px;
+      }
+
+      * {
+        box-sizing: border-box;
       }
 
       body {
         font-family: var(--font-primary);
         font-weight: 400;
+        color: var(--color-dark);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
-        letter-spacing: -0.01em;
+        line-height: 1.5;
+        letter-spacing: -0.005em;
       }
 
       h1, h2, h3, h4, h5, h6 {
         font-family: var(--font-display);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        color: var(--color-dark);
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
         font-weight: 700;
-        letter-spacing: -0.03em;
         line-height: 1.1;
+      }
+
+      h2 {
+        font-size: clamp(1.5rem, 3vw, 2.25rem);
+        font-weight: 600;
+      }
+
+      h3 {
+        font-size: clamp(1.25rem, 2vw, 1.5rem);
+        font-weight: 600;
+      }
+
+      p {
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      .text-primary {
+        color: var(--color-primary);
+      }
+
+      .text-gray {
+        color: var(--color-gray-dark);
       }
 
       .font-display {
         font-family: var(--font-display);
       }
 
-      .font-mono {
-        font-family: var(--font-mono);
+      /* Button System */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .btn-primary {
+        background: var(--color-primary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #E31C5F;
+        transform: translateY(-1px);
+      }
+
+      .btn-outline {
+        background: white;
+        color: var(--color-dark);
+        border: 1px solid var(--color-border);
+      }
+
+      .btn-outline:hover {
+        border-color: var(--color-dark);
+      }
+
+      /* Card System */
+      .card {
+        background: white;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        transition: all 0.2s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       }
     </style>
     

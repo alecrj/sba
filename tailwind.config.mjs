@@ -4,12 +4,11 @@ export default {
 
   theme: {
     extend: {
-      // 2025 Typography - Premium Brokerage
+      // Modern Typography System
       fontFamily: {
-        sans: ['Neue Haas Grotesk', 'Helvetica Neue', 'Arial', 'sans-serif'],
-        display: ['Neue Haas Grotesk', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Manrope', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['SF Mono', 'Monaco', 'monospace'],
-        serif: ['Times New Roman', 'serif'],
       },
 
       fontSize: {
@@ -28,44 +27,34 @@ export default {
         '9xl': ['8rem', { lineHeight: '1.05', letterSpacing: '-0.055em' }],
       },
 
-      // Shallow Bay Advisors Brand Colors
+      // Modern Color System
       colors: {
-        // Brand Colors from Logo
+        // Primary brand color (Airbnb-inspired red)
+        'primary': '#FF385C',
+
+        // Gray scale
+        'gray': {
+          50: '#F9FAFB',
+          100: '#F3F4F6',
+          200: '#E5E7EB',
+          300: '#D1D5DB',
+          400: '#9CA3AF',
+          500: '#6B7280',
+          600: '#4B5563',
+          700: '#374151',
+          800: '#1F2937',
+          900: '#111827',
+        },
+
+        // Legacy SBA colors for existing components
         'sba': {
-          'navy': '#1e3a5f',      // Main navy blue from logo
-          'navy-dark': '#162d47',  // Darker navy for hover states
-          'navy-light': '#2d4a6b', // Lighter navy for backgrounds
-          'gray': '#8b9199',       // Light gray from logo
-          'gray-dark': '#6b7280',  // Darker gray for text
-          'gray-light': '#e5e7eb', // Very light gray for backgrounds
+          'navy': '#1e3a5f',
+          'navy-dark': '#162d47',
+          'navy-light': '#2d4a6b',
+          'gray': '#8b9199',
+          'gray-dark': '#6b7280',
+          'gray-light': '#e5e7eb',
         },
-
-        // Neutral palette for sophistication
-        'neutral': {
-          50: '#fafafa',
-          100: '#f5f5f5',
-          200: '#e5e5e5',
-          300: '#d4d4d4',
-          400: '#a3a3a3',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#262626',
-          900: '#171717',
-          950: '#0a0a0a',
-        },
-
-        // Accent colors for states
-        'accent': {
-          blue: '#3b82f6',    // Trust/reliability
-          green: '#10b981',   // Success/growth
-          amber: '#f59e0b',   // Warning/attention
-          red: '#ef4444',     // Error/urgent
-        },
-
-        // High contrast base
-        black: '#000000',
-        white: '#ffffff',
       },
 
       // Premium Spacing Scale
