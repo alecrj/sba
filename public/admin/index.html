@@ -8,9 +8,6 @@
   <!-- Netlify Identity Widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-  <!-- Netlify CMS -->
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
-
   <!-- Custom styling for the CMS -->
   <style>
     /* Custom branding for Shallow Bay Advisors */
@@ -89,26 +86,53 @@
   <!-- This div will be the root of our Netlify CMS -->
   <div id="nc-root"></div>
 
+  <!-- Load Netlify CMS -->
+  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+
   <script>
-    // Initialize Netlify Identity
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
-          });
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM loaded, initializing CMS...');
+
+      // Initialize Netlify Identity
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+
+      // Wait for CMS to be available
+      function initializeCMS() {
+        if (typeof CMS !== 'undefined') {
+          console.log('CMS object found, initializing...');
+
+          try {
+            CMS.init({
+              config: {
+                load_config_file: true
+              }
+            });
+            console.log('Shallow Bay Advisors CMS initialized successfully');
+          } catch (error) {
+            console.error('CMS initialization failed:', error);
+            showError('CMS initialization failed: ' + error.message);
+          }
+        } else {
+          console.log('CMS not yet available, retrying...');
+          setTimeout(initializeCMS, 500);
         }
-      });
-    }
+      }
 
-    // Error handling and debugging
-    window.addEventListener('error', function(e) {
-      console.error('CMS Error:', e.error);
+      // Start initialization
+      initializeCMS();
 
-      // Show a helpful error message instead of white screen
-      if (!document.getElementById('error-message')) {
+      // Error handler
+      function showError(message) {
         const errorDiv = document.createElement('div');
-        errorDiv.id = 'error-message';
         errorDiv.style.cssText = `
           position: fixed;
           top: 0;
@@ -124,35 +148,23 @@
         `;
         errorDiv.innerHTML = `
           <div style="text-align: center; max-width: 500px; padding: 40px;">
-            <h1 style="color: #1E3A5F; margin-bottom: 20px;">CMS Loading Issue</h1>
-            <p style="color: #666; margin-bottom: 20px;">The CMS is having trouble loading. This usually means:</p>
-            <ul style="text-align: left; color: #666; margin-bottom: 30px;">
-              <li>Git Gateway needs to be enabled in Netlify</li>
-              <li>You need to be invited as a user</li>
-              <li>Your browser cache needs to be cleared</li>
-            </ul>
+            <h1 style="color: #1E3A5F; margin-bottom: 20px;">CMS Error</h1>
+            <p style="color: #666; margin-bottom: 20px;">${message}</p>
             <button onclick="window.location.reload()" style="background: #1E3A5F; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer;">
-              Try Again
+              Reload Page
             </button>
+            <br><br>
+            <a href="/admin/debug.html" style="color: #1E3A5F;">View Debug Page</a>
           </div>
         `;
         document.body.appendChild(errorDiv);
       }
-    });
 
-    // Simple CMS initialization with better error handling
-    try {
-      CMS.init({
-        config: {
-          load_config_file: true
-        }
+      // Global error handler
+      window.addEventListener('error', function(e) {
+        console.error('Global error:', e.error);
       });
-
-      console.log('Shallow Bay Advisors CMS loading...');
-
-    } catch (error) {
-      console.error('CMS initialization failed:', error);
-    }
+    });
   </script>
 </body>
 </html>

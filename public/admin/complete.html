@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Account Setup Complete - Shallow Bay Advisors</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 { color: #1E3A5F; margin-bottom: 20px; }
+        p { color: #666; margin-bottom: 20px; }
+        .button {
+            background: #1E3A5F;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 10px;
+        }
+        .success-icon {
+            font-size: 48px;
+            color: #10B981;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">✅</div>
+        <h1>Account Setup Complete!</h1>
+        <p>Your Shallow Bay Advisors CMS account has been successfully set up.</p>
+        <p>You can now access the content management system to manage properties and leads.</p>
+
+        <a href="/admin/" class="button">Access CMS</a>
+        <a href="/" class="button" style="background: #6B7280;">Back to Website</a>
+    </div>
+
+    <script>
+        // Handle Netlify Identity completion
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on('init', user => {
+                if (user) {
+                    console.log('User authenticated:', user.email);
+                    // Auto-redirect to CMS after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = '/admin/';
+                    }, 3000);
+                }
+            });
+
+            window.netlifyIdentity.on('login', user => {
+                console.log('User logged in:', user.email);
+                window.location.href = '/admin/';
+            });
+        }
+    </script>
+</body>
+</html>
