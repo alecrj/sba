@@ -4,10 +4,10 @@ export default {
 
   theme: {
     extend: {
-      // Modern Typography System
+      // Professional Real Estate Typography
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['Manrope', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Source Sans Pro', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Montserrat', 'Source Sans Pro', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['SF Mono', 'Monaco', 'monospace'],
       },
 
@@ -27,12 +27,15 @@ export default {
         '9xl': ['8rem', { lineHeight: '1.05', letterSpacing: '-0.055em' }],
       },
 
-      // Modern Color System
+      // SBA Brand Color System
       colors: {
-        // Primary brand color (Airbnb-inspired red)
-        'primary': '#FF385C',
+        // Primary brand colors from SBA logo
+        'primary': '#1E3A5F',
+        'primary-dark': '#162D47',
+        'primary-light': '#2D4A6B',
+        'accent': '#8B9199',
 
-        // Gray scale
+        // Professional gray scale
         'gray': {
           50: '#F9FAFB',
           100: '#F3F4F6',
@@ -46,7 +49,7 @@ export default {
           900: '#111827',
         },
 
-        // Legacy SBA colors for existing components
+        // Legacy SBA colors for compatibility
         'sba': {
           'navy': '#1e3a5f',
           'navy-dark': '#162d47',

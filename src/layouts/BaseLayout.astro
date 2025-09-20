@@ -46,24 +46,27 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(image, Astro.url)} />
     
-    <!-- Modern Typography System - Airbnb Inspired -->
+    <!-- Professional Real Estate Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Source+Sans+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Typography System -->
     <style>
       :root {
-        --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-        --font-display: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        --font-primary: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        --font-display: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 
-        /* Color System */
-        --color-primary: #FF385C;
+        /* SBA Brand Colors */
+        --color-primary: #1E3A5F;
+        --color-primary-dark: #162D47;
+        --color-primary-light: #2D4A6B;
+        --color-accent: #8B9199;
         --color-dark: #222222;
-        --color-gray-dark: #717171;
-        --color-gray-medium: #B0B0B0;
-        --color-gray-light: #F7F7F7;
-        --color-border: #DDDDDD;
+        --color-gray-dark: #6B7280;
+        --color-gray-medium: #9CA3AF;
+        --color-gray-light: #F3F4F6;
+        --color-border: #E5E7EB;
 
         /* Spacing System */
         --space-xs: 0.25rem;
@@ -159,7 +162,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
 
       .btn-primary:hover {
-        background: #E31C5F;
+        background: var(--color-primary-dark);
         transform: translateY(-1px);
       }
 
