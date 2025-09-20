@@ -254,6 +254,28 @@ select[style*="color: #fff"] {
   color: #374151 !important;
 }
 
+/* Aggressive fix for all select elements */
+select,
+select * {
+  color: #374151 !important;
+  background: white !important;
+}
+
+/* Target any divs that might contain sort controls */
+div[class*="sort"] *,
+div[class*="Sort"] *,
+div[class*="filter"] *,
+div[class*="Filter"] * {
+  color: #374151 !important;
+}
+
+/* Universal select override */
+* select,
+* select option {
+  color: #374151 !important;
+  background: white !important;
+}
+
 /* Success states */
 .css-success {
   background: #10b981;
