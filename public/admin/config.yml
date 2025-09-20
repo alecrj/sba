@@ -103,24 +103,6 @@ collections:
       - { label: "Internal Notes", name: "internal_notes", widget: "text", required: false }
       - { label: "Date Created", name: "date", widget: "datetime" }
 
-  # Blog Posts (Optional)
-  - name: "blog"
-    label: "Blog Posts"
-    folder: "src/content/blog"
-    create: true
-    slug: "{{slug}}"
-    editor:
-      preview: true
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Description", name: "description", widget: "string" }
-      - { label: "Author", name: "author", widget: "string", default: "Shallow Bay Advisors" }
-      - { label: "Featured Image", name: "image", widget: "image", required: false }
-      - { label: "Tags", name: "tags", widget: "list", field: { label: "Tag", name: "tag", widget: "string" }, required: false }
-      - { label: "Category", name: "category", widget: "select", options: ["commercial-real-estate", "warehouse", "industrial", "market-insights", "tips", "news"], default: "commercial-real-estate" }
-      - { label: "Featured Post", name: "featured", widget: "boolean", default: false }
-      - { label: "Publish Date", name: "date", widget: "datetime" }
-      - { label: "Body", name: "body", widget: "markdown" }
 
   # Site Settings
   - name: "settings"

@@ -58,23 +58,7 @@ const leads = defineCollection({
   })
 });
 
-// Blog collection schema
-const blog = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    author: z.string().default('Shallow Bay Advisors'),
-    image: z.string().optional(),
-    tags: z.array(z.string()).default([]).optional(),
-    category: z.enum(['commercial-real-estate', 'warehouse', 'industrial', 'market-insights', 'tips', 'news']).default('commercial-real-estate'),
-    featured: z.boolean().default(false),
-    date: z.date()
-  })
-});
-
 export const collections = {
   properties,
-  leads,
-  blog
+  leads
 };
