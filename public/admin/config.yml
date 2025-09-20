@@ -15,6 +15,11 @@ public_folder: "/images/uploads"
 # Publishing workflow
 publish_mode: editorial_workflow
 
+# Professional UI styling
+editor:
+  preview: false
+  frame: true
+
 # Collections
 collections:
   # Properties Collection
@@ -26,35 +31,44 @@ collections:
     editor:
       preview: false
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Property Type", name: "type", widget: "select", options: ["warehouse", "office", "industrial", "flex-space", "distribution"] }
-      - { label: "Location", name: "location", widget: "string" }
+      # Basic Information
+      - { label: "Property Title", name: "title", widget: "string", hint: "Enter the property name or description" }
+      - { label: "Location", name: "location", widget: "string", hint: "City or area (e.g., Doral, Miami)" }
       - { label: "County", name: "county", widget: "select", options: ["Miami-Dade", "Broward", "Palm Beach"] }
-      - { label: "Price per sqft", name: "price", widget: "string", hint: "e.g., $8.50" }
-      - { label: "Square Footage", name: "size", widget: "string", hint: "e.g., 25,000" }
-      - { label: "Available", name: "available", widget: "boolean", default: true }
-      - { label: "Featured Property", name: "featured", widget: "boolean", default: false, required: false }
-      - { label: "Description", name: "description", widget: "text", required: false }
-      - { label: "Property Image", name: "image", widget: "image", required: false }
-      - label: "Features"
-        name: "features"
-        widget: "list"
-        field: { label: "Feature", name: "feature", widget: "string" }
-        default: ["Dock High", "Highway Access"]
+
+      # Property Details
+      - { label: "Price per Square Foot", name: "price", widget: "string", hint: "Include $ symbol (e.g., $8.50)" }
+      - { label: "Square Footage", name: "size", widget: "string", hint: "Total square feet (e.g., 25,000)" }
+      - { label: "Available for Lease", name: "available", widget: "boolean", default: true }
+      - { label: "Featured Property", name: "featured", widget: "boolean", default: false, required: false, hint: "Display prominently on homepage" }
+
+      # Media
+      - { label: "Main Property Image", name: "image", widget: "image", hint: "Primary photo for property listing" }
       - label: "Additional Images"
         name: "gallery"
         widget: "list"
         field: { label: "Image", name: "image", widget: "image" }
         required: false
-      - { label: "Contact Name", name: "contact_name", widget: "string", required: false }
-      - { label: "Contact Email", name: "contact_email", widget: "string", required: false }
-      - { label: "Contact Phone", name: "contact_phone", widget: "string", required: false }
-      - { label: "Address", name: "address", widget: "string", required: false }
-      - { label: "Lease Term", name: "lease_term", widget: "string", required: false, hint: "e.g., 5 years" }
-      - { label: "Clear Height", name: "clear_height", widget: "string", required: false, hint: "e.g., 32 feet" }
-      - { label: "Loading Docks", name: "loading_docks", widget: "number", required: false }
-      - { label: "Parking Spaces", name: "parking", widget: "number", required: false }
-      - { label: "Year Built", name: "year_built", widget: "number", required: false }
+        hint: "Upload multiple photos (unlimited)"
+
+      # Location Details
+      - { label: "Full Address", name: "address", widget: "string", hint: "Start typing address for autocomplete suggestions" }
+
+      # Property Features
+      - label: "Property Features"
+        name: "features"
+        widget: "list"
+        field: { label: "Feature", name: "feature", widget: "string" }
+        default: ["Dock High", "Highway Access"]
+        hint: "List key property amenities and features"
+
+      # Advanced Details (Optional)
+      - { label: "Clear Height", name: "clear_height", widget: "string", required: false, hint: "Ceiling height (e.g., 32 feet)" }
+      - { label: "Loading Docks", name: "loading_docks", widget: "number", required: false, hint: "Number of dock doors" }
+      - { label: "Year Built", name: "year_built", widget: "number", required: false, hint: "Construction year" }
+      - { label: "Lease Term", name: "lease_term", widget: "string", required: false, hint: "Available lease duration (e.g., 5 years)" }
+
+      # System Fields
       - { label: "Listing Date", name: "date", widget: "datetime", default: "{{now}}" }
 
   # Leads Collection
@@ -127,3 +141,21 @@ collections:
             ]}
           - { label: "Google Analytics ID", name: "google_analytics", widget: "string", required: false }
           - { label: "Site Logo", name: "logo", widget: "image", required: false }
+
+      - name: "locations"
+        label: "Service Areas & Markets"
+        file: "src/content/settings/locations.yml"
+        fields:
+          - label: "Active Markets"
+            name: "markets"
+            widget: "list"
+            fields:
+              - { label: "State", name: "state", widget: "string", hint: "e.g., Florida" }
+              - { label: "State Code", name: "state_code", widget: "string", hint: "e.g., FL" }
+              - label: "Counties"
+                name: "counties"
+                widget: "list"
+                fields:
+                  - { label: "County Name", name: "name", widget: "string", hint: "e.g., Miami-Dade" }
+                  - { label: "Active", name: "active", widget: "boolean", default: true }
+                  - { label: "Primary Market", name: "primary", widget: "boolean", default: false, hint: "Mark as main market area" }
