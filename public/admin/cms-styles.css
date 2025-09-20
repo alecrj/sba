@@ -216,6 +216,44 @@ button[aria-label*="Publish"] + * button:hover,
   color: #374151 !important;
 }
 
+/* Sort dropdown and collection page controls */
+.css-sort,
+.css-filter,
+[class*="sort"],
+[class*="Sort"],
+[class*="filter"],
+[class*="Filter"],
+select {
+  background: white !important;
+  color: #374151 !important;
+  border: 1px solid #d1d5db !important;
+}
+
+/* Main collection page sort/filter controls */
+.css-collection-header select,
+.css-collection-header button,
+.css-toolbar select,
+.css-toolbar button {
+  background: white !important;
+  color: #374151 !important;
+  border: 1px solid #d1d5db !important;
+}
+
+/* Collection page white background fixes */
+[style*="background-color: white"] select,
+[style*="background: white"] select,
+[style*="background-color: #fff"] select,
+[style*="background: #fff"] select {
+  color: #374151 !important;
+  border: 1px solid #d1d5db !important;
+}
+
+/* Any remaining white-on-white selects */
+select[style*="color: white"],
+select[style*="color: #fff"] {
+  color: #374151 !important;
+}
+
 /* Success states */
 .css-success {
   background: #10b981;
