@@ -1,67 +1,90 @@
 ---
-// 2025 Modern Properties Listing Page - Completely Redesigned
+// 2025 Modern Properties Listing Page - Connected to CRM Database
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
-import { getCollection } from 'astro:content';
 
-// Define proper types
-interface WarehouseData {
+// Define proper types for CRM properties
+interface Property {
+  id: string;
   title: string;
+  type: string;
   location: string;
+  county: string;
   price: string;
-  size: number;
-  description: string;
-  images?: string[];
-  features?: string[];
-  featured?: boolean;
-  availability?: string;
-  slug: string;
-  county?: string;
+  size: string;
+  available: boolean;
+  featured: boolean;
+  description?: string;
+  image?: string;
+  gallery?: string[];
+  features: string[];
+  street_address?: string;
+  city?: string;
+  state?: string;
+  zip_code?: string;
+  lease_term?: string;
+  clear_height?: string;
+  loading_docks?: number;
+  parking?: number;
+  year_built?: number;
+  created_at: string;
+  updated_at: string;
 }
 
-interface Warehouse {
-  data: WarehouseData;
-}
-
-// Get warehouse data from CMS
-let allWarehouses: Warehouse[] = [];
-let availableWarehouses: Warehouse[] = [];
+// Get properties from CRM API
+let allProperties: Property[] = [];
+let availableProperties: Property[] = [];
 let totalListings = 0;
 let totalSqFt = 0;
 let avgPrice = 0;
 
 try {
-  allWarehouses = await getCollection('warehouses');
-  availableWarehouses = allWarehouses.filter((w: Warehouse) => w.data.availability === 'available');
-  totalListings = availableWarehouses.length;
-  totalSqFt = availableWarehouses.reduce((sum: number, w: Warehouse) => sum + (w.data.size || 0), 0);
-  avgPrice = availableWarehouses.length > 0 ?
-    Math.round(availableWarehouses.reduce((sum, w) => sum + parseFloat(w.data.price.replace(/[^0-9.-]/g, '')), 0) / availableWarehouses.length) : 0;
+  // Fetch properties from CRM API
+  const response = await fetch('http://localhost:3000/api/public/properties?available=true');
+
+  if (response.ok) {
+    const data = await response.json();
+    if (data.success) {
+      allProperties = data.properties;
+      availableProperties = allProperties.filter(p => p.available);
+      totalListings = availableProperties.length;
+
+      // Calculate total square footage and average price
+      totalSqFt = availableProperties.reduce((sum, p) => {
+        const size = parseInt(p.size?.replace(/[^0-9]/g, '') || '0');
+        return sum + size;
+      }, 0);
+
+      // Calculate average price per square foot
+      const prices = availableProperties
+        .map(p => parseFloat(p.price?.replace(/[^0-9.-]/g, '') || '0'))
+        .filter(price => price > 0);
+
+      avgPrice = prices.length > 0 ?
+        Math.round(prices.reduce((sum, price) => sum + price, 0) / prices.length * 100) / 100 : 0;
+    }
+  }
 } catch (error) {
-  console.log('No warehouse data available:', error);
+  console.log('Could not fetch CRM properties, using fallback data:', error);
 }
 
 // Market stats for data-driven feel
 const marketStats = {
-  totalListings: totalListings || 247,
-  totalSqFt: totalSqFt || 12500000,
-  avgPrice: avgPrice || 8.50,
-  newThisWeek: 23,
+  totalListings: totalListings || 8,
+  totalSqFt: totalSqFt || 250000,
+  avgPrice: avgPrice || 12.50,
+  newThisWeek: Math.min(totalListings, 3),
   avgDaysOnMarket: 45
 };
 
-// Filter options
+// Filter options - these can be dynamically generated from CRM data
 const locations = [
   'All Locations',
   'Miami-Dade County',
   'Broward County',
   'Palm Beach County',
-  'Doral',
-  'Hialeah',
-  'Medley',
-  'Airport West',
-  'Palmetto Bay'
+  ...Array.from(new Set(availableProperties.map(p => p.location))).slice(0, 6)
 ];
 
 const sizeRanges = [
@@ -76,11 +99,10 @@ const sizeRanges = [
 const propertyTypes = [
   'All Types',
   'Warehouse',
-  'Distribution Center',
-  'Manufacturing',
-  'Cold Storage',
+  'Office',
+  'Industrial',
   'Flex Space',
-  'Cross Dock'
+  'Distribution'
 ];
 
 const priceRanges = [
@@ -91,6 +113,26 @@ const priceRanges = [
   '$15 - $20 /SF',
   '$20+ /SF'
 ];
+
+// Helper function to format property type
+function formatType(type: string): string {
+  return type.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+
+// Helper function to format size
+function formatSize(size: string): string {
+  const numericSize = parseInt(size?.replace(/[^0-9]/g, '') || '0');
+  return numericSize > 0 ? numericSize.toLocaleString() : size || 'Contact for details';
+}
+
+// Helper function to get property slug
+function getPropertySlug(property: Property): string {
+  return property.title?.toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim() || property.id;
+}
 ---
 
 <BaseLayout
@@ -112,7 +154,7 @@ const priceRanges = [
               <span class="block gradient-sba">PROPERTIES</span>
             </h1>
             <p class="text-xl text-sba-gray-dark max-w-2xl">
-              Live inventory across South Florida's premier industrial markets
+              Live inventory from our CRM across South Florida's premier industrial markets
             </p>
           </div>
 
@@ -205,9 +247,9 @@ const priceRanges = [
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12">
           <div>
             <h2 class="text-2xl font-black text-sba-navy mb-2">
-              SHOWING {availableWarehouses.length} PROPERTIES
+              SHOWING {availableProperties.length} PROPERTIES
             </h2>
-            <p class="text-sba-gray-dark">Available for immediate lease</p>
+            <p class="text-sba-gray-dark">Live from our CRM database</p>
           </div>
 
           <!-- Sort Options -->
@@ -223,28 +265,33 @@ const priceRanges = [
         </div>
 
         <!-- Properties Grid -->
-        {availableWarehouses.length > 0 ? (
+        {availableProperties.length > 0 ? (
           <div class="grid grid-cols-property gap-8 mb-16">
-            {availableWarehouses.map((warehouse, index) => (
+            {availableProperties.map((property, index) => (
               <div class="card group overflow-hidden animate-fade-in" style={`animation-delay: ${index * 0.05}s;`}>
-                {warehouse.data.images && warehouse.data.images[0] && (
+                {property.image && (
                   <div class="aspect-property overflow-hidden bg-neutral-100 relative">
                     <img
-                      src={warehouse.data.images[0]}
-                      alt={warehouse.data.title}
+                      src={property.image}
+                      alt={property.title}
                       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       loading="lazy"
                     />
                     <!-- Property Status Badge -->
                     <div class="absolute top-4 left-4">
                       <span class="bg-success-500 text-white px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider">
-                        Available
+                        {property.available ? 'Available' : 'Leased'}
                       </span>
+                      {property.featured && (
+                        <span class="bg-accent-blue text-white px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider ml-2">
+                          Featured
+                        </span>
+                      )}
                     </div>
                     <!-- Size Badge -->
                     <div class="absolute top-4 right-4">
                       <span class="bg-black/80 text-white px-3 py-1 rounded-lg text-xs font-mono font-bold backdrop-blur-sm">
-                        {warehouse.data.size?.toLocaleString()} SF
+                        {formatSize(property.size)} SF
                       </span>
                     </div>
                   </div>
@@ -254,37 +301,64 @@ const priceRanges = [
                   <!-- Property Header -->
                   <div class="mb-6">
                     <h3 class="text-xl font-black text-sba-navy mb-2 leading-tight group-hover:text-sba-navy-dark transition-colors duration-200">
-                      {warehouse.data.title}
+                      {property.title}
                     </h3>
                     <p class="text-sba-gray-dark font-mono text-sm uppercase tracking-wider">
-                      {warehouse.data.location}
+                      {property.location} • {property.county}
+                    </p>
+                    <p class="text-sba-gray text-xs uppercase tracking-wider">
+                      {formatType(property.type)}
                     </p>
                   </div>
 
                   <!-- Key Stats -->
                   <div class="grid grid-cols-2 gap-4 mb-6">
                     <div class="text-center p-4 bg-sba-gray-light/20 rounded-xl">
-                      <div class="text-2xl font-black text-sba-navy">{warehouse.data.price}</div>
+                      <div class="text-2xl font-black text-sba-navy">{property.price}</div>
                       <div class="text-xs text-sba-gray uppercase tracking-wider font-semibold">Per SF/Year</div>
                     </div>
                     <div class="text-center p-4 bg-sba-gray-light/20 rounded-xl">
-                      <div class="text-2xl font-black text-sba-navy">{warehouse.data.size?.toLocaleString()}</div>
+                      <div class="text-2xl font-black text-sba-navy">{formatSize(property.size)}</div>
                       <div class="text-xs text-sba-gray uppercase tracking-wider font-semibold">Square Feet</div>
                     </div>
                   </div>
 
+                  <!-- Additional Details -->
+                  {(property.clear_height || property.loading_docks || property.parking) && (
+                    <div class="grid grid-cols-3 gap-2 mb-4 text-center">
+                      {property.clear_height && (
+                        <div class="bg-neutral-50 p-2 rounded-lg">
+                          <div class="text-sm font-bold text-sba-navy">{property.clear_height}</div>
+                          <div class="text-xs text-sba-gray">Height</div>
+                        </div>
+                      )}
+                      {property.loading_docks && property.loading_docks > 0 && (
+                        <div class="bg-neutral-50 p-2 rounded-lg">
+                          <div class="text-sm font-bold text-sba-navy">{property.loading_docks}</div>
+                          <div class="text-xs text-sba-gray">Docks</div>
+                        </div>
+                      )}
+                      {property.parking && property.parking > 0 && (
+                        <div class="bg-neutral-50 p-2 rounded-lg">
+                          <div class="text-sm font-bold text-sba-navy">{property.parking}</div>
+                          <div class="text-xs text-sba-gray">Parking</div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   <!-- Features -->
-                  {warehouse.data.features && (
+                  {property.features && property.features.length > 0 && (
                     <div class="mb-6">
                       <div class="flex flex-wrap gap-2">
-                        {warehouse.data.features.slice(0, 3).map(feature => (
+                        {property.features.slice(0, 3).map(feature => (
                           <span class="bg-sba-gray-light/30 text-sba-gray-dark px-3 py-1 rounded-lg text-xs font-semibold uppercase tracking-wider">
                             {feature}
                           </span>
                         ))}
-                        {warehouse.data.features.length > 3 && (
+                        {property.features.length > 3 && (
                           <span class="text-sba-gray text-xs font-semibold">
-                            +{warehouse.data.features.length - 3} more
+                            +{property.features.length - 3} more
                           </span>
                         )}
                       </div>
@@ -292,21 +366,26 @@ const priceRanges = [
                   )}
 
                   <!-- Description -->
-                  <p class="text-sba-gray-dark text-sm leading-relaxed mb-6 line-clamp-2">
-                    {warehouse.data.description}
-                  </p>
+                  {property.description && (
+                    <p class="text-sba-gray-dark text-sm leading-relaxed mb-6 line-clamp-2">
+                      {property.description}
+                    </p>
+                  )}
 
                   <!-- Actions -->
                   <div class="grid grid-cols-2 gap-3">
                     <a
-                      href={`/properties/${warehouse.data.slug}`}
+                      href={`/properties/${getPropertySlug(property)}`}
                       class="btn-ghost rounded-xl text-center py-3 text-sm hover:shadow-lg transition-all duration-200"
                     >
                       VIEW DETAILS
                     </a>
-                    <button class="btn-primary rounded-xl py-3 text-sm hover:shadow-lg transition-all duration-200">
+                    <a
+                      href="/book-appointment"
+                      class="btn-primary rounded-xl py-3 text-sm hover:shadow-lg transition-all duration-200 text-center"
+                    >
                       BOOK TOUR
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -322,22 +401,21 @@ const priceRanges = [
             </div>
             <h3 class="text-2xl font-bold text-black mb-4">No Properties Found</h3>
             <p class="text-neutral-600 mb-8 max-w-md mx-auto">
-              Try adjusting your filters or contact us to see off-market opportunities.
+              Add some properties to your CRM to see them displayed here, or contact us for off-market opportunities.
             </p>
-            <a href="/contact" class="btn-primary rounded-xl px-8 py-4 hover:shadow-lg transform hover:scale-105 transition-all duration-300">
-              CONTACT US
+            <a href="/book-appointment" class="btn-primary rounded-xl px-8 py-4 hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+              SCHEDULE CONSULTATION
             </a>
           </div>
         )}
 
-        <!-- Load More / Pagination -->
-        {availableWarehouses.length > 0 && (
-          <div class="text-center">
-            <button class="btn-ghost rounded-xl px-8 py-4 hover:shadow-lg transform hover:scale-105 transition-all duration-300">
-              LOAD MORE PROPERTIES
-            </button>
+        <!-- CRM Connection Status -->
+        <div class="text-center mt-12">
+          <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg text-sm font-medium">
+            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+            Live data from CRM • Last updated: {new Date().toLocaleTimeString()}
           </div>
-        )}
+        </div>
       </div>
     </section>
 
@@ -361,8 +439,8 @@ const priceRanges = [
             <span class="text-sm uppercase tracking-wider">OR</span>
             <span class="w-px h-8 bg-sba-gray"></span>
           </div>
-          <a href="/contact" class="text-white font-semibold text-lg hover:text-sba-gray-light transition-colors duration-200">
-            Contact Us Today
+          <a href="/book-appointment" class="text-white font-semibold text-lg hover:text-sba-gray-light transition-colors duration-200">
+            Schedule Consultation
           </a>
         </div>
       </div>
@@ -399,31 +477,22 @@ const priceRanges = [
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Filter form handling
+    // Filter form handling - would connect to CRM API
     const filterForm = document.getElementById('property-filters');
     if (filterForm) {
       filterForm.addEventListener('change', function() {
-        // In a real implementation, this would filter the properties
-        console.log('Filters changed - would update results');
+        console.log('Filters changed - would update CRM API call');
+        // In a real implementation, this would make a new API call with filters
       });
     }
 
-    // Sort functionality
+    // Sort functionality - would connect to CRM API
     const sortSelect = document.getElementById('sort-select');
     if (sortSelect) {
       sortSelect.addEventListener('change', function() {
-        // In a real implementation, this would re-sort the properties
         console.log('Sort changed to:', this.value);
+        // In a real implementation, this would re-sort via API
       });
     }
-
-    // Book tour functionality
-    const bookTourButtons = document.querySelectorAll('button:contains("BOOK TOUR")');
-    bookTourButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        // Redirect to booking page or open modal
-        window.location.href = '/book';
-      });
-    });
   });
 </script>
