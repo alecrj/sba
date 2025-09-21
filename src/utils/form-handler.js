@@ -23,7 +23,7 @@ export const submitForm = async (formData, formSource = 'unknown') => {
     // Also trigger our custom lead processor for EmailJS notifications
     try {
       const leadData = Object.fromEntries(formData.entries());
-      const leadResponse = await fetch('/.netlify/functions/process-lead', {
+      const leadResponse = await fetch('/.netlify/functions/process-lead-supabase', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(leadData)

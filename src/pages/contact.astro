@@ -485,7 +485,7 @@ const sqftRanges = [
         const data = Object.fromEntries(formData.entries());
         data.source = 'contact_hero_form';
         
-        const response = await fetch('/.netlify/functions/process-lead', {
+        const response = await fetch('/.netlify/functions/process-lead-supabase', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)

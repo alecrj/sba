@@ -413,7 +413,7 @@ const sqftRanges = [
           data.source = 'modal_form';
           
           // Submit to our CRM function
-          const response = await fetch('/.netlify/functions/process-lead', {
+          const response = await fetch('/.netlify/functions/process-lead-supabase', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
