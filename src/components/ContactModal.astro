@@ -413,7 +413,7 @@ const sqftRanges = [
           data.source = 'modal_form';
           
           // Submit to our CRM function
-          const response = await fetch('/.netlify/functions/process-lead-supabase', {
+          const response = await fetch('https://sbaycrm.netlify.app/api/public/leads', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -421,17 +421,19 @@ const sqftRanges = [
             body: JSON.stringify(data)
           });
 
-          if (response.ok) {
+          const result = await response.json();
+
+          if (result.success) {
             // Show success message
             modalForm.classList.add('hidden');
             document.getElementById('modal-success-message').classList.remove('hidden');
-            
+
             // Auto-close after 3 seconds
             setTimeout(() => {
               closeContactModal();
             }, 3000);
           } else {
-            throw new Error('Submission failed');
+            throw new Error(result.error || 'Submission failed');
           }
         } catch (error) {
           console.error('Error submitting form:', error);

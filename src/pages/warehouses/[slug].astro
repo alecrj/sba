@@ -676,7 +676,7 @@ const county = getCounty(addressInfo.city);
           data.source = `property_page_${data.warehouse_id}`;
           
           // Submit to our CRM function
-          const response = await fetch('/.netlify/functions/process-lead-supabase', {
+          const response = await fetch('https://sbaycrm.netlify.app/api/public/leads', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -684,7 +684,9 @@ const county = getCounty(addressInfo.city);
             body: JSON.stringify(data)
           });
 
-          if (response.ok) {
+          const result = await response.json();
+
+          if (result.success) {
             // Show success message
             const formContainer = document.getElementById('property-form-container');
             const successMessage = document.getElementById('property-success-message');

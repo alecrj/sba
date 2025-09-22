@@ -23,16 +23,20 @@ export const submitForm = async (formData, formSource = 'unknown') => {
     // Also trigger our custom lead processor for EmailJS notifications
     try {
       const leadData = Object.fromEntries(formData.entries());
-      const leadResponse = await fetch('/.netlify/functions/process-lead-supabase', {
+      const leadResponse = await fetch('https://sbaycrm.netlify.app/api/public/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(leadData)
+        body: JSON.stringify({
+          ...leadData,
+          source: formSource
+        })
       });
       
-      if (leadResponse.ok) {
-        console.log('EmailJS notifications triggered successfully');
+      const result = await leadResponse.json();
+      if (result.success) {
+        console.log('CRM lead submission successful');
       } else {
-        console.warn('EmailJS notification may have failed:', await leadResponse.text());
+        console.warn('CRM lead submission may have failed:', result.error);
       }
     } catch (emailError) {
       console.warn('EmailJS notification error (form still submitted):', emailError);

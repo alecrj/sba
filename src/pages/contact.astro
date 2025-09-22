@@ -485,19 +485,23 @@ const sqftRanges = [
         const data = Object.fromEntries(formData.entries());
         data.source = 'contact_hero_form';
         
-        const response = await fetch('/.netlify/functions/process-lead-supabase', {
+        const response = await fetch('https://sbaycrm.netlify.app/api/public/leads', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+          body: JSON.stringify({
+            ...data,
+            source: 'website-contact-form'
+          })
         });
 
-        if (response.ok) {
+        const result = await response.json();
+
+        if (result.success) {
           console.log('Contact form submission successful, redirecting to success page');
           window.location.href = '/success';
         } else {
-          const errorText = await response.text();
-          console.error('Contact form submission failed:', response.status, errorText);
-          throw new Error(`Form submission failed: ${response.status} ${errorText}`);
+          console.error('Contact form submission failed:', result.error);
+          throw new Error(result.error || 'Form submission failed');
         }
       } catch (error) {
         console.error('Form submission error:', error);
