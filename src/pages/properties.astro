@@ -41,7 +41,7 @@ let avgPrice = 0;
 
 try {
   // Fetch properties from CRM API
-  const response = await fetch('http://localhost:3000/api/public/properties?available=true');
+  const response = await fetch('https://sbaycrm.netlify.app/api/public/properties?available=true');
 
   if (response.ok) {
     const data = await response.json();
