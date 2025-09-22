@@ -134,12 +134,8 @@ const consultationTypes = [
             </p>
           </div>
 
-          <form name="consultation-booking" method="POST" action="/success.html" data-netlify="true" data-netlify-honeypot="bot-field" class="space-y-8">
-            <!-- Hidden fields for Netlify forms -->
-            <input type="hidden" name="form-name" value="consultation-booking" />
-            <div style="display: none;">
-              <label>Don't fill this out: <input name="bot-field" /></label>
-            </div>
+          <form id="consultation-booking-form" class="space-y-8">
+            <input type="hidden" name="source" value="consultation-booking" />
 
             <!-- Personal Information -->
             <div class="grid md:grid-cols-2 gap-6">
@@ -150,7 +146,7 @@ const consultationTypes = [
                 <input
                   type="text"
                   id="firstName"
-                  name="firstName"
+                  name="name"
                   required
                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
                   placeholder="John"
@@ -242,7 +238,7 @@ const consultationTypes = [
                 <input
                   type="date"
                   id="preferredDate"
-                  name="preferredDate"
+                  name="appointmentDate"
                   required
                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
                 />
@@ -253,7 +249,7 @@ const consultationTypes = [
                 </label>
                 <select
                   id="preferredTime"
-                  name="preferredTime"
+                  name="appointmentTime"
                   required
                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors appearance-none bg-white"
                 >
@@ -272,7 +268,7 @@ const consultationTypes = [
               </label>
               <textarea
                 id="spaceRequirements"
-                name="spaceRequirements"
+                name="message"
                 rows={4}
                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors resize-none"
                 placeholder="Tell us about your space requirements, preferred location, size, special features, timeline, or any other details that would help us prepare for your consultation..."
@@ -399,3 +395,83 @@ const consultationTypes = [
     }
   }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('consultation-booking-form');
+
+  if (form) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const submitButton = form.querySelector('button[type="submit"]');
+      const originalText = submitButton.textContent;
+
+      try {
+        submitButton.textContent = 'Scheduling...';
+        submitButton.disabled = true;
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        // Combine first and last name
+        const firstName = data.name || '';
+        const lastName = data.lastName || '';
+        const fullName = `${firstName} ${lastName}`.trim();
+
+        // Convert consultation type to location
+        const typeMapping = {
+          'tenant': 'Office Meeting',
+          'landlord': 'Office Meeting',
+          'investment': 'Office Meeting'
+        };
+
+        const appointmentData = {
+          name: fullName,
+          email: data.email,
+          phone: data.phone,
+          company: data.company || '',
+          appointmentDate: data.appointmentDate,
+          appointmentTime: data.appointmentTime,
+          location: typeMapping[data.consultationType] || 'Office Meeting',
+          message: data.message || '',
+          title: `${data.consultationType || 'Consultation'} - ${fullName}`,
+          duration: 60,
+          source: 'consultation-booking'
+        };
+
+        const response = await fetch('https://sbaycrm.netlify.app/api/public/appointments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(appointmentData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Redirect to success page
+          window.location.href = '/success';
+        } else {
+          throw new Error(result.error || 'Booking failed');
+        }
+
+      } catch (error) {
+        console.error('Booking error:', error);
+        alert('Sorry, there was an error booking your consultation. Please try again or call us at (954) 937-9667.');
+
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+      }
+    });
+  }
+
+  // Set minimum date to today
+  const dateInput = document.getElementById('appointmentDate');
+  if (dateInput) {
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+  }
+});
+</script>
