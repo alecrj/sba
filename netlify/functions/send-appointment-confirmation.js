@@ -15,7 +15,7 @@ exports.handler = async (event, context) => {
     console.log(`Sending appointment confirmation emails for ${appointmentData.name}`);
 
     // Create SMTP transporter
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       host: 'smtp-mail.outlook.com',
       port: 587,
       secure: false,
