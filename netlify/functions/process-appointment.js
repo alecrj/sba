@@ -146,10 +146,11 @@ exports.handler = async (event, context) => {
       // Don't fail the whole process for activity log errors
     }
 
-    // Send confirmation emails (optional)
+    // Send confirmation emails and sync with Google Calendar
     const baseUrl = process.env.URL;
     if (baseUrl) {
       try {
+        // Send confirmation emails
         const confirmationResponse = await fetch(`${baseUrl}/.netlify/functions/send-appointment-confirmation`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -171,8 +172,26 @@ exports.handler = async (event, context) => {
         } else {
           console.log('Confirmation email sent successfully');
         }
+
+        // Sync with Google Calendar
+        if (newAppointment?.id) {
+          const calendarResponse = await fetch(`${baseUrl}/.netlify/functions/google-calendar-sync`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              appointmentId: newAppointment.id,
+              action: 'create'
+            })
+          });
+
+          if (!calendarResponse.ok) {
+            console.error('Google Calendar sync failed:', await calendarResponse.text());
+          } else {
+            console.log('Google Calendar event created successfully');
+          }
+        }
       } catch (error) {
-        console.error('Confirmation email error:', error);
+        console.error('Post-booking process error:', error);
       }
     }
 

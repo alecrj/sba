@@ -440,12 +440,22 @@ document.addEventListener('DOMContentLoaded', function() {
           source: 'consultation-booking'
         };
 
-        const response = await fetch('https://sbaycrm.netlify.app/api/public/appointments', {
+        const response = await fetch('/.netlify/functions/process-appointment', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(appointmentData)
+          body: JSON.stringify({
+            name: fullName,
+            email: data.email,
+            phone: data.phone,
+            company: data.company || '',
+            appointment_type: data.consultationType || 'consultation',
+            appointment_date: data.appointmentDate,
+            appointment_time: data.appointmentTime,
+            message: data.message || '',
+            source: 'consultation-booking'
+          })
         });
 
         const result = await response.json();
