@@ -1,5 +1,5 @@
 ---
-// Professional Warehouse Discovery Platform - CRM API Integration
+// Professional Warehouse Discovery Platform - CRM API Integration (Live)
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
@@ -7,13 +7,19 @@ import Footer from '../components/Footer.astro';
 // Fetch properties from CRM API
 let crmProperties = [];
 try {
+  console.log('🔄 Fetching properties from CRM API...');
   const response = await fetch('https://sbaycrm.netlify.app/api/public/properties');
+  console.log('📡 API Response status:', response.status);
   const data = await response.json();
+  console.log('📊 API Data received:', data);
   if (data.success && data.properties) {
     crmProperties = data.properties;
+    console.log('✅ CRM Properties loaded:', crmProperties.length, 'properties');
+  } else {
+    console.log('❌ API response not successful:', data);
   }
 } catch (error) {
-  console.error('Failed to fetch properties from CRM:', error);
+  console.error('❌ Failed to fetch properties from CRM:', error);
 }
 
 // Organize CRM properties by county
@@ -22,6 +28,12 @@ const countyData: Record<string, any[]> = {
   'Broward': crmProperties.filter(p => p.county === 'Broward' || p.location.includes('Broward') || p.location.includes('Pompano') || p.location.includes('Fort Lauderdale')),
   'Palm Beach': crmProperties.filter(p => p.county === 'Palm Beach' || p.location.includes('Palm Beach') || p.location.includes('Boca') || p.location.includes('West Palm'))
 };
+
+console.log('🏘️ County Data:', {
+  'Miami-Dade': countyData['Miami-Dade'].length,
+  'Broward': countyData['Broward'].length,
+  'Palm Beach': countyData['Palm Beach'].length
+});
 
 // Fallback hardcoded data (in case no CMS properties exist yet)
 const fallbackCountyData = {
