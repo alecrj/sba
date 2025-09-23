@@ -165,18 +165,57 @@ const relatedProperties = allWarehouses
                 </div>
               )}
 
-              <!-- Location Details -->
+              <!-- Location & Map -->
               <div>
-                <h2 class="text-3xl font-black text-sba-navy mb-6">Location Details</h2>
+                <h2 class="text-3xl font-black text-sba-navy mb-6">Location & Map</h2>
                 <div class="bg-white rounded-2xl p-8 border border-sba-gray-light">
-                  <div class="grid md:grid-cols-2 gap-8">
-                    <div>
-                      <h3 class="font-bold text-sba-navy mb-4">Address</h3>
-                      <p class="text-sba-gray-dark">{data.address}</p>
+                  <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                      <div>
+                        <h3 class="font-bold text-sba-navy mb-4">Address</h3>
+                        <div class="text-sba-gray-dark space-y-2">
+                          {data.street_address && <p>{data.street_address}</p>}
+                          <p>{data.city}, {data.state} {data.zip_code}</p>
+                          <p class="text-sm text-sba-gray">County: {data.county}</p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 class="font-bold text-sba-navy mb-4">Transportation</h3>
+                        <div class="text-sba-gray-dark space-y-1">
+                          <p class="text-sm">• Easy highway access</p>
+                          <p class="text-sm">• Public transportation nearby</p>
+                          <p class="text-sm">• Prime commercial location</p>
+                        </div>
+                      </div>
                     </div>
+
                     <div>
-                      <h3 class="font-bold text-sba-navy mb-4">County</h3>
-                      <p class="text-sba-gray-dark">{data.county}</p>
+                      <h3 class="font-bold text-sba-navy mb-4">Map</h3>
+                      <div class="aspect-[4/3] rounded-xl overflow-hidden border border-sba-gray-light">
+                        {(data.street_address && data.city && data.state && data.zip_code) ? (
+                          <iframe
+                            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFhqm9vQSzI1UdkADhd8HQDYQqnwxm-Ws&q=${encodeURIComponent(`${data.street_address}, ${data.city}, ${data.state} ${data.zip_code}`)}`}
+                            width="100%"
+                            height="100%"
+                            style="border:0;"
+                            allowfullscreen
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            class="w-full h-full"
+                          ></iframe>
+                        ) : (
+                          <div class="w-full h-full bg-neutral-100 flex items-center justify-center">
+                            <div class="text-center text-sba-gray">
+                              <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                              </svg>
+                              <p class="text-sm">Map not available</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
