@@ -190,8 +190,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
     </style>
 
-    <!-- Netlify Identity Widget for CMS Authentication -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <!-- Netlify Identity Widget removed to fix CORS errors -->
 
     <!-- Tailwind CSS is handled by Astro integration -->
 
@@ -386,16 +385,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
       console.log('Global language system loaded');
 
-      // Initialize Netlify Identity for CMS
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on('init', user => {
-          if (!user) {
-            window.netlifyIdentity.on('login', () => {
-              document.location.href = '/admin/';
-            });
-          }
-        });
-      }
+      // Netlify Identity removed
 
       // Mobile menu functionality
       function toggleMobileMenu() {
