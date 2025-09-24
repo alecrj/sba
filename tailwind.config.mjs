@@ -4,13 +4,14 @@ export default {
 
   theme: {
     extend: {
-      // Professional Real Estate Typography
+      // Standardized Professional Typography System
       fontFamily: {
         sans: ['Source Sans Pro', 'system-ui', '-apple-system', 'sans-serif'],
         display: ['Montserrat', 'Source Sans Pro', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['SF Mono', 'Monaco', 'monospace'],
       },
 
+      // Consistent Typography Scale - Mobile First with Perfect Scaling
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem', letterSpacing: '0.025em' }],
         'sm': ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0.01em' }],
@@ -25,6 +26,14 @@ export default {
         '7xl': ['4.5rem', { lineHeight: '1.05', letterSpacing: '-0.045em' }],
         '8xl': ['6rem', { lineHeight: '1.05', letterSpacing: '-0.05em' }],
         '9xl': ['8rem', { lineHeight: '1.05', letterSpacing: '-0.055em' }],
+
+        // Standardized Heading Sizes with Consistent Scaling
+        'heading-sm': ['1.5rem', { lineHeight: '2rem', letterSpacing: '-0.02em' }],      // 24px - Small headings
+        'heading-md': ['2rem', { lineHeight: '2.5rem', letterSpacing: '-0.025em' }],     // 32px - Medium headings
+        'heading-lg': ['2.5rem', { lineHeight: '3rem', letterSpacing: '-0.03em' }],      // 40px - Large headings
+        'heading-xl': ['3rem', { lineHeight: '3.5rem', letterSpacing: '-0.035em' }],     // 48px - XL headings
+        'heading-2xl': ['3.75rem', { lineHeight: '4rem', letterSpacing: '-0.04em' }],    // 60px - Hero headings
+        'heading-3xl': ['4.5rem', { lineHeight: '4.5rem', letterSpacing: '-0.045em' }],  // 72px - Large hero
       },
 
       // SBA Brand Color System
@@ -248,23 +257,82 @@ export default {
       });
 
       addComponents({
-        // Button components
-        '.btn-primary': {
-          '@apply bg-sba-navy text-white px-8 py-4 text-sm font-semibold tracking-wide hover:bg-sba-navy-dark transition-all duration-300 active:scale-95 shadow-lg hover:shadow-xl': {},
+        // Standardized Container System
+        '.container-sba': {
+          '@apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8': {},
         },
-        '.btn-secondary': {
-          '@apply bg-white text-sba-navy border-2 border-sba-navy px-8 py-4 text-sm font-semibold tracking-wide hover:bg-sba-navy hover:text-white transition-all duration-300 active:scale-95': {},
+        '.container-sba-narrow': {
+          '@apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8': {},
         },
-        '.btn-ghost': {
-          '@apply text-sba-navy border-2 border-sba-navy px-8 py-4 text-sm font-semibold tracking-wide hover:bg-sba-navy hover:text-white transition-all duration-300': {},
+        '.container-sba-wide': {
+          '@apply max-w-8xl mx-auto px-4 sm:px-6 lg:px-8': {},
         },
 
-        // Card components
-        '.card': {
-          '@apply bg-white border border-sba-gray-light shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1': {},
+        // Standardized Section Spacing
+        '.section-padding': {
+          '@apply py-12 sm:py-16 lg:py-20': {},
+        },
+        '.section-padding-lg': {
+          '@apply py-16 sm:py-20 lg:py-24': {},
+        },
+        '.section-padding-sm': {
+          '@apply py-8 sm:py-12 lg:py-16': {},
+        },
+
+        // Standardized Typography Styles
+        '.heading-hero': {
+          '@apply text-heading-lg sm:text-heading-xl lg:text-heading-2xl font-black text-sba-navy leading-tight tracking-tight': {},
+        },
+        '.heading-section': {
+          '@apply text-heading-md sm:text-heading-lg lg:text-heading-xl font-bold text-sba-navy leading-tight': {},
+        },
+        '.heading-card': {
+          '@apply text-heading-sm font-semibold text-sba-navy leading-tight': {},
+        },
+        '.text-body': {
+          '@apply text-base lg:text-lg text-gray-600 leading-relaxed': {},
+        },
+        '.text-body-lg': {
+          '@apply text-lg lg:text-xl text-gray-600 leading-relaxed': {},
+        },
+
+        // Standardized Button System
+        '.btn-primary': {
+          '@apply bg-sba-navy text-white px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-semibold tracking-wide hover:bg-sba-navy-dark transition-all duration-300 active:scale-95 shadow-lg hover:shadow-xl rounded-xl': {},
+        },
+        '.btn-secondary': {
+          '@apply bg-white text-sba-navy border-2 border-sba-navy px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-semibold tracking-wide hover:bg-sba-navy hover:text-white transition-all duration-300 active:scale-95 rounded-xl': {},
+        },
+        '.btn-outline': {
+          '@apply border-2 border-sba-navy text-sba-navy px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-semibold tracking-wide hover:bg-sba-navy hover:text-white transition-all duration-300 rounded-xl': {},
+        },
+        '.btn-ghost': {
+          '@apply text-sba-navy px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-semibold tracking-wide hover:bg-sba-navy/10 transition-all duration-300 rounded-xl': {},
+        },
+
+        // Standardized Card System
+        '.card-sba': {
+          '@apply bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2': {},
+        },
+        '.card-property': {
+          '@apply card-sba overflow-hidden cursor-pointer': {},
         },
         '.card-feature': {
-          '@apply bg-white border border-sba-gray-light p-8 hover:border-sba-navy hover:shadow-xl transition-all duration-500 hover:-translate-y-2': {},
+          '@apply card-sba p-6 sm:p-8': {},
+        },
+        '.card-team': {
+          '@apply card-sba p-6 sm:p-8 text-center': {},
+        },
+
+        // Standardized Grid Systems
+        '.grid-properties': {
+          '@apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6': {},
+        },
+        '.grid-features': {
+          '@apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8': {},
+        },
+        '.grid-team': {
+          '@apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12': {},
         },
       });
     },

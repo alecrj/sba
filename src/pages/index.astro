@@ -1,316 +1,191 @@
 ---
-// Professional Warehouse Discovery Platform - CRM API Integration (Live)
-import BaseLayout from '../layouts/BaseLayout.astro';
+// Simple AirBnb-style warehouse showcase
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Fetch properties from CRM API
-let crmProperties = [];
-try {
-  console.log('🔄 Fetching properties from CRM API...');
-  const response = await fetch('https://sbaycrm.netlify.app/api/public/properties');
-  console.log('📡 API Response status:', response.status);
-  const data = await response.json();
-  console.log('📊 API Data received:', data);
-  if (data.success && data.properties) {
-    crmProperties = data.properties;
-    console.log('✅ CRM Properties loaded:', crmProperties.length, 'properties');
-  } else {
-    console.log('❌ API response not successful:', data);
-  }
-} catch (error) {
-  console.error('❌ Failed to fetch properties from CRM:', error);
-}
-
-// Organize CRM properties by county
-const countyData: Record<string, any[]> = {
-  'Miami-Dade': crmProperties.filter(p => p.county === 'Miami-Dade' || p.location.includes('Miami') || p.location.includes('Doral') || p.location.includes('Hialeah')),
-  'Broward': crmProperties.filter(p => p.county === 'Broward' || p.location.includes('Broward') || p.location.includes('Pompano') || p.location.includes('Fort Lauderdale')),
-  'Palm Beach': crmProperties.filter(p => p.county === 'Palm Beach' || p.location.includes('Palm Beach') || p.location.includes('Boca') || p.location.includes('West Palm'))
-};
-
-console.log('🏘️ County Data:', {
-  'Miami-Dade': countyData['Miami-Dade'].length,
-  'Broward': countyData['Broward'].length,
-  'Palm Beach': countyData['Palm Beach'].length
-});
-
-// Fallback hardcoded data (in case no CMS properties exist yet)
-const fallbackCountyData = {
-  'Miami-Dade': [
+// Curated warehouse data - 4 per county for optimal UX
+const warehousesByCounty = {
+  "Miami-Dade": [
     {
-      id: 'doral-logistics-hub',
-      title: 'Premium Logistics Hub',
-      location: 'Doral',
-      price: '$8.50',
-      size: '25,000',
-      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop&auto=format',
-      features: ['Dock High', '32\' Clear', 'Highway Access'],
+      id: 1,
+      title: "Modern Distribution Center",
+      location: "Doral, FL",
+      size: "85,000 SF",
+      price: "$12.50",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
       available: true
     },
     {
-      id: 'hialeah-distribution',
-      title: 'Distribution Center',
-      location: 'Hialeah',
-      price: '$7.75',
-      size: '35,000',
-      image: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&h=600&fit=crop&auto=format',
-      features: ['Rail Access', 'Grade Level', 'Flex Space'],
+      id: 2,
+      title: "Prime Warehouse Space",
+      location: "Hialeah, FL",
+      size: "45,000 SF",
+      price: "$10.75",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
       available: true
     },
     {
-      id: 'medley-warehouse',
-      title: 'Industrial Warehouse',
-      location: 'Medley',
-      price: '$9.25',
-      size: '18,000',
-      image: 'https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?w=800&h=600&fit=crop&auto=format',
-      features: ['Heavy Power', 'Crane Ready', 'Secured Yard'],
+      id: 3,
+      title: "Manufacturing Facility",
+      location: "Miami, FL",
+      size: "120,000 SF",
+      price: "$15.00",
+      type: "Manufacturing",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
       available: true
     },
     {
-      id: 'miami-cold-storage',
-      title: 'Cold Storage Facility',
-      location: 'Miami',
-      price: '$12.00',
-      size: '40,000',
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&h=600&fit=crop&auto=format',
-      features: ['Refrigerated', 'Food Grade', '24/7 Security'],
-      available: true
-    },
-    {
-      id: 'kendall-flex-space',
-      title: 'Flex Industrial Space',
-      location: 'Kendall',
-      price: '$8.00',
-      size: '22,000',
-      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop&auto=format',
-      features: ['Office Combo', 'Parking', 'Modern Build'],
-      available: false
-    }
-  ],
-  'Broward': [
-    {
-      id: 'pompano-logistics',
-      title: 'Pompano Logistics Center',
-      location: 'Pompano Beach',
-      price: '$8.25',
-      size: '45,000',
-      image: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&h=600&fit=crop&auto=format',
-      features: ['Port Access', 'Dock High', 'Rail Spur'],
-      available: true
-    },
-    {
-      id: 'davie-warehouse',
-      title: 'Davie Industrial Park',
-      location: 'Davie',
-      price: '$7.50',
-      size: '28,000',
-      image: 'https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?w=800&h=600&fit=crop&auto=format',
-      features: ['Highway 95', 'Grade Level', 'Truck Courts'],
-      available: true
-    },
-    {
-      id: 'plantation-flex',
-      title: 'Plantation Flex Building',
-      location: 'Plantation',
-      price: '$9.00',
-      size: '15,000',
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&h=600&fit=crop&auto=format',
-      features: ['Office Space', 'Modern HVAC', 'Parking'],
-      available: true
-    },
-    {
-      id: 'hollywood-distribution',
-      title: 'Hollywood Distribution Hub',
-      location: 'Hollywood',
-      price: '$8.75',
-      size: '32,000',
-      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop&auto=format',
-      features: ['Airport Access', 'Cross Dock', '30\' Clear'],
-      available: true
-    },
-    {
-      id: 'sunrise-manufacturing',
-      title: 'Manufacturing Facility',
-      location: 'Sunrise',
-      price: '$10.50',
-      size: '50,000',
-      image: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&h=600&fit=crop&auto=format',
-      features: ['Heavy Power', '3-Phase', 'Crane Ready'],
+      id: 7,
+      title: "Cold Storage Facility",
+      location: "Miami Beach, FL",
+      size: "35,000 SF",
+      price: "$18.00",
+      type: "Cold Storage",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
       available: true
     }
   ],
-  'Palm Beach': [
+  "Broward": [
     {
-      id: 'boca-tech-center',
-      title: 'Boca Tech Center',
-      location: 'Boca Raton',
-      price: '$11.00',
-      size: '20,000',
-      image: 'https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?w=800&h=600&fit=crop&auto=format',
-      features: ['Tech Ready', 'Fiber Optic', 'Class A'],
+      id: 4,
+      title: "Flex Industrial Space",
+      location: "Pompano Beach, FL",
+      size: "25,000 SF",
+      price: "$14.25",
+      type: "Flex Space",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
       available: true
     },
     {
-      id: 'delray-logistics',
-      title: 'Delray Logistics Hub',
-      location: 'Delray Beach',
-      price: '$9.50',
-      size: '35,000',
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&h=600&fit=crop&auto=format',
-      features: ['I-95 Access', 'Dock High', 'Flex Space'],
+      id: 5,
+      title: "Logistics Hub",
+      location: "Fort Lauderdale, FL",
+      size: "95,000 SF",
+      price: "$11.80",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
       available: true
     },
     {
-      id: 'wellington-warehouse',
-      title: 'Wellington Industrial',
-      location: 'Wellington',
-      price: '$8.25',
-      size: '25,000',
-      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop&auto=format',
-      features: ['Turnpike Access', 'Grade Level', 'Parking'],
+      id: 9,
+      title: "Distribution Warehouse",
+      location: "Hollywood, FL",
+      size: "75,000 SF",
+      price: "$13.25",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
       available: true
     },
     {
-      id: 'boynton-distribution',
-      title: 'Boynton Distribution',
-      location: 'Boynton Beach',
-      price: '$7.75',
-      size: '42,000',
-      image: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&h=600&fit=crop&auto=format',
-      features: ['Port Access', 'Rail Ready', 'Cross Dock'],
-      available: false
+      id: 11,
+      title: "Port Access Facility",
+      location: "Dania Beach, FL",
+      size: "60,000 SF",
+      price: "$12.75",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+      available: true
+    }
+  ],
+  "Palm Beach": [
+    {
+      id: 6,
+      title: "Industrial Complex",
+      location: "Boca Raton, FL",
+      size: "65,000 SF",
+      price: "$13.50",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+      available: true
     },
     {
-      id: 'west-palm-flex',
-      title: 'West Palm Flex Center',
-      location: 'West Palm Beach',
-      price: '$10.25',
-      size: '18,000',
-      image: 'https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?w=800&h=600&fit=crop&auto=format',
-      features: ['Downtown Access', 'Modern Build', 'LEED'],
+      id: 10,
+      title: "Tech Manufacturing Hub",
+      location: "Delray Beach, FL",
+      size: "110,000 SF",
+      price: "$16.75",
+      type: "Manufacturing",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+      available: true
+    },
+    {
+      id: 12,
+      title: "Multi-Use Industrial",
+      location: "West Palm Beach, FL",
+      size: "80,000 SF",
+      price: "$14.50",
+      type: "Flex Space",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      available: true
+    },
+    {
+      id: 13,
+      title: "Distribution Center",
+      location: "Boynton Beach, FL",
+      size: "90,000 SF",
+      price: "$13.25",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
       available: true
     }
   ]
 };
-
-// Use CRM data if available, otherwise fallback
-const displayCountyData = crmProperties.length > 0 ? countyData : fallbackCountyData;
-
-// Helper function to get property data (handles both CRM and fallback formats)
-function getPropertyData(property: any) {
-  // If it's a CRM property, format it for display
-  if (property.id && property.title) {
-    return {
-      id: property.id,
-      title: property.title,
-      location: property.location,
-      price: property.price,
-      size: property.size,
-      image: property.image || 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop&auto=format',
-      features: property.features || [],
-      available: property.available
-    };
-  }
-  // Otherwise it's fallback data, return as-is
-  return property;
-}
-
-// Calculate totals for each county
-const countyStats = Object.entries(displayCountyData).map(([county, properties]) => ({
-  county,
-  total: properties.length,
-  available: properties.filter(p => p.available).length
-}));
 ---
 
-<BaseLayout
-  title="Warehouse Space in South Florida | Shallow Bay Advisors"
-  description="Find premium warehouse and industrial space across Miami-Dade, Broward, and Palm Beach counties. Professional commercial real estate brokerage services."
->
+<BaseLayout title="South Florida Warehouses | Shallow Bay Advisors">
   <Navigation />
 
-  <main class="pt-20">
+  <main class="min-h-screen bg-gray-100">
 
-    <!-- Compact Header & Search -->
-    <section class="py-8 border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Simple AirBnb-style Hero -->
+    <section class="pt-28 pb-16">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
 
-        <!-- Page Title -->
-        <div class="text-center mb-8">
-          <h1 class="font-display text-3xl lg:text-4xl font-bold text-gray-900 mb-3" data-translate="hero_title">
-            Find Your Perfect Warehouse Space
+        <!-- Simple Headline -->
+        <div class="text-center mb-12">
+          <h1 class="text-4xl md:text-5xl font-light text-sba-navy mb-6 font-['Poppins'] tracking-tight leading-tight">
+            Where you find your warehouse
           </h1>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto" data-translate="hero_subtitle">
-            South Florida's premier industrial real estate platform. Discover available warehouse space with live inventory and instant tour booking.
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Discover industrial properties across South Florida
           </p>
         </div>
 
-        <!-- Enhanced Search Bar -->
-        <div class="max-w-5xl mx-auto">
-          <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-3 backdrop-blur-sm">
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-3">
-
-              <!-- Location Filter -->
-              <div class="relative group">
-                <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                  </svg>
-                </div>
-                <select class="w-full pl-12 pr-4 py-4 rounded-xl border-0 bg-gray-50 hover:bg-gray-100 focus:bg-white focus:ring-2 focus:ring-primary/20 text-sm font-medium text-gray-900 transition-all duration-200 cursor-pointer">
-                  <option value="">All Counties</option>
-                  <option value="miami-dade">Miami-Dade County</option>
-                  <option value="broward">Broward County</option>
-                  <option value="palm-beach">Palm Beach County</option>
+        <!-- AirBnb-style Search Bar -->
+        <div class="flex justify-center mb-16">
+          <div id="floating-search-bar" class="bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 p-1 max-w-4xl w-full">
+            <div class="flex items-center">
+              <div class="flex-1 px-6 py-4 border-r border-gray-300">
+                <div class="text-xs font-semibold text-gray-700 mb-1">County</div>
+                <select id="county-select" class="text-sm text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
+                  <option value="">All counties</option>
+                  <option value="Miami-Dade">Miami-Dade</option>
+                  <option value="Broward">Broward</option>
+                  <option value="Palm Beach">Palm Beach</option>
                 </select>
               </div>
-
-              <!-- Property Type -->
-              <div class="relative group">
-                <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                  </svg>
-                </div>
-                <select class="w-full pl-12 pr-4 py-4 rounded-xl border-0 bg-gray-50 hover:bg-gray-100 focus:bg-white focus:ring-2 focus:ring-primary/20 text-sm font-medium text-gray-900 transition-all duration-200 cursor-pointer">
-                  <option value="">Property Type</option>
+              <div class="flex-1 px-6 py-4 border-r border-gray-300">
+                <div class="text-xs font-semibold text-gray-700 mb-1">Size</div>
+                <select id="size-select" class="text-sm text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
+                  <option value="">Any size</option>
+                  <option value="small">5K - 25K SF</option>
+                  <option value="medium">25K - 100K SF</option>
+                  <option value="large">100K+ SF</option>
+                </select>
+              </div>
+              <div class="flex-1 px-6 py-4">
+                <div class="text-xs font-semibold text-gray-700 mb-1">Type</div>
+                <select id="type-select" class="text-sm text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
+                  <option value="">All types</option>
                   <option value="warehouse">Warehouse</option>
-                  <option value="distribution">Distribution Center</option>
+                  <option value="distribution">Distribution</option>
                   <option value="manufacturing">Manufacturing</option>
                   <option value="flex">Flex Space</option>
-                  <option value="cold-storage">Cold Storage</option>
                 </select>
               </div>
-
-              <!-- Size Range -->
-              <div class="relative group">
-                <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
-                  </svg>
-                </div>
-                <select class="w-full pl-12 pr-4 py-4 rounded-xl border-0 bg-gray-50 hover:bg-gray-100 focus:bg-white focus:ring-2 focus:ring-primary/20 text-sm font-medium text-gray-900 transition-all duration-200 cursor-pointer">
-                  <option value="">Size Range</option>
-                  <option value="0-10000">Under 10,000 SF</option>
-                  <option value="10000-25000">10,000 - 25,000 SF</option>
-                  <option value="25000-50000">25,000 - 50,000 SF</option>
-                  <option value="50000+">50,000+ SF</option>
-                </select>
-              </div>
-
-              <!-- Search Button -->
-              <div class="flex items-center justify-center lg:justify-end">
-                <button class="btn btn-primary rounded-xl w-full lg:w-auto px-8 py-4 flex items-center justify-center gap-2 text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                  </svg>
-                  <span data-translate="search_button">Search</span>
-                </button>
-              </div>
-
             </div>
           </div>
         </div>
@@ -318,135 +193,127 @@ const countyStats = Object.entries(displayCountyData).map(([county, properties])
       </div>
     </section>
 
-    <!-- County-Based Warehouse Listings -->
-    {Object.entries(displayCountyData).map(([county, properties]) => (
-      <section class="py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- AirBnb-style Properties -->
+    <section class="pb-24">
+      <div class="max-w-7xl mx-auto px-6">
 
-          <!-- County Header -->
-          <div class="flex items-end justify-between mb-10">
-            <div>
-              <h2 class="font-display text-3xl lg:text-4xl font-bold text-gray-900 mb-2" data-translate={`county_${county.toLowerCase().replace('-', '_')}`}>
-                {county} County
-              </h2>
-              <p class="text-gray-600 text-lg">
-                {properties.filter(p => p.available).length} warehouses available
-              </p>
-            </div>
-            <a
-              href={`/warehouses?county=${county.toLowerCase().replace(' ', '-')}`}
-              class="text-primary hover:text-primary-dark font-semibold flex items-center gap-2 group px-4 py-2 rounded-xl hover:bg-primary/5 transition-all duration-200"
-            >
-              Show all {properties.length} properties
-              <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
+        <!-- All Properties Grid - No County Separation -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+          {Object.entries(warehousesByCounty).flatMap(([county, warehouses]) =>
+            warehouses.map((warehouse) => (
+              <div class="group cursor-pointer transition-all duration-200">
 
-          <!-- Warehouse Grid - 5 per row on desktop -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-            {properties.map((warehouse) => {
-              const prop = getPropertyData(warehouse);
-              return (
-              <a
-                href={`/warehouses/${prop.id}`}
-                class="card overflow-hidden group block hover:shadow-xl transition-all duration-300"
-              >
-
-                <!-- Warehouse Image -->
-                <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                <!-- Simple Property Image -->
+                <div class="relative overflow-hidden rounded-lg mb-3" style="aspect-ratio: 20/19;">
                   <img
-                    src={prop.image}
-                    alt={prop.title}
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    src={warehouse.image}
+                    alt={warehouse.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                   />
-
-                  <!-- Availability Badge -->
-                  <div class="absolute top-4 left-4">
-                    <span class={`px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg backdrop-blur-sm ${
-                      prop.available
-                        ? 'bg-emerald-500 text-white'
-                        : 'bg-gray-800 text-white'
-                    }`}>
-                      {prop.available ? 'Available' : 'Leased'}
-                    </span>
-                  </div>
-
-                  <!-- Save Button -->
-                  <button class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/95 hover:bg-white p-2.5 rounded-xl shadow-lg backdrop-blur-sm hover:scale-110">
-                    <svg class="w-4 h-4 text-gray-600 hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                    </svg>
-                  </button>
                 </div>
 
-                <!-- Warehouse Details -->
-                <div class="p-5">
+                <!-- Simple Text Below Like LoopNet -->
+                <div class="space-y-2">
+                  <h3 class="font-semibold text-sba-navy text-sm leading-tight">
+                    {warehouse.title}
+                  </h3>
 
-                  <!-- Title & Location -->
-                  <div class="mb-4">
-                    <h3 class="font-semibold text-gray-900 mb-1.5 line-clamp-1 text-base">
-                      {prop.title}
-                    </h3>
-                    <p class="text-sm text-gray-600 font-medium">
-                      {prop.location}, {county}
-                    </p>
-                  </div>
+                  <p class="text-gray-600 text-sm">
+                    {warehouse.location}
+                  </p>
 
-                  <!-- Features -->
-                  <div class="flex items-center gap-1.5 mb-4">
-                    {prop.features.slice(0, 2).map((feature) => (
-                      <span class="px-2.5 py-1 bg-gray-50 text-gray-700 text-xs rounded-lg font-medium border border-gray-200">
-                        {feature}
-                      </span>
-                    ))}
-                    {prop.features.length > 2 && (
-                      <span class="px-2.5 py-1 bg-primary/10 text-primary text-xs rounded-lg font-medium border border-primary/20">
-                        +{prop.features.length - 2}
-                      </span>
-                    )}
-                  </div>
-
-                  <!-- Pricing & Size -->
-                  <div class="flex items-baseline justify-between">
-                    <div>
-                      <span class="font-bold text-gray-900 text-lg">{prop.price}/SF</span>
-                      <span class="text-sm text-gray-500 ml-1">per year</span>
+                  <div class="flex items-center justify-between">
+                    <div class="text-sm text-gray-600">
+                      {warehouse.size} • {warehouse.type}
                     </div>
-                    <span class="text-sm font-semibold text-primary bg-primary/10 px-2 py-1 rounded-lg">
-                      {prop.size} SF
-                    </span>
+                    <div class="font-semibold text-sba-navy">
+                      {warehouse.price}/SF
+                    </div>
                   </div>
-
                 </div>
 
-              </a>
-              );
-            })}
-          </div>
-
+              </div>
+            ))
+          )}
         </div>
-      </section>
-    ))}
 
-    <!-- Call to Action -->
-    <section class="py-16 bg-gray-50">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="font-display text-3xl lg:text-4xl font-semibold text-gray-900 mb-6">
-          Need help finding the perfect space?
-        </h2>
-        <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-          Our commercial real estate experts know South Florida's industrial market inside and out.
-          Let us help you find exactly what your business needs.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/book-consultation" class="btn btn-primary px-8 py-4" data-translate="hero_cta_secondary">
-            Book Consultation
+        <!-- View All Properties -->
+        <div class="text-center mt-16 pt-8 border-t border-gray-300">
+          <a
+            href="/properties"
+            class="text-gray-600 hover:text-sba-navy font-medium underline transition-colors"
+          >
+            Show all properties
           </a>
-          <a href="/properties" class="btn btn-outline px-8 py-4" data-translate="hero_cta">
-            Explore Properties
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Professional CTA Section -->
+    <section class="py-32 bg-gradient-to-br from-sba-navy to-blue-900 relative overflow-hidden">
+      <!-- Subtle background elements -->
+      <div class="absolute inset-0">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-1/4 w-72 h-72 bg-blue-400/10 rounded-full blur-2xl"></div>
+      </div>
+
+      <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
+        <!-- Professional headline -->
+        <div class="mb-16">
+          <span class="inline-block bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-lg text-sm font-bold uppercase tracking-wider border border-white/20 mb-8">
+            Ready to Move Forward?
+          </span>
+          <h2 class="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-8 leading-none">
+            <span class="block">Partner with</span>
+            <span class="block text-blue-300">The Experts</span>
+          </h2>
+          <p class="text-2xl md:text-3xl text-blue-100 max-w-4xl mx-auto font-medium leading-relaxed">
+            Get professional guidance and access to
+            <span class="text-white font-bold">South Florida's best industrial properties.</span>
+            <span class="block mt-2 text-xl">Let's find your perfect space today.</span>
+          </p>
+        </div>
+
+        <!-- Professional CTAs -->
+        <div class="flex flex-col lg:flex-row gap-6 justify-center items-center max-w-4xl mx-auto">
+          <a href="/book-consultation" class="group bg-white text-sba-navy px-12 py-6 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 w-full lg:w-auto">
+            <div class="flex items-center justify-center space-x-3">
+              <span>Schedule Consultation</span>
+              <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+              </svg>
+            </div>
+            <div class="text-sm font-medium mt-1 opacity-75">Professional consultation • Free initial meeting</div>
           </a>
+
+          <div class="text-white font-medium text-lg lg:mx-8">or</div>
+
+          <a href="/contact" class="group border-2 border-white/30 backdrop-blur-sm text-white px-12 py-6 rounded-xl font-bold text-lg hover:bg-white hover:text-sba-navy transition-all duration-300 transform hover:scale-105 w-full lg:w-auto">
+            <div class="flex items-center justify-center space-x-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 7.89a2 2 0 002.83 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+              <span>Contact Our Team</span>
+            </div>
+            <div class="text-sm font-medium mt-1 opacity-75">Direct access to our specialists</div>
+          </a>
+        </div>
+
+        <!-- Professional trust indicators -->
+        <div class="mt-20 pt-12 border-t border-white/20">
+          <p class="text-white/90 text-lg font-medium mb-8">Serving South Florida's Leading Businesses</p>
+          <div class="flex flex-wrap justify-center items-center gap-12 opacity-80">
+            <div class="bg-white/10 backdrop-blur-sm px-6 py-4 rounded-lg border border-white/20">
+              <span class="text-white font-bold text-lg">25+ Years Experience</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur-sm px-6 py-4 rounded-lg border border-white/20">
+              <span class="text-white font-bold text-lg">Licensed Professionals</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur-sm px-6 py-4 rounded-lg border border-white/20">
+              <span class="text-white font-bold text-lg">Local Market Experts</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -457,33 +324,7 @@ const countyStats = Object.entries(displayCountyData).map(([county, properties])
 </BaseLayout>
 
 <style>
-  /* Enhanced Professional Warehouse Cards */
-  .card {
-    background: white;
-    border-radius: 16px;
-    border: 1px solid #F3F4F6;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  }
-
-  .card:hover {
-    transform: translateY(-8px);
-    box-shadow:
-      0 25px 50px rgba(30, 58, 95, 0.15),
-      0 0 0 1px rgba(30, 58, 95, 0.05);
-    border-color: rgba(30, 58, 95, 0.1);
-  }
-
-  /* Enhanced line clamp */
-  .line-clamp-1 {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  /* Enhanced search bar styling */
+  /* Clean minimal styling */
   select {
     appearance: none;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
@@ -492,71 +333,377 @@ const countyStats = Object.entries(displayCountyData).map(([county, properties])
     background-size: 16px;
   }
 
-  select:focus {
+  select:focus,
+  input:focus {
     outline: none;
-    box-shadow: none;
   }
 
-  /* Micro-animations */
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  html {
+    scroll-behavior: smooth;
   }
 
-  .animate-slide-in {
-    animation: slideInUp 0.6s ease-out;
-  }
-
-  /* Staggered animation delays */
-  .card:nth-child(1) { animation-delay: 0.1s; }
-  .card:nth-child(2) { animation-delay: 0.2s; }
-  .card:nth-child(3) { animation-delay: 0.3s; }
-  .card:nth-child(4) { animation-delay: 0.4s; }
-  .card:nth-child(5) { animation-delay: 0.5s; }
-
-  /* Enhanced button hover effects */
-  .btn {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-  }
-
-  .btn:hover::before {
-    left: 100%;
-  }
-
-  /* Responsive grid with better spacing */
-  @media (min-width: 1536px) {
-    .grid-cols-5 {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-    }
-  }
-
-  /* Enhanced focus states for accessibility */
   select:focus-visible,
-  button:focus-visible {
-    outline: 2px solid #1E3A5F;
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid #1f2937;
     outline-offset: 2px;
   }
-
-  /* Smooth page load animation */
-  .page-enter {
-    animation: slideInUp 0.8s ease-out;
-  }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const floatingSearchBar = document.getElementById('floating-search-bar');
+    const countySelect = document.getElementById('county-select');
+    const sizeSelect = document.getElementById('size-select');
+    const typeSelect = document.getElementById('type-select');
+    const propertiesGrid = document.querySelector('.grid.grid-cols-1');
+
+    // All warehouse data for filtering
+    const warehouseData = {
+      "Miami-Dade": [
+        {
+          id: 1,
+          title: "Modern Distribution Center",
+          location: "Doral, FL",
+          size: "85,000 SF",
+          sizeValue: 85000,
+          price: "$12.50",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 2,
+          title: "Prime Warehouse Space",
+          location: "Hialeah, FL",
+          size: "45,000 SF",
+          sizeValue: 45000,
+          price: "$10.75",
+          type: "Warehouse",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 3,
+          title: "Manufacturing Facility",
+          location: "Miami, FL",
+          size: "120,000 SF",
+          sizeValue: 120000,
+          price: "$15.00",
+          type: "Manufacturing",
+          typeValue: "manufacturing",
+          image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 7,
+          title: "Cold Storage Facility",
+          location: "Miami Beach, FL",
+          size: "35,000 SF",
+          sizeValue: 35000,
+          price: "$18.00",
+          type: "Cold Storage",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+          available: true
+        }
+      ],
+      "Broward": [
+        {
+          id: 4,
+          title: "Flex Industrial Space",
+          location: "Pompano Beach, FL",
+          size: "25,000 SF",
+          sizeValue: 25000,
+          price: "$14.25",
+          type: "Flex Space",
+          typeValue: "flex",
+          image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 5,
+          title: "Logistics Hub",
+          location: "Fort Lauderdale, FL",
+          size: "95,000 SF",
+          sizeValue: 95000,
+          price: "$11.80",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 9,
+          title: "Distribution Warehouse",
+          location: "Hollywood, FL",
+          size: "75,000 SF",
+          sizeValue: 75000,
+          price: "$13.25",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 11,
+          title: "Port Access Facility",
+          location: "Dania Beach, FL",
+          size: "60,000 SF",
+          sizeValue: 60000,
+          price: "$12.75",
+          type: "Warehouse",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+          available: true
+        }
+      ],
+      "Palm Beach": [
+        {
+          id: 6,
+          title: "Industrial Complex",
+          location: "Boca Raton, FL",
+          size: "65,000 SF",
+          sizeValue: 65000,
+          price: "$13.50",
+          type: "Warehouse",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 10,
+          title: "Tech Manufacturing Hub",
+          location: "Delray Beach, FL",
+          size: "110,000 SF",
+          sizeValue: 110000,
+          price: "$16.75",
+          type: "Manufacturing",
+          typeValue: "manufacturing",
+          image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 12,
+          title: "Multi-Use Industrial",
+          location: "West Palm Beach, FL",
+          size: "80,000 SF",
+          sizeValue: 80000,
+          price: "$14.50",
+          type: "Flex Space",
+          typeValue: "flex",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 13,
+          title: "Distribution Center",
+          location: "Boynton Beach, FL",
+          size: "90,000 SF",
+          sizeValue: 90000,
+          price: "$13.25",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+          available: true
+        }
+      ]
+    };
+
+    // Search bar shrinking behavior on scroll
+    let lastScrollY = window.scrollY;
+    let isCompact = false;
+
+    function updateSearchBarOnScroll() {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > 200 && !isCompact) {
+        // Shrink search bar
+        floatingSearchBar.style.transform = 'scale(0.8)';
+        floatingSearchBar.style.maxWidth = '700px';
+        isCompact = true;
+      } else if (currentScrollY <= 200 && isCompact) {
+        // Expand search bar back to normal
+        floatingSearchBar.style.transform = 'scale(1)';
+        floatingSearchBar.style.maxWidth = '1280px';
+        isCompact = false;
+      }
+
+      lastScrollY = currentScrollY;
+    }
+
+    // Throttle scroll events for performance
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(updateSearchBarOnScroll);
+        ticking = true;
+        setTimeout(() => { ticking = false; }, 10);
+      }
+    });
+
+    // Filter properties based on search criteria
+    function filterProperties() {
+      const county = countySelect ? countySelect.value : '';
+      const size = sizeSelect ? sizeSelect.value : '';
+      const type = typeSelect ? typeSelect.value : '';
+
+      let filteredProperties = [];
+
+      // Get all properties or filter by county
+      if (county) {
+        filteredProperties = warehouseData[county] || [];
+      } else {
+        // Get all properties from all counties
+        filteredProperties = Object.values(warehouseData).flat();
+      }
+
+      // Filter by size
+      if (size) {
+        filteredProperties = filteredProperties.filter(property => {
+          switch (size) {
+            case 'small':
+              return property.sizeValue >= 5000 && property.sizeValue <= 25000;
+            case 'medium':
+              return property.sizeValue > 25000 && property.sizeValue <= 100000;
+            case 'large':
+              return property.sizeValue > 100000;
+            default:
+              return true;
+          }
+        });
+      }
+
+      // Filter by type
+      if (type) {
+        filteredProperties = filteredProperties.filter(property =>
+          property.typeValue === type
+        );
+      }
+
+      return filteredProperties;
+    }
+
+    // Render filtered properties
+    function renderProperties(properties) {
+      console.log('Rendering properties:', properties.length, 'properties found');
+      console.log('Properties grid element:', propertiesGrid);
+      if (!propertiesGrid) {
+        console.error('Properties grid not found!');
+        return;
+      }
+
+      if (properties.length === 0) {
+        propertiesGrid.innerHTML = `
+          <div class="col-span-full text-center py-12">
+            <div class="text-gray-500 text-lg">
+              No properties found matching your criteria.
+            </div>
+            <button onclick="clearFilters()" class="mt-4 text-sba-navy hover:text-sba-navy-dark font-medium">
+              Clear filters
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      propertiesGrid.innerHTML = properties.map(warehouse => `
+        <div class="group cursor-pointer transition-all duration-200">
+          <div class="relative overflow-hidden rounded-lg mb-3" style="aspect-ratio: 20/19;">
+            <img
+              src="${warehouse.image}"
+              alt="${warehouse.title}"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+            />
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-semibold text-sba-navy text-sm leading-tight">
+              ${warehouse.title}
+            </h3>
+            <p class="text-gray-600 text-sm">
+              ${warehouse.location}
+            </p>
+            <div class="flex items-center justify-between">
+              <div class="text-sm text-gray-600">
+                ${warehouse.size} • ${warehouse.type}
+              </div>
+              <div class="font-semibold text-sba-navy">
+                ${warehouse.price}/SF
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Clear filters function (make it global so button can access it)
+    window.clearFilters = function() {
+      if (countySelect) countySelect.value = '';
+      if (sizeSelect) sizeSelect.value = '';
+      if (typeSelect) typeSelect.value = '';
+      renderProperties(Object.values(warehouseData).flat());
+    };
+
+    // Live filtering - no search button needed
+    function performLiveFilter() {
+      const filteredProperties = filterProperties();
+      renderProperties(filteredProperties);
+    }
+
+    // Add live filtering to all select elements
+    if (countySelect) {
+      console.log('County select found, adding listener');
+      countySelect.addEventListener('change', function() {
+        console.log('County changed to:', countySelect.value);
+        performLiveFilter();
+      });
+    } else {
+      console.log('County select not found');
+    }
+
+    if (sizeSelect) {
+      console.log('Size select found, adding listener');
+      sizeSelect.addEventListener('change', function() {
+        console.log('Size changed to:', sizeSelect.value);
+        performLiveFilter();
+      });
+    } else {
+      console.log('Size select not found');
+    }
+
+    if (typeSelect) {
+      console.log('Type select found, adding listener');
+      typeSelect.addEventListener('change', function() {
+        console.log('Type changed to:', typeSelect.value);
+        performLiveFilter();
+      });
+    } else {
+      console.log('Type select not found');
+    }
+
+
+    // Enhanced search bar interactions
+    if (floatingSearchBar) {
+      // Add focus states
+      const inputs = floatingSearchBar.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+          floatingSearchBar.classList.add('shadow-2xl');
+          floatingSearchBar.classList.remove('shadow-lg');
+        });
+
+        input.addEventListener('blur', function() {
+          // Delay to allow for clicking search button
+          setTimeout(() => {
+            if (!floatingSearchBar.contains(document.activeElement)) {
+              floatingSearchBar.classList.remove('shadow-2xl');
+              floatingSearchBar.classList.add('shadow-lg');
+            }
+          }, 100);
+        });
+      });
+    }
+  });
+</script>

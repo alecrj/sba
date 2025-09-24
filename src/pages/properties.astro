@@ -142,19 +142,19 @@ function getPropertySlug(property: Property): string {
   <Navigation />
 
   <!-- 2025 MODERN PROPERTIES PAGE -->
-  <main class="pt-20">
+  <main class="pt-44">
 
     <!-- Page Header with Live Stats -->
-    <section class="py-16 bg-neutral-50 border-b border-sba-gray-light">
-      <div class="container mx-auto px-4">
+    <section class="section-padding bg-neutral-50 border-b border-sba-gray-light">
+      <div class="container-sba">
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12">
           <div>
-            <h1 class="text-4xl md:text-6xl font-black text-sba-navy leading-tight tracking-tighter mb-4">
+            <h1 class="heading-hero mb-4">
               WAREHOUSE
               <span class="block gradient-sba">PROPERTIES</span>
             </h1>
-            <p class="text-xl text-sba-gray-dark max-w-2xl">
-              Live inventory from our CRM across South Florida's premier industrial markets
+            <p class="text-body-lg max-w-2xl">
+              Premium warehouse and industrial properties across South Florida's key markets
             </p>
           </div>
 
@@ -186,8 +186,8 @@ function getPropertySlug(property: Property): string {
     </section>
 
     <!-- Filters Section -->
-    <section class="py-12 bg-white sticky top-20 z-40 border-b border-sba-gray-light">
-      <div class="container mx-auto px-4">
+    <section class="section-padding-sm bg-white sticky top-20 z-40 border-b border-sba-gray-light">
+      <div class="container-sba">
         <form id="property-filters" class="grid grid-cols-1 md:grid-cols-5 gap-4">
           <!-- Location Filter -->
           <div>
@@ -231,7 +231,7 @@ function getPropertySlug(property: Property): string {
 
           <!-- Search Button -->
           <div class="flex items-end">
-            <button type="submit" class="btn-primary rounded-xl w-full h-12 text-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+            <button type="submit" class="btn-primary w-full h-12 text-sm">
               FILTER
             </button>
           </div>
@@ -240,16 +240,16 @@ function getPropertySlug(property: Property): string {
     </section>
 
     <!-- Properties Grid -->
-    <section class="py-16 bg-white">
-      <div class="container mx-auto px-4">
+    <section class="section-padding bg-white">
+      <div class="container-sba">
 
         <!-- Results Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12">
           <div>
-            <h2 class="text-2xl font-black text-sba-navy mb-2">
+            <h2 class="heading-section mb-2">
               SHOWING {availableProperties.length} PROPERTIES
             </h2>
-            <p class="text-sba-gray-dark">Live from our CRM database</p>
+            <p class="text-sba-gray-dark">Updated property listings</p>
           </div>
 
           <!-- Sort Options -->
@@ -401,7 +401,7 @@ function getPropertySlug(property: Property): string {
             </div>
             <h3 class="text-2xl font-bold text-black mb-4">No Properties Found</h3>
             <p class="text-neutral-600 mb-8 max-w-md mx-auto">
-              Add some properties to your CRM to see them displayed here, or contact us for off-market opportunities.
+              Contact us for off-market opportunities and exclusive listings.
             </p>
             <a href="/book-appointment" class="btn-primary rounded-xl px-8 py-4 hover:shadow-lg transform hover:scale-105 transition-all duration-300">
               SCHEDULE CONSULTATION
@@ -409,13 +409,6 @@ function getPropertySlug(property: Property): string {
           </div>
         )}
 
-        <!-- CRM Connection Status -->
-        <div class="text-center mt-12">
-          <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg text-sm font-medium">
-            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-            Live data from CRM • Last updated: {new Date().toLocaleTimeString()}
-          </div>
-        </div>
       </div>
     </section>
 

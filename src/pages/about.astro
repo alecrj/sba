@@ -49,17 +49,17 @@ const markets = [
 >
   <Navigation />
 
-  <main class="pt-24 md:pt-28">
+  <main class="pt-44 md:pt-28">
 
     <!-- Hero Section -->
-    <section class="py-16 md:py-24 bg-gradient-to-br from-white via-neutral-50 to-sba-gray-light/30">
-      <div class="container mx-auto px-4">
+    <section class="section-padding-lg bg-gradient-to-br from-white via-neutral-50 to-sba-gray-light/30">
+      <div class="container-sba">
         <div class="max-w-4xl mx-auto text-center">
-          <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-sba-navy leading-tight tracking-tighter mb-6 md:mb-8">
+          <h1 class="heading-hero mb-6 md:mb-8">
             South Florida's
             <span class="block gradient-sba">Premier Brokerage</span>
           </h1>
-          <p class="text-lg md:text-xl lg:text-2xl text-sba-gray-dark leading-relaxed mb-8 md:mb-12 max-w-3xl mx-auto">
+          <p class="text-body-lg mb-8 md:mb-12 max-w-3xl mx-auto">
             Shallow Bay Advisors delivers unparalleled expertise in commercial real estate,
             specializing in warehouse and industrial properties across South Florida.
           </p>
@@ -68,19 +68,19 @@ const markets = [
     </section>
 
     <!-- Company Overview -->
-    <section class="py-16 md:py-20 bg-white">
-      <div class="container mx-auto px-4">
+    <section class="section-padding bg-white">
+      <div class="container-sba">
         <div class="max-w-6xl mx-auto">
           <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
             <!-- Content -->
             <div>
-              <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-sba-navy leading-tight mb-6 md:mb-8">
+              <h2 class="heading-section mb-6 md:mb-8">
                 Expertise That
                 <span class="text-sba-gray">Delivers Results</span>
               </h2>
 
-              <div class="space-y-4 md:space-y-6 text-base md:text-lg text-sba-gray-dark leading-relaxed">
+              <div class="space-y-4 md:space-y-6 text-body">
                 <p>
                   Founded on the principle that commercial real estate requires specialized knowledge,
                   Shallow Bay Advisors has established itself as South Florida's trusted partner for
@@ -134,25 +134,25 @@ const markets = [
     </section>
 
     <!-- Team Section -->
-    <section class="py-16 md:py-20 bg-neutral-50">
-      <div class="container mx-auto px-4">
+    <section class="section-padding bg-neutral-50">
+      <div class="container-sba">
         <div class="max-w-6xl mx-auto">
 
           <!-- Section Header -->
           <div class="text-center mb-12 md:mb-16">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-sba-navy leading-tight mb-4 md:mb-6">
+            <h2 class="heading-section mb-4 md:mb-6">
               Our Team
             </h2>
-            <p class="text-lg md:text-xl text-sba-gray-dark max-w-3xl mx-auto leading-relaxed">
+            <p class="text-body-lg max-w-3xl mx-auto">
               Experienced professionals dedicated to delivering exceptional results
               in commercial real estate
             </p>
           </div>
 
           <!-- Team Grid -->
-          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+          <div class="grid-team">
             {teamMembers.map((member, index) => (
-              <div class="text-center group">
+              <div class="card-team">
                 <div class="aspect-square bg-sba-gray-light/20 rounded-2xl md:rounded-3xl mb-4 md:mb-6 overflow-hidden">
                   <div class="w-full h-full bg-gradient-to-br from-sba-navy/10 to-sba-gray/10 flex items-center justify-center">
                     <div class="w-16 h-16 md:w-20 md:h-20 bg-sba-navy rounded-2xl flex items-center justify-center">
@@ -174,24 +174,24 @@ const markets = [
     </section>
 
     <!-- Markets Section -->
-    <section class="py-16 md:py-20 bg-white">
-      <div class="container mx-auto px-4">
+    <section class="section-padding bg-white">
+      <div class="container-sba">
         <div class="max-w-6xl mx-auto">
 
           <!-- Section Header -->
           <div class="text-center mb-12 md:mb-16">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-sba-navy leading-tight mb-4 md:mb-6">
+            <h2 class="heading-section mb-4 md:mb-6">
               Markets We Serve
             </h2>
-            <p class="text-lg md:text-xl text-sba-gray-dark max-w-3xl mx-auto leading-relaxed">
+            <p class="text-body-lg max-w-3xl mx-auto">
               Comprehensive coverage across South Florida's premier industrial corridors
             </p>
           </div>
 
           <!-- Markets Grid -->
-          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div class="grid-features">
             {markets.map((market, index) => (
-              <div class="bg-neutral-50 rounded-2xl p-6 md:p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div class="card-feature bg-neutral-50">
                 <h3 class="text-xl md:text-2xl font-black text-sba-navy mb-4 md:mb-6">{market.name}</h3>
                 <div class="space-y-2 md:space-y-3">
                   {market.areas.map(area => (
@@ -209,32 +209,32 @@ const markets = [
     </section>
 
     <!-- Services Overview -->
-    <section class="py-16 md:py-20 bg-gradient-to-br from-neutral-50 to-sba-gray-light/20">
-      <div class="container mx-auto px-4">
+    <section class="section-padding bg-gradient-to-br from-neutral-50 to-sba-gray-light/20">
+      <div class="container-sba">
         <div class="max-w-6xl mx-auto">
 
           <!-- Section Header -->
           <div class="text-center mb-12 md:mb-16">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-sba-navy leading-tight mb-4 md:mb-6">
+            <h2 class="heading-section mb-4 md:mb-6">
               What We Do
             </h2>
-            <p class="text-lg md:text-xl text-sba-gray-dark max-w-3xl mx-auto leading-relaxed">
+            <p class="text-body-lg max-w-3xl mx-auto">
               Comprehensive commercial real estate services tailored to industrial markets
             </p>
           </div>
 
           <!-- Services Grid -->
-          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div class="grid-features">
 
             <!-- Tenant Representation -->
-            <div class="bg-white rounded-2xl p-6 md:p-8 hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
+            <div class="card-feature bg-white">
               <div class="w-12 h-12 md:w-16 md:h-16 bg-sba-navy rounded-2xl flex items-center justify-center mb-4 md:mb-6">
                 <svg class="w-6 h-6 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l7-3 7 3z"/>
                 </svg>
               </div>
-              <h3 class="text-lg md:text-2xl font-bold text-sba-navy mb-3 md:mb-4">Tenant Representation</h3>
-              <p class="text-sm md:text-base text-sba-gray-dark leading-relaxed mb-4 md:mb-6">
+              <h3 class="heading-card mb-3 md:mb-4">Tenant Representation</h3>
+              <p class="text-body mb-4 md:mb-6">
                 Find the perfect warehouse or industrial space for your business needs with expert guidance.
               </p>
               <div class="space-y-2">
@@ -254,14 +254,14 @@ const markets = [
             </div>
 
             <!-- Landlord Services -->
-            <div class="bg-white rounded-2xl p-6 md:p-8 hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
+            <div class="card-feature bg-white">
               <div class="w-12 h-12 md:w-16 md:h-16 bg-sba-navy rounded-2xl flex items-center justify-center mb-4 md:mb-6">
                 <svg class="w-6 h-6 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
                 </svg>
               </div>
-              <h3 class="text-lg md:text-2xl font-bold text-sba-navy mb-3 md:mb-4">Landlord Representation</h3>
-              <p class="text-sm md:text-base text-sba-gray-dark leading-relaxed mb-4 md:mb-6">
+              <h3 class="heading-card mb-3 md:mb-4">Landlord Representation</h3>
+              <p class="text-body mb-4 md:mb-6">
                 Maximize occupancy and value for your commercial properties with strategic marketing.
               </p>
               <div class="space-y-2">
@@ -281,14 +281,14 @@ const markets = [
             </div>
 
             <!-- Investment Sales -->
-            <div class="bg-white rounded-2xl p-6 md:p-8 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 sm:col-span-2 lg:col-span-1">
+            <div class="card-feature bg-white sm:col-span-2 lg:col-span-1">
               <div class="w-12 h-12 md:w-16 md:h-16 bg-sba-navy rounded-2xl flex items-center justify-center mb-4 md:mb-6">
                 <svg class="w-6 h-6 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                 </svg>
               </div>
-              <h3 class="text-lg md:text-2xl font-bold text-sba-navy mb-3 md:mb-4">Investment Sales</h3>
-              <p class="text-sm md:text-base text-sba-gray-dark leading-relaxed mb-4 md:mb-6">
+              <h3 class="heading-card mb-3 md:mb-4">Investment Sales</h3>
+              <p class="text-body mb-4 md:mb-6">
                 Expert guidance for buying and selling commercial real estate investments.
               </p>
               <div class="space-y-2">
@@ -312,18 +312,18 @@ const markets = [
     </section>
 
     <!-- CTA Section -->
-    <section class="py-16 md:py-20 bg-sba-navy text-white">
-      <div class="container mx-auto px-4 text-center">
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-black leading-tight mb-4 md:mb-6">
+    <section class="section-padding bg-sba-navy text-white">
+      <div class="container-sba text-center">
+        <h2 class="heading-section text-white mb-4 md:mb-6">
           Ready to Work With Us?
         </h2>
-        <p class="text-lg md:text-xl text-sba-gray-light max-w-2xl mx-auto mb-8 md:mb-12 leading-relaxed">
+        <p class="text-body-lg text-sba-gray-light max-w-2xl mx-auto mb-8 md:mb-12">
           Experience the difference that specialized knowledge and dedicated service can make
           for your commercial real estate needs.
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center">
-          <a href="/properties" class="bg-white text-sba-navy px-8 md:px-12 py-4 md:py-5 rounded-2xl text-base md:text-lg font-semibold hover:shadow-2xl transform hover:scale-105 transition-all duration-500 w-full sm:w-auto text-center">
+          <a href="/properties" class="btn-secondary w-full sm:w-auto text-center">
             VIEW PROPERTIES
           </a>
           <div class="hidden sm:flex items-center gap-4 text-sba-gray">
@@ -331,7 +331,7 @@ const markets = [
             <span class="text-sm uppercase tracking-wider">OR</span>
             <span class="w-px h-8 bg-sba-gray"></span>
           </div>
-          <a href="/contact" class="text-white font-semibold text-base md:text-lg hover:text-sba-gray-light transition-colors duration-300 w-full sm:w-auto text-center">
+          <a href="/contact" class="btn-ghost text-white hover:text-sba-gray-light w-full sm:w-auto text-center">
             Contact Our Team
           </a>
         </div>
