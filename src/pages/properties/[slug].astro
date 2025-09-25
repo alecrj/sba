@@ -3,389 +3,664 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
-import { getCollection } from 'astro:content';
+import CalendarBooking from '../../components/CalendarBooking.astro';
+
+// Our hardcoded warehouse data (same as homepage)
+const warehousesByCounty = {
+  "Miami-Dade": [
+    {
+      id: 1,
+      title: "Modern Distribution Center",
+      location: "Doral, FL",
+      size: "85,000 SF",
+      sizeValue: 85000,
+      price: "$12.50",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      available: true,
+      county: "Miami-Dade",
+      description: "Premium distribution center featuring modern dock-high loading, 32-foot clear heights, and excellent highway access.",
+      features: ["Dock High Loading", "32' Clear Height", "Highway Access", "LED Lighting", "ESFR Sprinkler System"],
+      address: "8200 NW 36th St, Doral, FL 33166"
+    },
+    {
+      id: 2,
+      title: "Prime Warehouse Space",
+      location: "Hialeah, FL",
+      size: "45,000 SF",
+      sizeValue: 45000,
+      price: "$10.75",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+      available: true,
+      county: "Miami-Dade",
+      description: "Well-maintained warehouse space in prime Hialeah location. Features grade-level and dock-high doors.",
+      features: ["Grade Level Doors", "Dock High Doors", "Flexible Layout", "Ample Parking"],
+      address: "1150 W 29th St, Hialeah, FL 33012"
+    },
+    {
+      id: 3,
+      title: "Manufacturing Facility",
+      location: "Miami, FL",
+      size: "120,000 SF",
+      sizeValue: 120000,
+      price: "$15.00",
+      type: "Manufacturing",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+      available: true,
+      county: "Miami-Dade",
+      description: "Large-scale manufacturing facility with heavy power and crane-ready infrastructure.",
+      features: ["Heavy Power", "Crane Ready", "High Ceilings", "Rail Access"],
+      address: "3800 NW 25th St, Miami, FL 33142"
+    },
+    {
+      id: 7,
+      title: "Cold Storage Facility",
+      location: "Miami Beach, FL",
+      size: "35,000 SF",
+      sizeValue: 35000,
+      price: "$18.00",
+      type: "Cold Storage",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+      available: true,
+      county: "Miami-Dade",
+      description: "State-of-the-art cold storage facility with temperature-controlled environments and food-grade standards.",
+      features: ["Temperature Controlled", "Food Grade", "24/7 Security", "Loading Docks"],
+      address: "500 Alton Rd, Miami Beach, FL 33139"
+    }
+  ],
+  "Broward": [
+    {
+      id: 4,
+      title: "Flex Industrial Space",
+      location: "Pompano Beach, FL",
+      size: "25,000 SF",
+      sizeValue: 25000,
+      price: "$14.25",
+      type: "Flex Space",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+      available: true,
+      county: "Broward",
+      description: "Versatile flex industrial space perfect for light manufacturing, assembly, or warehouse operations with office component.",
+      features: ["Office Space", "Drive-In Doors", "Flexible Layout", "Good Highway Access"],
+      address: "1200 N Federal Hwy, Pompano Beach, FL 33062"
+    },
+    {
+      id: 5,
+      title: "Logistics Hub",
+      location: "Fort Lauderdale, FL",
+      size: "95,000 SF",
+      sizeValue: 95000,
+      price: "$11.80",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      available: true,
+      county: "Broward",
+      description: "Large-scale logistics and distribution facility with excellent interstate access and modern dock facilities.",
+      features: ["Multiple Dock Doors", "Interstate Access", "Cross-Dock Design", "24-Hour Operations"],
+      address: "3600 Davie Blvd, Fort Lauderdale, FL 33312"
+    },
+    {
+      id: 9,
+      title: "Distribution Warehouse",
+      location: "Hollywood, FL",
+      size: "75,000 SF",
+      sizeValue: 75000,
+      price: "$13.25",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+      available: true,
+      county: "Broward",
+      description: "Modern distribution warehouse with high-efficiency LED lighting and climate-controlled office areas.",
+      features: ["LED Lighting", "Climate Controlled Office", "Clear Span Design", "Ample Trailer Parking"],
+      address: "2850 Stirling Rd, Hollywood, FL 33312"
+    },
+    {
+      id: 11,
+      title: "Port Access Facility",
+      location: "Dania Beach, FL",
+      size: "60,000 SF",
+      sizeValue: 60000,
+      price: "$12.75",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+      available: true,
+      county: "Broward",
+      description: "Strategic warehouse location with direct port access for import/export operations and container storage.",
+      features: ["Port Access", "Container Storage", "Customs Bonded", "Security Fencing"],
+      address: "101 SE 2nd Ave, Dania Beach, FL 33004"
+    }
+  ],
+  "Palm Beach": [
+    {
+      id: 6,
+      title: "Industrial Complex",
+      location: "Boca Raton, FL",
+      size: "65,000 SF",
+      sizeValue: 65000,
+      price: "$13.50",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+      available: true,
+      county: "Palm Beach",
+      description: "Premium industrial complex in Boca Raton with modern amenities and professional office spaces.",
+      features: ["Professional Offices", "Modern Loading", "Secure Access", "Landscaped Grounds"],
+      address: "6500 Park of Commerce Blvd, Boca Raton, FL 33487"
+    },
+    {
+      id: 10,
+      title: "Tech Manufacturing Hub",
+      location: "Delray Beach, FL",
+      size: "110,000 SF",
+      sizeValue: 110000,
+      price: "$16.75",
+      type: "Manufacturing",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+      available: true,
+      county: "Palm Beach",
+      description: "High-tech manufacturing facility with clean room capabilities and advanced utilities for precision operations.",
+      features: ["Clean Room Ready", "Advanced Utilities", "High Power Load", "Precision HVAC"],
+      address: "15000 Jog Rd, Delray Beach, FL 33446"
+    },
+    {
+      id: 12,
+      title: "Multi-Use Industrial",
+      location: "West Palm Beach, FL",
+      size: "80,000 SF",
+      sizeValue: 80000,
+      price: "$14.50",
+      type: "Flex Space",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      available: true,
+      county: "Palm Beach",
+      description: "Multi-use industrial facility combining warehouse, light manufacturing, and office space in one location.",
+      features: ["Mixed Use Design", "Office Component", "Flexible Zoning", "Convenient Location"],
+      address: "2800 Corporate Way, West Palm Beach, FL 33407"
+    },
+    {
+      id: 13,
+      title: "Distribution Center",
+      location: "Boynton Beach, FL",
+      size: "90,000 SF",
+      sizeValue: 90000,
+      price: "$13.25",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+      available: true,
+      county: "Palm Beach",
+      description: "Efficient distribution center with modern material handling systems and excellent transportation access.",
+      features: ["Material Handling Systems", "Transportation Access", "Energy Efficient", "Expansion Ready"],
+      address: "1500 Old Boynton Rd, Boynton Beach, FL 33426"
+    }
+  ]
+};
 
 export async function getStaticPaths() {
-  const warehouses = await getCollection('warehouses');
-  return warehouses.map((warehouse) => ({
-    params: { slug: warehouse.data.slug },
+  // Define the same warehouse data here for static path generation
+  const warehousesByCounty = {
+    "Miami-Dade": [
+      {
+        id: 1,
+        title: "Modern Distribution Center",
+        location: "Doral, FL",
+        size: "85,000 SF",
+        sizeValue: 85000,
+        price: "$12.50",
+        type: "Distribution",
+        image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+        available: true,
+        county: "Miami-Dade",
+        description: "Premium distribution center featuring modern dock-high loading, 32-foot clear heights, and excellent highway access.",
+        features: ["Dock High Loading", "32' Clear Height", "Highway Access", "LED Lighting", "ESFR Sprinkler System"],
+        address: "8200 NW 36th St, Doral, FL 33166"
+      },
+      {
+        id: 2,
+        title: "Prime Warehouse Space",
+        location: "Hialeah, FL",
+        size: "45,000 SF",
+        sizeValue: 45000,
+        price: "$10.75",
+        type: "Warehouse",
+        image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+        available: true,
+        county: "Miami-Dade",
+        description: "Well-maintained warehouse space in prime Hialeah location. Features grade-level and dock-high doors.",
+        features: ["Grade Level Doors", "Dock High Doors", "Flexible Layout", "Ample Parking"],
+        address: "1150 W 29th St, Hialeah, FL 33012"
+      },
+      {
+        id: 3,
+        title: "Manufacturing Facility",
+        location: "Miami, FL",
+        size: "120,000 SF",
+        sizeValue: 120000,
+        price: "$15.00",
+        type: "Manufacturing",
+        image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+        available: true,
+        county: "Miami-Dade",
+        description: "Large-scale manufacturing facility with heavy power and crane-ready infrastructure.",
+        features: ["Heavy Power", "Crane Ready", "High Ceilings", "Rail Access"],
+        address: "3800 NW 25th St, Miami, FL 33142"
+      },
+      {
+        id: 7,
+        title: "Cold Storage Facility",
+        location: "Miami Beach, FL",
+        size: "35,000 SF",
+        sizeValue: 35000,
+        price: "$18.00",
+        type: "Cold Storage",
+        image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+        available: true,
+        county: "Miami-Dade",
+        description: "State-of-the-art cold storage facility with temperature-controlled environments and food-grade standards.",
+        features: ["Temperature Controlled", "Food Grade", "24/7 Security", "Loading Docks"],
+        address: "500 Alton Rd, Miami Beach, FL 33139"
+      }
+    ],
+    "Broward": [
+      {
+        id: 4,
+        title: "Flex Industrial Space",
+        location: "Pompano Beach, FL",
+        size: "25,000 SF",
+        sizeValue: 25000,
+        price: "$14.25",
+        type: "Flex Space",
+        image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+        available: true,
+        county: "Broward",
+        description: "Versatile flex industrial space perfect for light manufacturing, assembly, or warehouse operations with office component.",
+        features: ["Office Space", "Drive-In Doors", "Flexible Layout", "Good Highway Access"],
+        address: "1200 N Federal Hwy, Pompano Beach, FL 33062"
+      },
+      {
+        id: 5,
+        title: "Logistics Hub",
+        location: "Fort Lauderdale, FL",
+        size: "95,000 SF",
+        sizeValue: 95000,
+        price: "$11.80",
+        type: "Distribution",
+        image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+        available: true,
+        county: "Broward",
+        description: "Large-scale logistics and distribution facility with excellent interstate access and modern dock facilities.",
+        features: ["Multiple Dock Doors", "Interstate Access", "Cross-Dock Design", "24-Hour Operations"],
+        address: "3600 Davie Blvd, Fort Lauderdale, FL 33312"
+      },
+      {
+        id: 9,
+        title: "Distribution Warehouse",
+        location: "Hollywood, FL",
+        size: "75,000 SF",
+        sizeValue: 75000,
+        price: "$13.25",
+        type: "Distribution",
+        image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+        available: true,
+        county: "Broward",
+        description: "Modern distribution warehouse with high-efficiency LED lighting and climate-controlled office areas.",
+        features: ["LED Lighting", "Climate Controlled Office", "Clear Span Design", "Ample Trailer Parking"],
+        address: "2850 Stirling Rd, Hollywood, FL 33312"
+      },
+      {
+        id: 11,
+        title: "Port Access Facility",
+        location: "Dania Beach, FL",
+        size: "60,000 SF",
+        sizeValue: 60000,
+        price: "$12.75",
+        type: "Warehouse",
+        image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+        available: true,
+        county: "Broward",
+        description: "Strategic warehouse location with direct port access for import/export operations and container storage.",
+        features: ["Port Access", "Container Storage", "Customs Bonded", "Security Fencing"],
+        address: "101 SE 2nd Ave, Dania Beach, FL 33004"
+      }
+    ],
+    "Palm Beach": [
+      {
+        id: 6,
+        title: "Industrial Complex",
+        location: "Boca Raton, FL",
+        size: "65,000 SF",
+        sizeValue: 65000,
+        price: "$13.50",
+        type: "Warehouse",
+        image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+        available: true,
+        county: "Palm Beach",
+        description: "Premium industrial complex in Boca Raton with modern amenities and professional office spaces.",
+        features: ["Professional Offices", "Modern Loading", "Secure Access", "Landscaped Grounds"],
+        address: "6500 Park of Commerce Blvd, Boca Raton, FL 33487"
+      },
+      {
+        id: 10,
+        title: "Tech Manufacturing Hub",
+        location: "Delray Beach, FL",
+        size: "110,000 SF",
+        sizeValue: 110000,
+        price: "$16.75",
+        type: "Manufacturing",
+        image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+        available: true,
+        county: "Palm Beach",
+        description: "High-tech manufacturing facility with clean room capabilities and advanced utilities for precision operations.",
+        features: ["Clean Room Ready", "Advanced Utilities", "High Power Load", "Precision HVAC"],
+        address: "15000 Jog Rd, Delray Beach, FL 33446"
+      },
+      {
+        id: 12,
+        title: "Multi-Use Industrial",
+        location: "West Palm Beach, FL",
+        size: "80,000 SF",
+        sizeValue: 80000,
+        price: "$14.50",
+        type: "Flex Space",
+        image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+        available: true,
+        county: "Palm Beach",
+        description: "Multi-use industrial facility combining warehouse, light manufacturing, and office space in one location.",
+        features: ["Mixed Use Design", "Office Component", "Flexible Zoning", "Convenient Location"],
+        address: "2800 Corporate Way, West Palm Beach, FL 33407"
+      },
+      {
+        id: 13,
+        title: "Distribution Center",
+        location: "Boynton Beach, FL",
+        size: "90,000 SF",
+        sizeValue: 90000,
+        price: "$13.25",
+        type: "Distribution",
+        image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+        available: true,
+        county: "Palm Beach",
+        description: "Efficient distribution center with modern material handling systems and excellent transportation access.",
+        features: ["Material Handling Systems", "Transportation Access", "Energy Efficient", "Expansion Ready"],
+        address: "1500 Old Boynton Rd, Boynton Beach, FL 33426"
+      }
+    ]
+  };
+
+  const allWarehouses = Object.values(warehousesByCounty).flat();
+  return allWarehouses.map((warehouse) => ({
+    params: { slug: warehouse.id.toString() },
     props: { warehouse },
   }));
 }
 
 const { warehouse } = Astro.props;
-const { data } = warehouse;
 
-// Related properties (same county)
-const allWarehouses = await getCollection('warehouses');
+// Related properties (same county, different property)
+const allWarehouses = Object.values(warehousesByCounty).flat();
 const relatedProperties = allWarehouses
-  .filter(w => w.data.county === data.county && w.data.slug !== data.slug && w.data.availability === 'available')
+  .filter(w => w.county === warehouse.county && w.id !== warehouse.id)
   .slice(0, 3);
 ---
 
 <BaseLayout
-  title={`${data.title} | Warehouse for Lease | Shallow Bay Advisors`}
-  description={`${data.description} - ${data.size?.toLocaleString()} SF warehouse in ${data.location}. ${data.price} per SF. Available for immediate lease.`}
-  image={data.images?.[0]}
+  title={`${warehouse.title} | Warehouse for Lease | Shallow Bay Advisors`}
+  description={`${warehouse.description} - ${warehouse.sizeValue?.toLocaleString()} SF warehouse in ${warehouse.location}. ${warehouse.price} per SF. Available for immediate lease.`}
+  image={warehouse.image}
 >
   <Navigation />
 
-  <main class="pt-44">
-    <!-- Property Hero Section -->
-    <section class="py-16 bg-white">
-      <div class="container mx-auto px-4">
+  <main class="pt-20">
+    <!-- Hero Section with Integrated Stats -->
+    <section class="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <!-- Background Image with Overlay -->
+      <div class="absolute inset-0">
+        <img
+          src={warehouse.image}
+          alt={warehouse.title}
+          class="w-full h-full object-cover opacity-30"
+        />
+        <div class="absolute inset-0 bg-gradient-to-r from-sba-navy/90 to-sba-navy/70"></div>
+      </div>
+
+      <!-- Content -->
+      <div class="relative container mx-auto px-4 py-20">
         <div class="max-w-6xl mx-auto">
 
           <!-- Breadcrumb -->
           <nav class="mb-8 text-sm">
-            <a href="/" class="text-sba-gray hover:text-sba-navy">Home</a>
-            <span class="text-sba-gray mx-2">></span>
-            <a href="/properties" class="text-sba-gray hover:text-sba-navy">Properties</a>
-            <span class="text-sba-gray mx-2">></span>
-            <span class="text-sba-navy font-semibold">{data.title}</span>
+            <a href="/" class="text-white/70 hover:text-white">Home</a>
+            <span class="mx-2 text-white/50">></span>
+            <a href="/properties" class="text-white/70 hover:text-white">Properties</a>
+            <span class="mx-2 text-white/50">></span>
+            <span class="text-white font-medium">{warehouse.title}</span>
           </nav>
 
-          <!-- Property Header -->
-          <div class="grid lg:grid-cols-2 gap-12 mb-16">
-
-            <!-- Property Images -->
-            <div class="space-y-4">
-              {data.images && data.images[0] && (
-                <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-neutral-100">
-                  <img
-                    src={data.images[0]}
-                    alt={data.title}
-                    class="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-
-              {data.images && data.images.length > 1 && (
-                <div class="grid grid-cols-3 gap-4">
-                  {data.images.slice(1, 4).map((image, index) => (
-                    <div class="aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100">
-                      <img
-                        src={image}
-                        alt={`${data.title} - Image ${index + 2}`}
-                        class="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
+          <!-- Hero Content -->
+          <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+              <span class={`px-4 py-2 rounded-full text-sm font-medium ${
+                warehouse.available
+                  ? 'bg-green-500 text-white'
+                  : 'bg-red-500 text-white'
+              }`}>
+                {warehouse.available ? 'Available Now' : 'Currently Leased'}
+              </span>
             </div>
 
-            <!-- Property Info -->
-            <div class="space-y-8">
+            <h1 class="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+              {warehouse.title}
+            </h1>
 
-              <!-- Status Badge -->
-              <div>
-                <span class="bg-accent-green text-white px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-wider">
-                  Available Now
-                </span>
+            <div class="flex items-center text-xl text-white/80 mb-8">
+              <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              {warehouse.address}
+            </div>
+
+            <!-- Key Stats - Floating Cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-xl text-center">
+                <div class="text-white/70 text-sm font-medium mb-2">Total Size</div>
+                <div class="text-3xl font-bold text-white">{warehouse.size}</div>
               </div>
-
-              <!-- Title & Location -->
-              <div>
-                <h1 class="text-4xl md:text-5xl font-black text-sba-navy leading-tight mb-4">
-                  {data.title}
-                </h1>
-                <p class="text-xl text-sba-gray-dark font-mono uppercase tracking-wider">
-                  {data.address}
-                </p>
+              <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-xl text-center">
+                <div class="text-white/70 text-sm font-medium mb-2">Lease Rate</div>
+                <div class="text-3xl font-bold text-white">{warehouse.price}<span class="text-lg font-normal">/SF</span></div>
               </div>
-
-              <!-- Key Stats -->
-              <div class="grid grid-cols-2 gap-6">
-                <div class="bg-sba-gray-light/20 rounded-2xl p-6 text-center">
-                  <div class="text-3xl font-black text-sba-navy mb-2">{data.price}</div>
-                  <div class="text-sm text-sba-gray uppercase tracking-wider font-semibold">Per SF/Year</div>
-                </div>
-                <div class="bg-sba-gray-light/20 rounded-2xl p-6 text-center">
-                  <div class="text-3xl font-black text-sba-navy mb-2">{data.size?.toLocaleString()}</div>
-                  <div class="text-sm text-sba-gray uppercase tracking-wider font-semibold">Square Feet</div>
-                </div>
+              <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-xl text-center">
+                <div class="text-white/70 text-sm font-medium mb-2">Property Type</div>
+                <div class="text-3xl font-bold text-white">{warehouse.type}</div>
               </div>
-
-              <!-- CTAs -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <a href="/book" class="btn-primary rounded-xl py-4 text-center font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                  BOOK A TOUR
-                </a>
-                <a href="/contact" class="btn-secondary rounded-xl py-4 text-center font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                  GET INFO
-                </a>
-              </div>
-
-              <!-- Contact -->
-              <div class="border-t border-sba-gray-light pt-6">
-                <p class="text-sba-gray-dark mb-4">Need more information?</p>
-                <a href="/contact" class="text-sba-navy font-semibold hover:text-sba-navy-dark transition-colors duration-300">
-                  Contact our leasing team →
-                </a>
+              <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-xl text-center">
+                <div class="text-white/70 text-sm font-medium mb-2">Location</div>
+                <div class="text-3xl font-bold text-white">{warehouse.county}</div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- Property Details -->
-    <section class="py-16 bg-neutral-50">
+    <!-- Main Content -->
+    <section class="py-20 bg-gradient-to-br from-gray-50 via-white to-gray-50">
       <div class="container mx-auto px-4">
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-7xl mx-auto">
 
-          <div class="grid lg:grid-cols-3 gap-12">
+          <!-- Property Details -->
+          <div class="grid lg:grid-cols-2 gap-16 mb-20">
 
-            <!-- Main Content -->
-            <div class="lg:col-span-2 space-y-12">
+            <!-- Left Column: Description & Features -->
+            <div class="space-y-12">
 
               <!-- Description -->
-              <div>
-                <h2 class="text-3xl font-black text-sba-navy mb-6">Property Description</h2>
-                <div class="prose prose-lg max-w-none">
-                  <p class="text-sba-gray-dark leading-relaxed text-lg">
-                    {data.description}
-                  </p>
+              <div class="bg-white/70 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-xl">
+                <h2 class="text-3xl font-bold text-sba-navy mb-6">Property Overview</h2>
+                <p class="text-gray-700 text-lg leading-relaxed">{warehouse.description}</p>
+              </div>
+
+              <!-- Features Grid -->
+              <div class="bg-white/70 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-xl">
+                <h3 class="text-2xl font-semibold text-sba-navy mb-8">Key Features & Amenities</h3>
+                <div class="grid gap-4">
+                  {warehouse.features.map((feature: string) => (
+                    <div class="flex items-center p-4 bg-white/50 backdrop-blur-sm rounded-2xl border border-white/30 hover:bg-white/70 transition-all duration-300">
+                      <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                      </div>
+                      <span class="text-gray-800 font-semibold text-lg">{feature}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              <!-- Features -->
-              {data.features && data.features.length > 0 && (
-                <div>
-                  <h2 class="text-3xl font-black text-sba-navy mb-6">Property Features</h2>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {data.features.map(feature => (
-                      <div class="flex items-center space-x-3">
-                        <div class="w-2 h-2 bg-sba-navy rounded-full flex-shrink-0"></div>
-                        <span class="text-sba-gray-dark font-medium">{feature}</span>
-                      </div>
-                    ))}
+              <!-- Property Gallery -->
+              <div class="bg-white/70 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-xl">
+                <h3 class="text-2xl font-semibold text-sba-navy mb-6">Property Gallery</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div class="relative aspect-video bg-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                    <img src={warehouse.image} alt={`${warehouse.title} - Main View`} class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                    <div class="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
+                      <span class="text-white font-semibold bg-black/50 px-3 py-1 rounded-full text-sm">Main View</span>
+                    </div>
+                  </div>
+                  <div class="relative aspect-video bg-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                    <img src={warehouse.image} alt={`${warehouse.title} - Additional View`} class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                    <div class="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
+                      <span class="text-white font-semibold bg-black/50 px-3 py-1 rounded-full text-sm">Additional View</span>
+                    </div>
                   </div>
                 </div>
-              )}
+                <p class="text-gray-600 text-sm mt-4 text-center">
+                  More photos available upon request. Contact us to schedule a virtual or in-person tour.
+                </p>
+              </div>
 
-              <!-- Location & Map -->
-              <div>
-                <h2 class="text-3xl font-black text-sba-navy mb-6">Location & Map</h2>
-                <div class="bg-white rounded-2xl p-8 border border-sba-gray-light">
-                  <div class="grid lg:grid-cols-2 gap-8">
-                    <div class="space-y-6">
-                      <div>
-                        <h3 class="font-bold text-sba-navy mb-4">Address</h3>
-                        <div class="text-sba-gray-dark space-y-2">
-                          {data.street_address && <p>{data.street_address}</p>}
-                          <p>{data.city}, {data.state} {data.zip_code}</p>
-                          <p class="text-sm text-sba-gray">County: {data.county}</p>
-                        </div>
-                      </div>
+            </div>
 
-                      <div>
-                        <h3 class="font-bold text-sba-navy mb-4">Transportation</h3>
-                        <div class="text-sba-gray-dark space-y-1">
-                          <p class="text-sm">• Easy highway access</p>
-                          <p class="text-sm">• Public transportation nearby</p>
-                          <p class="text-sm">• Prime commercial location</p>
-                        </div>
-                      </div>
+            <!-- Right Column: Contact Card -->
+            <div class="space-y-8">
+              <div class="bg-gradient-to-br from-sba-navy via-sba-navy-dark to-slate-900 text-white p-10 rounded-3xl shadow-2xl border border-white/10">
+                <div class="mb-8">
+                  <h3 class="text-2xl font-bold mb-3">Ready to Tour This Property?</h3>
+                  <p class="text-blue-100 text-lg">Contact our commercial real estate experts for immediate assistance</p>
+                </div>
+
+                <div class="space-y-4 mb-8">
+                  <a href="tel:954-937-9667" class="flex items-center p-4 bg-white/10 backdrop-blur-sm rounded-2xl hover:bg-white/20 transition-all duration-300 group">
+                    <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mr-4">
+                      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                      </svg>
                     </div>
-
                     <div>
-                      <h3 class="font-bold text-sba-navy mb-4">Map</h3>
-                      <div class="aspect-[4/3] rounded-xl overflow-hidden border border-sba-gray-light">
-                        {(data.street_address && data.city && data.state && data.zip_code) ? (
-                          <iframe
-                            src={`https://www.google.com/maps/embed/v1/place?key=${import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY || 'YOUR_API_KEY_HERE'}&q=${encodeURIComponent(`${data.street_address}, ${data.city}, ${data.state} ${data.zip_code}`)}`}
-                            width="100%"
-                            height="100%"
-                            style="border:0;"
-                            allowfullscreen
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"
-                            class="w-full h-full"
-                          ></iframe>
-                        ) : (
-                          <div class="w-full h-full bg-neutral-100 flex items-center justify-center">
-                            <div class="text-center text-sba-gray">
-                              <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                              </svg>
-                              <p class="text-sm">Map not available</p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+                      <div class="text-white font-bold text-xl">(954) 937-9667</div>
+                      <div class="text-blue-100 text-sm">Call for immediate assistance</div>
                     </div>
-                  </div>
+                  </a>
+
+                  <a href="mailto:contact@shallowbayadvisors.com" class="flex items-center p-4 bg-white/10 backdrop-blur-sm rounded-2xl hover:bg-white/20 transition-all duration-300 group">
+                    <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mr-4">
+                      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="text-white font-semibold">contact@shallowbayadvisors.com</div>
+                      <div class="text-blue-100 text-sm">Email our team</div>
+                    </div>
+                  </a>
+                </div>
+
+                <div class="border-t border-white/20 pt-6">
+                  <p class="text-blue-100 text-sm">Licensed Florida Real Estate Brokerage</p>
                 </div>
               </div>
             </div>
 
-            <!-- Sidebar -->
-            <div class="space-y-8">
+          </div>
 
-              <!-- Quick Facts -->
-              <div class="bg-white rounded-2xl p-8 border border-sba-gray-light">
-                <h3 class="text-xl font-black text-sba-navy mb-6">Quick Facts</h3>
-                <div class="space-y-4">
-                  <div class="flex justify-between items-center">
-                    <span class="text-sba-gray-dark">Size</span>
-                    <span class="font-semibold text-sba-navy">{data.size?.toLocaleString()} SF</span>
-                  </div>
-                  <div class="flex justify-between items-center">
-                    <span class="text-sba-gray-dark">Rate</span>
-                    <span class="font-semibold text-sba-navy">{data.price}</span>
-                  </div>
-                  <div class="flex justify-between items-center">
-                    <span class="text-sba-gray-dark">Status</span>
-                    <span class="font-semibold text-accent-green">Available</span>
-                  </div>
-                  <div class="flex justify-between items-center">
-                    <span class="text-sba-gray-dark">Location</span>
-                    <span class="font-semibold text-sba-navy">{data.location}</span>
-                  </div>
-                </div>
+          <!-- Full Width Booking Form Section -->
+          <div class="relative">
+            <!-- Background with glassmorphism -->
+            <div class="absolute inset-0 bg-gradient-to-r from-sba-navy/10 via-blue-500/5 to-sba-navy/10 rounded-3xl"></div>
+            <div class="relative bg-white/60 backdrop-blur-2xl border border-white/30 rounded-3xl p-12 shadow-2xl">
+              <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-sba-navy mb-4">Schedule Your Property Tour</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                  Book a personalized consultation to view {warehouse.title} and discuss your commercial real estate needs with our experts.
+                </p>
               </div>
 
-              <!-- Contact Card -->
-              <div class="bg-sba-navy rounded-2xl p-8 text-white">
-                <h3 class="text-xl font-black mb-6">Interested in This Property?</h3>
-                <p class="text-sba-gray-light mb-6">
-                  Contact our commercial real estate experts to schedule a tour or get more information.
-                </p>
-                <div class="space-y-4">
-                  <a href="/book" class="block bg-white text-sba-navy text-center py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300">
-                    Schedule Tour
-                  </a>
-                  <a href="/contact" class="block border border-white text-center py-3 rounded-xl font-semibold hover:bg-white hover:text-sba-navy transition-all duration-300">
-                    Get Information
-                  </a>
-                </div>
+              <div class="max-w-5xl mx-auto">
+                <CalendarBooking
+                  title=""
+                  subtitle=""
+                  buttonText="Schedule Property Tour"
+                  propertyId={warehouse.id.toString()}
+                  propertyTitle={warehouse.title}
+                />
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
     <!-- Related Properties -->
     {relatedProperties.length > 0 && (
-      <section class="py-16 bg-white">
+      <section class="py-16 bg-gray-50">
         <div class="container mx-auto px-4">
           <div class="max-w-6xl mx-auto">
 
-            <div class="text-center mb-12">
-              <h2 class="text-4xl font-black text-sba-navy mb-4">
-                Similar Properties
-              </h2>
-              <p class="text-xl text-sba-gray-dark">
-                Other available properties in {data.county}
-              </p>
-            </div>
+            <h2 class="text-2xl lg:text-3xl font-bold text-sba-navy mb-8 text-center">
+              More Properties in {warehouse.county}
+            </h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {relatedProperties.map((property) => (
-                <div class="card group overflow-hidden">
-                  {property.data.images && property.data.images[0] && (
-                    <div class="aspect-[4/3] overflow-hidden bg-neutral-100">
+            <div class="grid md:grid-cols-3 gap-8">
+              {relatedProperties.map((property: any) => (
+                <a href={`/properties/${property.id}`} class="group block">
+                  <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                    <div class="relative">
                       <img
-                        src={property.data.images[0]}
-                        alt={property.data.title}
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        loading="lazy"
+                        src={property.image}
+                        alt={property.title}
+                        class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                    </div>
-                  )}
-                  <div class="p-6">
-                    <h3 class="text-xl font-black text-sba-navy mb-2 group-hover:text-sba-navy-dark transition-colors duration-200">
-                      {property.data.title}
-                    </h3>
-                    <p class="text-sba-gray-dark font-mono text-sm uppercase tracking-wider mb-4">
-                      {property.data.location}
-                    </p>
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                      <div class="text-center">
-                        <div class="text-lg font-black text-sba-navy">{property.data.price}</div>
-                        <div class="text-xs text-sba-gray">Per SF/Year</div>
-                      </div>
-                      <div class="text-center">
-                        <div class="text-lg font-black text-sba-navy">{property.data.size?.toLocaleString()}</div>
-                        <div class="text-xs text-sba-gray">Square Feet</div>
+                      <div class="absolute top-4 right-4">
+                        <span class="bg-white bg-opacity-90 px-2 py-1 rounded text-sm font-medium text-sba-navy">
+                          {property.size}
+                        </span>
                       </div>
                     </div>
-                    <a
-                      href={`/properties/${property.data.slug}`}
-                      class="btn-primary rounded-xl py-3 text-center text-sm hover:shadow-lg transition-all duration-200 block"
-                    >
-                      VIEW DETAILS
-                    </a>
+                    <div class="p-6">
+                      <h3 class="text-lg font-semibold text-sba-navy mb-2 group-hover:text-sba-navy-dark">
+                        {property.title}
+                      </h3>
+                      <p class="text-sba-gray text-sm mb-3">{property.location}</p>
+                      <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold text-sba-navy">
+                          {property.price}/SF
+                        </span>
+                        <span class="text-sm text-sba-gray">{property.type}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
+
           </div>
         </div>
       </section>
     )}
 
-    <!-- CTA Section -->
-    <section class="py-20 bg-sba-navy text-white">
-      <div class="container mx-auto px-4 text-center">
-        <h2 class="text-4xl md:text-5xl font-black leading-tight mb-6">
-          Ready to Move Forward?
-        </h2>
-        <p class="text-xl text-sba-gray-light max-w-2xl mx-auto mb-12">
-          Schedule a tour of this property or speak with our leasing experts about your requirements.
-        </p>
-
-        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
-          <a href="/book" class="bg-white text-sba-navy px-12 py-5 rounded-2xl text-lg font-semibold hover:shadow-2xl transform hover:scale-105 transition-all duration-500">
-            SCHEDULE TOUR
-          </a>
-          <div class="flex items-center gap-4 text-sba-gray">
-            <span class="w-px h-8 bg-sba-gray"></span>
-            <span class="text-sm uppercase tracking-wider">OR</span>
-            <span class="w-px h-8 bg-sba-gray"></span>
-          </div>
-          <a href="/contact" class="text-white font-semibold text-lg hover:text-sba-gray-light transition-colors duration-300">
-            Contact Our Team
-          </a>
-        </div>
-      </div>
-    </section>
   </main>
 
   <Footer />
 </BaseLayout>
-
-<style>
-  /* Prose styling for description */
-  .prose p {
-    margin-bottom: 1.5rem;
-  }
-
-  /* Image gallery hover effects */
-  .image-gallery img:hover {
-    transform: scale(1.05);
-  }
-
-  /* Smooth scroll for anchor links */
-  html {
-    scroll-behavior: smooth;
-  }
-</style>
-
-<script>
-  // Image gallery functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    const galleryImages = document.querySelectorAll('.image-gallery img');
-
-    galleryImages.forEach(img => {
-      img.addEventListener('click', function() {
-        // Simple image expansion - in production you'd use a proper lightbox
-        console.log('Image clicked:', this.src);
-      });
-    });
-  });
-</script>

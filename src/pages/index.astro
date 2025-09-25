@@ -1,6 +1,7 @@
 ---
-// Simple AirBnb-style warehouse showcase
+// Mobile-First Airbnb-Style Warehouse Showcase
 import Navigation from '../components/Navigation.astro';
+import MobileAppHeader from '../components/MobileAppHeader.astro';
 import Footer from '../components/Footer.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
@@ -12,40 +13,60 @@ const warehousesByCounty = {
       title: "Modern Distribution Center",
       location: "Doral, FL",
       size: "85,000 SF",
+      sizeValue: 85000,
       price: "$12.50",
       type: "Distribution",
       image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
-      available: true
+      available: true,
+      county: "Miami-Dade",
+      description: "Premium distribution center featuring modern dock-high loading, 32-foot clear heights, and excellent highway access.",
+      features: ["Dock High Loading", "32' Clear Height", "Highway Access", "LED Lighting", "ESFR Sprinkler System"],
+      address: "8200 NW 36th St, Doral, FL 33166"
     },
     {
       id: 2,
       title: "Prime Warehouse Space",
       location: "Hialeah, FL",
       size: "45,000 SF",
+      sizeValue: 45000,
       price: "$10.75",
       type: "Warehouse",
       image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
-      available: true
+      available: true,
+      county: "Miami-Dade",
+      description: "Well-maintained warehouse space in prime Hialeah location. Features grade-level and dock-high doors.",
+      features: ["Grade Level Doors", "Dock High Doors", "Flexible Layout", "Ample Parking"],
+      address: "1150 W 29th St, Hialeah, FL 33012"
     },
     {
       id: 3,
       title: "Manufacturing Facility",
       location: "Miami, FL",
       size: "120,000 SF",
+      sizeValue: 120000,
       price: "$15.00",
       type: "Manufacturing",
       image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
-      available: true
+      available: true,
+      county: "Miami-Dade",
+      description: "Large-scale manufacturing facility with heavy power and crane-ready infrastructure.",
+      features: ["Heavy Power", "Crane Ready", "High Ceilings", "Rail Access"],
+      address: "3800 NW 25th St, Miami, FL 33142"
     },
     {
       id: 7,
       title: "Cold Storage Facility",
       location: "Miami Beach, FL",
       size: "35,000 SF",
+      sizeValue: 35000,
       price: "$18.00",
       type: "Cold Storage",
       image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
-      available: true
+      available: true,
+      county: "Miami-Dade",
+      description: "State-of-the-art cold storage facility with temperature-controlled environments and food-grade standards.",
+      features: ["Temperature Controlled", "Food Grade", "24/7 Security", "Loading Docks"],
+      address: "500 Alton Rd, Miami Beach, FL 33139"
     }
   ],
   "Broward": [
@@ -54,40 +75,60 @@ const warehousesByCounty = {
       title: "Flex Industrial Space",
       location: "Pompano Beach, FL",
       size: "25,000 SF",
+      sizeValue: 25000,
       price: "$14.25",
       type: "Flex Space",
       image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
-      available: true
+      available: true,
+      county: "Broward",
+      description: "Versatile flex industrial space perfect for light manufacturing, assembly, or warehouse operations with office component.",
+      features: ["Office Space", "Drive-In Doors", "Flexible Layout", "Good Highway Access"],
+      address: "1200 N Federal Hwy, Pompano Beach, FL 33062"
     },
     {
       id: 5,
       title: "Logistics Hub",
       location: "Fort Lauderdale, FL",
       size: "95,000 SF",
+      sizeValue: 95000,
       price: "$11.80",
       type: "Distribution",
       image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
-      available: true
+      available: true,
+      county: "Broward",
+      description: "Large-scale logistics and distribution facility with excellent interstate access and modern dock facilities.",
+      features: ["Multiple Dock Doors", "Interstate Access", "Cross-Dock Design", "24-Hour Operations"],
+      address: "3600 Davie Blvd, Fort Lauderdale, FL 33312"
     },
     {
       id: 9,
       title: "Distribution Warehouse",
       location: "Hollywood, FL",
       size: "75,000 SF",
+      sizeValue: 75000,
       price: "$13.25",
       type: "Distribution",
       image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
-      available: true
+      available: true,
+      county: "Broward",
+      description: "Modern distribution warehouse with high-efficiency LED lighting and climate-controlled office areas.",
+      features: ["LED Lighting", "Climate Controlled Office", "Clear Span Design", "Ample Trailer Parking"],
+      address: "2850 Stirling Rd, Hollywood, FL 33312"
     },
     {
       id: 11,
       title: "Port Access Facility",
       location: "Dania Beach, FL",
       size: "60,000 SF",
+      sizeValue: 60000,
       price: "$12.75",
       type: "Warehouse",
       image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
-      available: true
+      available: true,
+      county: "Broward",
+      description: "Strategic warehouse location with direct port access for import/export operations and container storage.",
+      features: ["Port Access", "Container Storage", "Customs Bonded", "Security Fencing"],
+      address: "101 SE 2nd Ave, Dania Beach, FL 33004"
     }
   ],
   "Palm Beach": [
@@ -96,40 +137,60 @@ const warehousesByCounty = {
       title: "Industrial Complex",
       location: "Boca Raton, FL",
       size: "65,000 SF",
+      sizeValue: 65000,
       price: "$13.50",
       type: "Warehouse",
       image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
-      available: true
+      available: true,
+      county: "Palm Beach",
+      description: "Premium industrial complex in Boca Raton with modern amenities and professional office spaces.",
+      features: ["Professional Offices", "Modern Loading", "Secure Access", "Landscaped Grounds"],
+      address: "6500 Park of Commerce Blvd, Boca Raton, FL 33487"
     },
     {
       id: 10,
       title: "Tech Manufacturing Hub",
       location: "Delray Beach, FL",
       size: "110,000 SF",
+      sizeValue: 110000,
       price: "$16.75",
       type: "Manufacturing",
       image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
-      available: true
+      available: true,
+      county: "Palm Beach",
+      description: "High-tech manufacturing facility with clean room capabilities and advanced utilities for precision operations.",
+      features: ["Clean Room Ready", "Advanced Utilities", "High Power Load", "Precision HVAC"],
+      address: "15000 Jog Rd, Delray Beach, FL 33446"
     },
     {
       id: 12,
       title: "Multi-Use Industrial",
       location: "West Palm Beach, FL",
       size: "80,000 SF",
+      sizeValue: 80000,
       price: "$14.50",
       type: "Flex Space",
       image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
-      available: true
+      available: true,
+      county: "Palm Beach",
+      description: "Multi-use industrial facility combining warehouse, light manufacturing, and office space in one location.",
+      features: ["Mixed Use Design", "Office Component", "Flexible Zoning", "Convenient Location"],
+      address: "2800 Corporate Way, West Palm Beach, FL 33407"
     },
     {
       id: 13,
       title: "Distribution Center",
       location: "Boynton Beach, FL",
       size: "90,000 SF",
+      sizeValue: 90000,
       price: "$13.25",
       type: "Distribution",
       image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
-      available: true
+      available: true,
+      county: "Palm Beach",
+      description: "Efficient distribution center with modern material handling systems and excellent transportation access.",
+      features: ["Material Handling Systems", "Transportation Access", "Energy Efficient", "Expansion Ready"],
+      address: "1500 Old Boynton Rd, Boynton Beach, FL 33426"
     }
   ]
 };
@@ -137,25 +198,26 @@ const warehousesByCounty = {
 
 <BaseLayout title="South Florida Warehouses | Shallow Bay Advisors">
   <Navigation />
+  <MobileAppHeader />
 
-  <main class="min-h-screen bg-gray-100">
+  <main class="min-h-screen bg-white">
 
-    <!-- Simple AirBnb-style Hero -->
-    <section class="pt-28 pb-16">
-      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <!-- Airbnb-Style Mobile Header -->
+    <section class="pt-16 md:pt-28 pb-4 md:pb-16">
+      <div class="px-4 md:max-w-7xl md:mx-auto md:px-6 lg:px-8">
 
-        <!-- Simple Headline -->
-        <div class="text-center mb-12">
-          <h1 class="text-4xl md:text-5xl font-light text-sba-navy mb-6 font-['Poppins'] tracking-tight leading-tight">
-            Where you find your warehouse
+        <!-- Mobile-First Header -->
+        <div class="mb-6 md:text-center md:mb-12">
+          <h1 class="text-2xl md:text-5xl font-semibold md:font-light text-gray-900 mb-2 md:mb-6 font-['Poppins'] tracking-tight leading-tight">
+            Find your perfect warehouse
           </h1>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p class="text-gray-500 text-sm md:text-lg md:text-gray-600 max-w-2xl md:mx-auto">
             Discover industrial properties across South Florida
           </p>
         </div>
 
-        <!-- AirBnb-style Search Bar -->
-        <div class="flex justify-center mb-16">
+        <!-- Desktop Search Bar Only -->
+        <div class="hidden md:flex justify-center mb-16">
           <div id="floating-search-bar" class="bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 p-1 max-w-4xl w-full">
             <div class="flex items-center">
               <div class="flex-1 px-6 py-4 border-r border-gray-300">
@@ -193,127 +255,104 @@ const warehousesByCounty = {
       </div>
     </section>
 
-    <!-- AirBnb-style Properties -->
-    <section class="pb-24">
-      <div class="max-w-7xl mx-auto px-6">
+    <!-- Airbnb-Style Mobile Properties -->
+    <section class="pb-20">
+      <div class="px-4 md:max-w-7xl md:mx-auto md:px-6">
 
-        <!-- All Properties Grid - No County Separation -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+        <!-- Section Header - Mobile First -->
+        <div class="mb-4 md:mb-8">
+          <h2 class="text-lg md:text-2xl font-semibold text-gray-900 mb-1">
+            Explore warehouses
+          </h2>
+          <p class="text-gray-500 text-sm md:text-base">
+            Find your perfect space across South Florida
+          </p>
+        </div>
+
+        <!-- Two-Column Mobile Grid like Letterboxd -->
+        <div class="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
           {Object.entries(warehousesByCounty).flatMap(([county, warehouses]) =>
-            warehouses.map((warehouse) => (
-              <div class="group cursor-pointer transition-all duration-200">
+            warehouses.slice(0, 12).map((warehouse) => (
+              <a href={`/properties/${warehouse.id}`} class="block group">
 
-                <!-- Simple Property Image -->
-                <div class="relative overflow-hidden rounded-lg mb-3" style="aspect-ratio: 20/19;">
-                  <img
-                    src={warehouse.image}
-                    alt={warehouse.title}
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                  />
-                </div>
+                <!-- Clean Property Card -->
+                <div class="bg-white rounded-xl overflow-hidden">
 
-                <!-- Simple Text Below Like LoopNet -->
-                <div class="space-y-2">
-                  <h3 class="font-semibold text-sba-navy text-sm leading-tight">
-                    {warehouse.title}
-                  </h3>
-
-                  <p class="text-gray-600 text-sm">
-                    {warehouse.location}
-                  </p>
-
-                  <div class="flex items-center justify-between">
-                    <div class="text-sm text-gray-600">
-                      {warehouse.size} • {warehouse.type}
-                    </div>
-                    <div class="font-semibold text-sba-navy">
-                      {warehouse.price}/SF
-                    </div>
+                  <!-- Property Image - Optimized aspect ratio -->
+                  <div class="relative overflow-hidden rounded-xl" style="aspect-ratio: 1.15/1;">
+                    <img
+                      src={warehouse.image}
+                      alt={warehouse.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
                   </div>
+
+                  <!-- Compact Content -->
+                  <div class="pt-2">
+                    <!-- Title and Price Row -->
+                    <div class="flex justify-between items-start mb-1">
+                      <h3 class="font-medium text-gray-900 text-sm leading-tight pr-2 flex-1">
+                        {warehouse.title}
+                      </h3>
+                      <div class="text-sm font-semibold text-gray-900 whitespace-nowrap">
+                        {warehouse.price}<span class="font-normal">/SF</span>
+                      </div>
+                    </div>
+
+                    <!-- Location -->
+                    <p class="text-gray-500 text-xs mb-1">
+                      {warehouse.location}
+                    </p>
+
+                    <!-- Size and Type - Compact row -->
+                    <div class="flex items-center text-xs text-gray-500">
+                      <span>{warehouse.size}</span>
+                      <span class="mx-1">•</span>
+                      <span>{warehouse.type}</span>
+                      {warehouse.available && (
+                        <>
+                          <span class="mx-1">•</span>
+                          <span class="text-green-600 font-medium">Available</span>
+                        </>
+                      )}
+                    </div>
+
+                  </div>
+
                 </div>
 
-              </div>
+              </a>
             ))
           )}
         </div>
 
         <!-- View All Properties -->
-        <div class="text-center mt-16 pt-8 border-t border-gray-300">
+        <div class="text-center mt-12">
           <a
             href="/properties"
-            class="text-gray-600 hover:text-sba-navy font-medium underline transition-colors"
+            class="inline-flex items-center px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold rounded-2xl transition-all duration-200"
           >
             Show all properties
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
           </a>
         </div>
 
       </div>
     </section>
 
-    <!-- Professional CTA Section -->
-    <section class="py-32 bg-gradient-to-br from-sba-navy to-blue-900 relative overflow-hidden">
-      <!-- Subtle background elements -->
-      <div class="absolute inset-0">
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 right-1/4 w-72 h-72 bg-blue-400/10 rounded-full blur-2xl"></div>
-      </div>
-
-      <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
-        <!-- Professional headline -->
-        <div class="mb-16">
-          <span class="inline-block bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-lg text-sm font-bold uppercase tracking-wider border border-white/20 mb-8">
-            Ready to Move Forward?
-          </span>
-          <h2 class="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-8 leading-none">
-            <span class="block">Partner with</span>
-            <span class="block text-blue-300">The Experts</span>
-          </h2>
-          <p class="text-2xl md:text-3xl text-blue-100 max-w-4xl mx-auto font-medium leading-relaxed">
-            Get professional guidance and access to
-            <span class="text-white font-bold">South Florida's best industrial properties.</span>
-            <span class="block mt-2 text-xl">Let's find your perfect space today.</span>
-          </p>
-        </div>
-
-        <!-- Professional CTAs -->
-        <div class="flex flex-col lg:flex-row gap-6 justify-center items-center max-w-4xl mx-auto">
-          <a href="/book-consultation" class="group bg-white text-sba-navy px-12 py-6 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 w-full lg:w-auto">
-            <div class="flex items-center justify-center space-x-3">
-              <span>Schedule Consultation</span>
-              <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-              </svg>
-            </div>
-            <div class="text-sm font-medium mt-1 opacity-75">Professional consultation • Free initial meeting</div>
+    <!-- Simple CTA Buttons -->
+    <section class="py-16 bg-gray-50">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <div class="flex flex-col gap-4 justify-center items-center max-w-md mx-auto">
+          <a href="/book-consultation" class="w-full bg-sba-navy text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-sba-navy-dark transition-all duration-300 shadow-lg hover:shadow-xl text-center">
+            Book Showing
           </a>
 
-          <div class="text-white font-medium text-lg lg:mx-8">or</div>
-
-          <a href="/contact" class="group border-2 border-white/30 backdrop-blur-sm text-white px-12 py-6 rounded-xl font-bold text-lg hover:bg-white hover:text-sba-navy transition-all duration-300 transform hover:scale-105 w-full lg:w-auto">
-            <div class="flex items-center justify-center space-x-3">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 7.89a2 2 0 002.83 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-              </svg>
-              <span>Contact Our Team</span>
-            </div>
-            <div class="text-sm font-medium mt-1 opacity-75">Direct access to our specialists</div>
+          <a href="/contact" class="w-full border-2 border-sba-navy text-sba-navy px-8 py-4 rounded-lg font-semibold text-lg hover:bg-sba-navy hover:text-white transition-all duration-300 text-center">
+            Can't find what you're looking for? Let us know what you need
           </a>
-        </div>
-
-        <!-- Professional trust indicators -->
-        <div class="mt-20 pt-12 border-t border-white/20">
-          <p class="text-white/90 text-lg font-medium mb-8">Serving South Florida's Leading Businesses</p>
-          <div class="flex flex-wrap justify-center items-center gap-12 opacity-80">
-            <div class="bg-white/10 backdrop-blur-sm px-6 py-4 rounded-lg border border-white/20">
-              <span class="text-white font-bold text-lg">25+ Years Experience</span>
-            </div>
-            <div class="bg-white/10 backdrop-blur-sm px-6 py-4 rounded-lg border border-white/20">
-              <span class="text-white font-bold text-lg">Licensed Professionals</span>
-            </div>
-            <div class="bg-white/10 backdrop-blur-sm px-6 py-4 rounded-lg border border-white/20">
-              <span class="text-white font-bold text-lg">Local Market Experts</span>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -340,6 +379,14 @@ const warehousesByCounty = {
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Mobile app-style adjustments */
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
   }
 
   select:focus-visible,
@@ -705,5 +752,6 @@ const warehousesByCounty = {
         });
       });
     }
+
   });
 </script>

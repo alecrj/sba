@@ -1,6 +1,7 @@
 ---
-// Clean BaseLayout with proper TypeScript and GSAP integration
+// Clean BaseLayout with proper TypeScript and Mobile App Experience
 import ContactModal from '../components/ContactModal.astro';
+import MobileBottomNav from '../components/MobileBottomNav.astro';
 
 export interface Props {
   title: string;
@@ -9,11 +10,11 @@ export interface Props {
   type?: string;
 }
 
-const { 
-  title, 
+const {
+  title,
   description = "South Florida's premier industrial real estate platform. Find warehouse space fast with live inventory and instant tour booking.",
   image = "/shallow-bay-hero.jpg",
-  type = "website" 
+  type = "website"
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -212,9 +213,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </style>
   </head>
   
-  <body class="font-inter antialiased">
+  <body class="font-inter antialiased pb-16 md:pb-0">
     <slot />
-    
+
+    <!-- Mobile Bottom Navigation -->
+    <MobileBottomNav />
+
     <!-- Contact Modal - Include at the end of body -->
     <ContactModal />
     
