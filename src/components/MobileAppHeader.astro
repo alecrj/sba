@@ -14,7 +14,7 @@ const {
 ---
 
 <!-- Mobile App Header -->
-<header class="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-100 md:hidden safe-area-top">
+<header id="mobile-header" class="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-100 sm:hidden safe-area-top transition-all duration-300 ease-in-out">
   <div class="flex items-center justify-center px-4 h-14 relative">
 
     <!-- Left: Back Button (if needed) -->
@@ -32,11 +32,13 @@ const {
     {title ? (
       <h1 class="text-lg font-semibold text-gray-900">{title}</h1>
     ) : (
-      <img
-        src="/images/uploads/sba-transparent.png"
-        alt="Shallow Bay Advisors"
-        class="h-18 w-auto"
-      />
+      <a href="/" class="flex items-center">
+        <img
+          src="/images/uploads/sba-transparent.png"
+          alt="Shallow Bay Advisors"
+          class="h-18 w-auto"
+        />
+      </a>
     )}
 
   </div>
@@ -47,3 +49,37 @@ const {
     padding-top: env(safe-area-inset-top);
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Mobile header scroll behavior (same as desktop nav)
+    let lastScrollY = window.scrollY;
+    const mobileHeader = document.getElementById('mobile-header');
+
+    if (mobileHeader) {
+      function updateMobileHeaderOnScroll() {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY > lastScrollY && currentScrollY > 80) {
+          // Scrolling down & past initial threshold - hide header
+          mobileHeader.style.transform = 'translateY(-100%)';
+        } else {
+          // Scrolling up or at top - show header
+          mobileHeader.style.transform = 'translateY(0)';
+        }
+
+        lastScrollY = currentScrollY;
+      }
+
+      // Throttle scroll events for performance
+      let ticking = false;
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          requestAnimationFrame(updateMobileHeaderOnScroll);
+          ticking = true;
+          setTimeout(() => { ticking = false; }, 10);
+        }
+      });
+    }
+  });
+</script>
