@@ -331,32 +331,32 @@ const warehousesByCounty = {
 
                   <!-- Compact Content -->
                   <div class="pt-2">
-                    <!-- Title and Price Row -->
-                    <div class="flex justify-between items-start mb-1">
-                      <h3 class="font-medium text-gray-900 text-sm leading-tight pr-2 flex-1">
-                        {warehouse.title}
-                      </h3>
-                      <div class="text-sm font-semibold text-gray-900 whitespace-nowrap">
-                        {warehouse.price}<span class="font-normal">/SF</span>
-                      </div>
+                    <!-- Title - Full width to prevent cutoff -->
+                    <h3 class="font-medium text-gray-900 text-xs leading-snug mb-1 line-clamp-2">
+                      {warehouse.title}
+                    </h3>
+
+                    <!-- Price -->
+                    <div class="text-sm font-semibold text-gray-900 mb-1">
+                      {warehouse.price}<span class="font-normal">/SF</span>
                     </div>
 
                     <!-- Location -->
-                    <p class="text-gray-500 text-xs mb-1">
+                    <p class="text-gray-500 text-xs mb-1 truncate">
                       {warehouse.location}
                     </p>
 
-                    <!-- Size and Type - Compact row -->
-                    <div class="flex items-center text-xs text-gray-500">
-                      <span>{warehouse.size}</span>
-                      <span class="mx-1">•</span>
-                      <span>{warehouse.type}</span>
-                      {warehouse.available && (
-                        <>
-                          <span class="mx-1">•</span>
-                          <span class="text-green-600 font-medium">Available</span>
-                        </>
-                      )}
+                    <!-- Size and Type - Stacked for mobile -->
+                    <div class="text-xs text-gray-500 space-y-1">
+                      <div class="flex items-center">
+                        <span class="truncate">{warehouse.size}</span>
+                      </div>
+                      <div class="flex items-center justify-between">
+                        <span class="truncate">{warehouse.type}</span>
+                        {warehouse.available && (
+                          <span class="text-green-600 font-medium whitespace-nowrap">Available</span>
+                        )}
+                      </div>
                     </div>
 
                   </div>
@@ -421,6 +421,14 @@ const warehousesByCounty = {
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Text truncation utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   /* Mobile app-style adjustments */
@@ -614,16 +622,18 @@ const warehousesByCounty = {
     function updateSearchBarOnScroll() {
       const currentScrollY = window.scrollY;
 
-      if (currentScrollY > 200 && !isCompact) {
-        // Shrink search bar
-        floatingSearchBar.style.transform = 'scale(0.8)';
-        floatingSearchBar.style.maxWidth = '700px';
-        isCompact = true;
-      } else if (currentScrollY <= 200 && isCompact) {
-        // Expand search bar back to normal
-        floatingSearchBar.style.transform = 'scale(1)';
-        floatingSearchBar.style.maxWidth = '1280px';
-        isCompact = false;
+      if (floatingSearchBar) {
+        if (currentScrollY > 200 && !isCompact) {
+          // Shrink search bar
+          floatingSearchBar.style.transform = 'scale(0.8)';
+          floatingSearchBar.style.maxWidth = '700px';
+          isCompact = true;
+        } else if (currentScrollY <= 200 && isCompact) {
+          // Expand search bar back to normal
+          floatingSearchBar.style.transform = 'scale(1)';
+          floatingSearchBar.style.maxWidth = '1280px';
+          isCompact = false;
+        }
       }
 
       lastScrollY = currentScrollY;
