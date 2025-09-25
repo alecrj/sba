@@ -206,17 +206,17 @@ const warehousesByCounty = {
     <section class="pt-16 md:pt-28 pb-4 md:pb-16">
       <div class="px-4 md:max-w-7xl md:mx-auto md:px-6 lg:px-8">
 
-        <!-- Mobile-First Header -->
-        <div class="mb-6 md:text-center md:mb-12">
-          <h1 class="text-2xl md:text-5xl font-semibold md:font-light text-gray-900 mb-2 md:mb-6 font-['Poppins'] tracking-tight leading-tight">
+        <!-- Header - Desktop Style on Mobile -->
+        <div class="mb-12 text-center">
+          <h1 class="text-5xl font-light text-gray-900 mb-6 font-['Poppins'] tracking-tight leading-tight">
             Find your perfect warehouse
           </h1>
-          <p class="text-gray-500 text-sm md:text-lg md:text-gray-600 max-w-2xl md:mx-auto">
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
             Discover industrial properties across South Florida
           </p>
         </div>
 
-        <!-- Desktop Search Bar Only -->
+        <!-- Desktop Search Bar -->
         <div class="hidden md:flex justify-center mb-16">
           <div id="floating-search-bar" class="bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 p-1 max-w-4xl w-full">
             <div class="flex items-center">
@@ -269,8 +269,50 @@ const warehousesByCounty = {
           </p>
         </div>
 
-        <!-- Two-Column Mobile Grid like Letterboxd -->
-        <div class="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
+        <!-- Mobile Filter Bar - Compact Single Row -->
+        <div class="md:hidden mb-6">
+          <div id="mobile-search-bar" class="bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 mx-4 overflow-hidden">
+
+            <!-- All Filters in One Row -->
+            <div class="flex">
+              <!-- County -->
+              <div class="flex-1 px-3 py-3 border-r border-gray-100">
+                <div class="text-xs font-semibold text-gray-700 mb-1">County</div>
+                <select id="mobile-county-select" class="text-xs text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
+                  <option value="">All counties</option>
+                  <option value="Miami-Dade">Miami-Dade</option>
+                  <option value="Broward">Broward</option>
+                  <option value="Palm Beach">Palm Beach</option>
+                </select>
+              </div>
+              <!-- Size -->
+              <div class="flex-1 px-3 py-3 border-r border-gray-100">
+                <div class="text-xs font-semibold text-gray-700 mb-1">Size</div>
+                <select id="mobile-size-select" class="text-xs text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
+                  <option value="">Any size</option>
+                  <option value="small">5K - 25K SF</option>
+                  <option value="medium">25K - 100K SF</option>
+                  <option value="large">100K+ SF</option>
+                </select>
+              </div>
+              <!-- Type -->
+              <div class="flex-1 px-3 py-3">
+                <div class="text-xs font-semibold text-gray-700 mb-1">Type</div>
+                <select id="mobile-type-select" class="text-xs text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
+                  <option value="">All types</option>
+                  <option value="warehouse">Warehouse</option>
+                  <option value="distribution">Distribution</option>
+                  <option value="manufacturing">Manufacturing</option>
+                  <option value="flex">Flex Space</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Responsive Grid: 3→4→5 cards per row -->
+        <div class="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 lg:grid-cols-5 lg:gap-4 xl:gap-6">
           {Object.entries(warehousesByCounty).flatMap(([county, warehouses]) =>
             warehouses.slice(0, 12).map((warehouse) => (
               <a href={`/properties/${warehouse.id}`} class="block group">
@@ -400,10 +442,16 @@ const warehousesByCounty = {
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const floatingSearchBar = document.getElementById('floating-search-bar');
+    const mobileSearchBar = document.getElementById('mobile-search-bar');
     const countySelect = document.getElementById('county-select');
     const sizeSelect = document.getElementById('size-select');
     const typeSelect = document.getElementById('type-select');
-    const propertiesGrid = document.querySelector('.grid.grid-cols-1');
+
+    // Mobile selectors
+    const mobileCountySelect = document.getElementById('mobile-county-select');
+    const mobileSizeSelect = document.getElementById('mobile-size-select');
+    const mobileTypeSelect = document.getElementById('mobile-type-select');
+    const propertiesGrid = document.querySelector('.grid.grid-cols-3');
 
     // All warehouse data for filtering
     const warehouseData = {
@@ -593,9 +641,9 @@ const warehousesByCounty = {
 
     // Filter properties based on search criteria
     function filterProperties() {
-      const county = countySelect ? countySelect.value : '';
-      const size = sizeSelect ? sizeSelect.value : '';
-      const type = typeSelect ? typeSelect.value : '';
+      const county = (countySelect ? countySelect.value : '') || (mobileCountySelect ? mobileCountySelect.value : '');
+      const size = (sizeSelect ? sizeSelect.value : '') || (mobileSizeSelect ? mobileSizeSelect.value : '');
+      const type = (typeSelect ? typeSelect.value : '') || (mobileTypeSelect ? mobileTypeSelect.value : '');
 
       let filteredProperties = [];
 
@@ -690,6 +738,9 @@ const warehousesByCounty = {
       if (countySelect) countySelect.value = '';
       if (sizeSelect) sizeSelect.value = '';
       if (typeSelect) typeSelect.value = '';
+      if (mobileCountySelect) mobileCountySelect.value = '';
+      if (mobileSizeSelect) mobileSizeSelect.value = '';
+      if (mobileTypeSelect) mobileTypeSelect.value = '';
       renderProperties(Object.values(warehouseData).flat());
     };
 
@@ -730,6 +781,28 @@ const warehousesByCounty = {
       console.log('Type select not found');
     }
 
+    // Mobile filter event listeners
+    if (mobileCountySelect) {
+      mobileCountySelect.addEventListener('change', function() {
+        console.log('Mobile county changed to:', mobileCountySelect.value);
+        performLiveFilter();
+      });
+    }
+
+    if (mobileSizeSelect) {
+      mobileSizeSelect.addEventListener('change', function() {
+        console.log('Mobile size changed to:', mobileSizeSelect.value);
+        performLiveFilter();
+      });
+    }
+
+    if (mobileTypeSelect) {
+      mobileTypeSelect.addEventListener('change', function() {
+        console.log('Mobile type changed to:', mobileTypeSelect.value);
+        performLiveFilter();
+      });
+    }
+
 
     // Enhanced search bar interactions
     if (floatingSearchBar) {
@@ -747,6 +820,28 @@ const warehousesByCounty = {
             if (!floatingSearchBar.contains(document.activeElement)) {
               floatingSearchBar.classList.remove('shadow-2xl');
               floatingSearchBar.classList.add('shadow-lg');
+            }
+          }, 100);
+        });
+      });
+    }
+
+    // Enhanced mobile search bar interactions
+    if (mobileSearchBar) {
+      // Add focus states
+      const mobileInputs = mobileSearchBar.querySelectorAll('input, select');
+      mobileInputs.forEach(input => {
+        input.addEventListener('focus', function() {
+          mobileSearchBar.classList.add('shadow-2xl');
+          mobileSearchBar.classList.remove('shadow-lg');
+        });
+
+        input.addEventListener('blur', function() {
+          // Delay to allow for clicking search button
+          setTimeout(() => {
+            if (!mobileSearchBar.contains(document.activeElement)) {
+              mobileSearchBar.classList.remove('shadow-2xl');
+              mobileSearchBar.classList.add('shadow-lg');
             }
           }, 100);
         });

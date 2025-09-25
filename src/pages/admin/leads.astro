@@ -3,17 +3,18 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 const leads = await getCollection('leads');
-const sortedLeads = leads.sort((a, b) => 
-  new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime()
-);
+const sortedLeads = leads.sort((a, b) => {
+  const dateB = a.data.submitted_date ? new Date(a.data.submitted_date) : new Date(0);
+  const dateA = b.data.submitted_date ? new Date(b.data.submitted_date) : new Date(0);
+  return dateB.getTime() - dateA.getTime();
+});
 
 // Group leads by status for kanban columns
 const leadsByStatus = {
   'new': sortedLeads.filter(l => l.data.status === 'new'),
   'contacted': sortedLeads.filter(l => l.data.status === 'contacted'),
   'qualified': sortedLeads.filter(l => l.data.status === 'qualified'),
-  'proposal': sortedLeads.filter(l => l.data.status === 'proposal'),
-  'negotiating': sortedLeads.filter(l => l.data.status === 'negotiating'),
+  'proposal-sent': sortedLeads.filter(l => l.data.status === 'proposal-sent'),
   'closed-won': sortedLeads.filter(l => l.data.status === 'closed-won'),
   'closed-lost': sortedLeads.filter(l => l.data.status === 'closed-lost'),
 };
@@ -22,15 +23,14 @@ const statusConfig = [
   { key: 'new', title: 'New Leads', color: 'blue', icon: '📝' },
   { key: 'contacted', title: 'Contacted', color: 'yellow', icon: '📞' },
   { key: 'qualified', title: 'Qualified', color: 'green', icon: '✅' },
-  { key: 'proposal', title: 'Proposal Sent', color: 'purple', icon: '📄' },
-  { key: 'negotiating', title: 'Negotiating', color: 'orange', icon: '🤝' },
+  { key: 'proposal-sent', title: 'Proposal Sent', color: 'purple', icon: '📄' },
   { key: 'closed-won', title: 'Won', color: 'emerald', icon: '🎉' },
   { key: 'closed-lost', title: 'Lost', color: 'red', icon: '❌' },
 ];
 
 // Calculate stats
 const thisWeekLeads = sortedLeads.filter(l => {
-  const leadDate = new Date(l.data.createdAt);
+  const leadDate = l.data.submitted_date ? new Date(l.data.submitted_date) : new Date(0);
   const weekAgo = new Date();
   weekAgo.setDate(weekAgo.getDate() - 7);
   return leadDate > weekAgo;
@@ -159,7 +159,7 @@ const thisWeekLeads = sortedLeads.filter(l => {
                   <div 
                     class="lead-card bg-white border border-gray-200 rounded-lg p-4 shadow-sm cursor-move hover:shadow-md transition-shadow"
                     draggable="true"
-                    data-lead-id={lead.data.id}
+                    data-lead-id={lead.id}
                     data-status={lead.data.status}
                   >
                     <!-- Lead Card Content -->
@@ -167,10 +167,10 @@ const thisWeekLeads = sortedLeads.filter(l => {
                       <div class="flex justify-between items-start">
                         <h4 class="font-semibold text-gray-900 text-sm truncate">{lead.data.name}</h4>
                         <span class="text-xs text-gray-500">
-                          {new Date(lead.data.createdAt).toLocaleDateString('en-US', { 
-                            month: 'short', 
-                            day: 'numeric' 
-                          })}
+                          {lead.data.submitted_date ? new Date(lead.data.submitted_date).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric'
+                          }) : 'No date'}
                         </span>
                       </div>
                       
@@ -193,10 +193,10 @@ const thisWeekLeads = sortedLeads.filter(l => {
                         </a>
                       </div>
                       
-                      {lead.data.propertyInterested && (
+                      {lead.data.warehouse_interest && (
                         <div class="pt-2 border-t border-gray-100">
                           <p class="text-xs text-gray-600">
-                            <span class="font-medium">Interest:</span> {lead.data.propertyInterested}
+                            <span class="font-medium">Interest:</span> {lead.data.warehouse_interest}
                           </p>
                         </div>
                       )}
@@ -250,9 +250,9 @@ const thisWeekLeads = sortedLeads.filter(l => {
               {sortedLeads.map((lead) => (
                 <tr class="hover:bg-gray-50">
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {new Date(lead.data.createdAt).toLocaleDateString('en-US', { 
-                      month: 'short', day: 'numeric', year: 'numeric' 
-                    })}
+                    {lead.data.submitted_date ? new Date(lead.data.submitted_date).toLocaleDateString('en-US', {
+                      month: 'short', day: 'numeric', year: 'numeric'
+                    }) : 'No date'}
                   </td>
                   <td class="px-6 py-4">
                     <div class="text-sm font-medium text-gray-900">{lead.data.name}</div>
@@ -262,7 +262,7 @@ const thisWeekLeads = sortedLeads.filter(l => {
                     <div class="text-sm text-blue-600">{lead.data.email}</div>
                     <div class="text-sm text-gray-500">{lead.data.phone}</div>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-900">{lead.data.propertyInterested || '-'}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900">{lead.data.warehouse_interest || '-'}</td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">
                       {lead.data.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
