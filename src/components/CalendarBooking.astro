@@ -22,12 +22,27 @@ const timeSlots = [
   "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM"
 ];
 
-const appointmentTypes = [
-  { value: "consultation", label: "Initial Consultation (30 min)", duration: 30 },
-  { value: "property-viewing", label: "Property Viewing (45 min)", duration: 45 },
-  { value: "portfolio-review", label: "Portfolio Review (60 min)", duration: 60 },
-  { value: "market-analysis", label: "Market Analysis (45 min)", duration: 45 }
-];
+// Properties organized by county and sorted by size for easy navigation
+const propertiesByCounty = {
+  "Miami-Dade": [
+    { id: "cold-storage-miami-beach", title: "Cold Storage Facility - Miami Beach, FL", size: "35,000 SF", sizeValue: 35000 },
+    { id: "prime-warehouse-hialeah", title: "Prime Warehouse Space - Hialeah, FL", size: "45,000 SF", sizeValue: 45000 },
+    { id: "modern-distribution-center-doral", title: "Modern Distribution Center - Doral, FL", size: "85,000 SF", sizeValue: 85000 },
+    { id: "manufacturing-facility-miami", title: "Manufacturing Facility - Miami, FL", size: "120,000 SF", sizeValue: 120000 }
+  ],
+  "Broward": [
+    { id: "flex-industrial-pompano", title: "Flex Industrial Space - Pompano Beach, FL", size: "25,000 SF", sizeValue: 25000 },
+    { id: "port-access-dania-beach", title: "Port Access Facility - Dania Beach, FL", size: "60,000 SF", sizeValue: 60000 },
+    { id: "distribution-warehouse-hollywood", title: "Distribution Warehouse - Hollywood, FL", size: "75,000 SF", sizeValue: 75000 },
+    { id: "logistics-hub-ft-lauderdale", title: "Logistics Hub - Fort Lauderdale, FL", size: "95,000 SF", sizeValue: 95000 }
+  ],
+  "Palm Beach": [
+    { id: "industrial-complex-boca", title: "Industrial Complex - Boca Raton, FL", size: "65,000 SF", sizeValue: 65000 },
+    { id: "multi-use-west-palm", title: "Multi-Use Industrial - West Palm Beach, FL", size: "80,000 SF", sizeValue: 80000 },
+    { id: "distribution-center-boynton", title: "Distribution Center - Boynton Beach, FL", size: "90,000 SF", sizeValue: 90000 },
+    { id: "tech-manufacturing-delray", title: "Tech Manufacturing Hub - Delray Beach, FL", size: "110,000 SF", sizeValue: 110000 }
+  ]
+};
 ---
 
 <div class="p-0">
@@ -104,22 +119,26 @@ const appointmentTypes = [
 
     <!-- Appointment Details Row -->
     <div class="space-y-4">
-      <!-- Appointment Type -->
+      <!-- Property Selection -->
       <div>
-        <label for="appointment-type" class="block text-sm font-medium text-gray-700 mb-2">
-          Appointment Type *
+        <label for="property-selection" class="block text-sm font-medium text-gray-700 mb-2">
+          Property to View *
         </label>
         <select
-          id="appointment-type"
-          name="appointment_type"
+          id="property-selection"
+          name="property_id"
           required
-          class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white text-sm transition-all duration-300"
+          class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white text-sm transition-all duration-300 appearance-none"
         >
-          <option value="">Select appointment type...</option>
-          {appointmentTypes.map(type => (
-            <option value={type.value} data-duration={type.duration}>
-              {type.label}
-            </option>
+          <option value="">Select a property to tour...</option>
+          {Object.entries(propertiesByCounty).map(([county, properties]) => (
+            <optgroup label={`${county} County`}>
+              {properties.map(property => (
+                <option value={property.id}>
+                  {property.title} ({property.size})
+                </option>
+              ))}
+            </optgroup>
           ))}
         </select>
       </div>
@@ -247,8 +266,16 @@ const appointmentTypes = [
 
           // Add appointment-specific metadata
           data.source = 'calendar_booking';
-          data.type = 'consultation';
+          data.type = 'property_showing';
+          data.appointment_type = 'showing';
           data.lead_source = 'appointment_booking';
+
+          // Add property title for reference
+          const selectedProperty = document.getElementById('property-selection');
+          if (selectedProperty && selectedProperty.value) {
+            const propertyTitle = selectedProperty.options[selectedProperty.selectedIndex].text;
+            data.property_title = propertyTitle;
+          }
 
           // Submit to CRM function
           const response = await fetch('/.netlify/functions/process-appointment', {
@@ -282,3 +309,18 @@ const appointmentTypes = [
     }
   });
 </script>
+
+<style>
+  /* Select dropdown styling */
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+  }
+
+  select:focus {
+    outline: none;
+  }
+</style>

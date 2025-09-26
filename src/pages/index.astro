@@ -384,34 +384,34 @@ const warehousesByCounty = {
                     />
                   </div>
 
-                  <!-- Compact Content -->
-                  <div class="pt-2">
-                    <!-- Title - Full width to prevent cutoff -->
-                    <h3 class="font-medium text-gray-900 text-xs leading-snug mb-1 line-clamp-2">
+                  <!-- Desktop Content -->
+                  <div class="pt-3">
+                    <!-- Title - Larger text, no truncation -->
+                    <h3 class="font-medium text-gray-900 text-sm leading-snug mb-2 line-clamp-2">
                       {warehouse.title}
                     </h3>
 
                     <!-- Price -->
-                    <div class="text-sm font-semibold text-gray-900 mb-1">
-                      {warehouse.price}<span class="font-normal">/SF</span>
+                    <div class="text-base font-semibold text-gray-900 mb-2">
+                      {warehouse.price}<span class="font-normal text-sm">/SF</span>
                     </div>
 
                     <!-- Location -->
-                    <p class="text-gray-500 text-xs mb-1 truncate">
+                    <p class="text-gray-500 text-sm mb-2 line-clamp-1">
                       {warehouse.location}
                     </p>
 
-                    <!-- Size and Type - Stacked for mobile -->
-                    <div class="text-xs text-gray-500 space-y-1">
-                      <div class="flex items-center">
-                        <span class="truncate">{warehouse.size}</span>
-                      </div>
-                      <div class="flex items-center justify-between">
-                        <span class="truncate">{warehouse.type}</span>
-                        {warehouse.available && (
-                          <span class="text-green-600 font-medium whitespace-nowrap">Available</span>
-                        )}
-                      </div>
+                    <!-- Size and Type -->
+                    <div class="text-sm text-gray-500 mb-1">
+                      <div class="line-clamp-1">{warehouse.size}</div>
+                    </div>
+
+                    <!-- Type and Availability -->
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-gray-500 line-clamp-1">{warehouse.type}</span>
+                      {warehouse.available && (
+                        <span class="text-green-600 font-medium text-xs">Available</span>
+                      )}
                     </div>
 
                   </div>

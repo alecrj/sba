@@ -146,6 +146,34 @@ exports.handler = async (event, context) => {
       // Don't fail the whole process for activity log errors
     }
 
+    // Send lead notification to CRM (triggers admin email alert)
+    try {
+      const crmUrl = process.env.CRM_URL || 'https://sbaycrm.netlify.app';
+      const crmNotificationResponse = await fetch(`${crmUrl}/api/public/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          phone: phone,
+          company: company,
+          property_interest: property_title || `${typeInfo.label} appointment`,
+          message: message || `Appointment booking: ${typeInfo.label} on ${appointment_date} at ${appointment_time}`,
+          source: 'appointment_booking',
+          priority: 'high',
+          type: 'consultation'
+        })
+      });
+
+      if (crmNotificationResponse.ok) {
+        console.log('CRM notification sent - admin will receive email alert');
+      } else {
+        console.error('CRM notification failed:', await crmNotificationResponse.text());
+      }
+    } catch (error) {
+      console.error('CRM notification error:', error);
+    }
+
     // Send confirmation emails and sync with Google Calendar
     const baseUrl = process.env.URL;
     if (baseUrl) {
