@@ -570,14 +570,8 @@ const warehousesByCounty = {
           </div>
 
           <div class="h-96 md:h-[500px] relative">
-            <div id="properties-map" class="w-full h-full bg-gray-100 flex items-center justify-center">
-              <div class="text-center">
-                <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
-                </svg>
-                <p class="text-gray-500 font-medium">Interactive Map</p>
-                <p class="text-gray-400 text-sm mt-2">Properties will appear as markers when you use the filters above</p>
-              </div>
+            <div id="properties-map" class="w-full h-full">
+              <!-- Leaflet map will be initialized here -->
             </div>
           </div>
 
@@ -1156,86 +1150,87 @@ const warehousesByCounty = {
     }
 
 
-    // Simple map rendering function (creates a visual representation)
+    // Leaflet map instance
+    let map = null;
+    let markersLayer = null;
+
+    // Initialize Leaflet map
+    function initializeMap() {
+      if (map) return; // Already initialized
+
+      // Initialize the map centered on South Florida with scroll wheel zoom disabled
+      map = L.map('properties-map', {
+        scrollWheelZoom: false,
+        doubleClickZoom: true,
+        dragging: true,
+        zoomControl: true
+      }).setView([26.5, -80.2], 9);
+
+      // Add tile layer (OpenStreetMap)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 18
+      }).addTo(map);
+
+      // Create layer group for markers
+      markersLayer = L.layerGroup().addTo(map);
+    }
+
+    // Render properties on the Leaflet map
     function renderMapView(properties) {
       if (!propertiesMap) return;
 
-      // Calculate bounds for all properties
-      let minLat = Math.min(...properties.map(p => p.lat));
-      let maxLat = Math.max(...properties.map(p => p.lat));
-      let minLng = Math.min(...properties.map(p => p.lng));
-      let maxLng = Math.max(...properties.map(p => p.lng));
+      // Initialize map if not already done
+      initializeMap();
 
-      // Add some padding
-      const latPadding = (maxLat - minLat) * 0.1;
-      const lngPadding = (maxLng - minLng) * 0.1;
-      minLat -= latPadding;
-      maxLat += latPadding;
-      minLng -= lngPadding;
-      maxLng += lngPadding;
+      // Clear existing markers
+      if (markersLayer) {
+        markersLayer.clearLayers();
+      }
 
-      // Create a simple visual map representation
-      const mapHTML = `
-        <div class="relative w-full h-full bg-gradient-to-br from-blue-50 to-green-50 overflow-hidden">
-          <!-- Background map-like gradient -->
-          <div class="absolute inset-0 opacity-20">
-            <div class="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-blue-200 to-transparent"></div>
-            <div class="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-green-200 to-transparent"></div>
+      if (properties.length === 0) return;
+
+      // Create custom icon for properties
+      const propertyIcon = L.divIcon({
+        className: 'custom-property-marker',
+        html: `
+          <div class="w-8 h-8 bg-sba-navy rounded-full border-2 border-white shadow-lg flex items-center justify-center hover:scale-110 transition-transform duration-200">
+            <div class="w-3 h-3 bg-white rounded-full"></div>
           </div>
-
-          <!-- County labels -->
-          <div class="absolute top-4 left-4 text-xs text-gray-600 font-semibold">
-            South Florida Coverage Area
-          </div>
-          <div class="absolute top-8 right-4 text-xs text-gray-500">
-            Miami-Dade → St. Lucie
-          </div>
-
-          <!-- Property markers -->
-          ${properties.map(property => {
-            // Calculate position as percentage of the map area
-            const x = ((property.lng - minLng) / (maxLng - minLng)) * 100;
-            const y = ((maxLat - property.lat) / (maxLat - minLat)) * 100;
-
-            return `
-              <div
-                class="absolute w-6 h-6 bg-sba-navy rounded-full border-2 border-white shadow-lg cursor-pointer transform -translate-x-3 -translate-y-3 hover:scale-125 transition-transform duration-200 group"
-                style="left: ${x}%; top: ${y}%;"
-                data-property-id="${property.id}"
-                title="${property.title} - ${property.location}"
-              >
-                <div class="w-full h-full bg-sba-navy rounded-full flex items-center justify-center">
-                  <div class="w-2 h-2 bg-white rounded-full"></div>
-                </div>
-
-                <!-- Tooltip -->
-                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-3 min-w-48 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
-                  <div class="text-sm font-semibold text-gray-900 mb-1">${property.title}</div>
-                  <div class="text-xs text-gray-600 mb-1">${property.location}</div>
-                  <div class="text-xs text-gray-500">${property.size} • ${property.type}</div>
-                  <div class="text-sm font-semibold text-sba-navy">${property.price}/SF</div>
-                  <!-- Arrow pointing down -->
-                  <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
-                </div>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      `;
-
-      propertiesMap.innerHTML = mapHTML;
-
-      // Add click handlers to property markers
-      const markers = propertiesMap.querySelectorAll('[data-property-id]');
-      markers.forEach(marker => {
-        marker.addEventListener('click', function() {
-          const propertyId = parseInt(this.getAttribute('data-property-id'));
-          const property = properties.find(p => p.id === propertyId);
-          if (property) {
-            showPropertyCard(property);
-          }
-        });
+        `,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
       });
+
+      // Add markers for each property
+      const markers = [];
+      properties.forEach(property => {
+        const marker = L.marker([property.lat, property.lng], { icon: propertyIcon })
+          .bindTooltip(`
+            <div class="text-sm">
+              <div class="font-semibold text-gray-900">${property.title}</div>
+              <div class="text-gray-600">${property.location}</div>
+              <div class="text-gray-500">${property.size} • ${property.type}</div>
+              <div class="font-semibold text-sba-navy">${property.price}/SF</div>
+            </div>
+          `, {
+            permanent: false,
+            direction: 'top',
+            offset: [0, -20]
+          })
+          .on('click', function() {
+            showPropertyCard(property);
+          });
+
+        markers.push(marker);
+        markersLayer.addLayer(marker);
+      });
+
+      // Fit map bounds to show all properties
+      if (markers.length > 0) {
+        const group = new L.featureGroup(markers);
+        map.fitBounds(group.getBounds().pad(0.1));
+      }
     }
 
     // Show property card in map view (GTA-style popup)
@@ -1320,7 +1315,14 @@ const warehousesByCounty = {
       // Show map below list when we have properties
       if (hasFilters && properties.length > 0) {
         if (mapContainer) mapContainer.classList.remove('hidden');
-        renderMapView(properties);
+        // Small delay to ensure the map container is visible before initializing
+        setTimeout(() => {
+          renderMapView(properties);
+          // Invalidate size to ensure proper map rendering
+          if (map) {
+            map.invalidateSize();
+          }
+        }, 100);
         // Reset property card area
         if (mapPropertyCards) {
           mapPropertyCards.innerHTML = `

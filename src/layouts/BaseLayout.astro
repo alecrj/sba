@@ -12,7 +12,7 @@ export interface Props {
 
 const {
   title,
-  description = "South Florida's premier industrial real estate platform. Find warehouse space fast with live inventory and instant tour booking.",
+  description = "Premier industrial real estate platform serving Miami-Dade to Port St. Lucie. Find warehouse space fast with live inventory and instant tour booking.",
   image = "/shallow-bay-hero.jpg",
   type = "website"
 } = Astro.props;
@@ -51,6 +51,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Source+Sans+Pro:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
     <!-- Typography System -->
     <style>
@@ -189,6 +192,24 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         transform: translateY(-2px);
         box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       }
+
+      /* Leaflet Map Customizations */
+      .custom-property-marker {
+        background: none !important;
+        border: none !important;
+      }
+
+      .leaflet-tooltip {
+        background: white !important;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+        font-family: var(--font-primary) !important;
+      }
+
+      .leaflet-tooltip-top:before {
+        border-top-color: white !important;
+      }
     </style>
 
     <!-- Netlify Identity Widget removed to fix CORS errors -->
@@ -199,6 +220,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script> -->
     <!-- ScrollToPlugin temporarily removed due to compatibility issues -->
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
     <!-- Tailwind config is handled by tailwind.config.mjs -->
     <!-- Cache bust: Force fresh deployment on 2025-09-11 -->
@@ -238,7 +262,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
           // Homepage
           hero_title: "Find Your Perfect Warehouse Space",
-          hero_subtitle: "South Florida's premier industrial real estate platform. Discover available warehouse space with live inventory and instant tour booking.",
+          hero_subtitle: "Premier industrial real estate platform serving Miami-Dade to Port St. Lucie. Discover available warehouse space with live inventory and instant tour booking.",
           hero_cta: "Explore Properties",
           hero_cta_secondary: "Book Consultation",
 
@@ -272,7 +296,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
           // About page
           about_title: "About Shallow Bay Advisors",
-          about_subtitle: "Your trusted partner in South Florida commercial real estate",
+          about_subtitle: "Your trusted partner in commercial real estate from Miami-Dade to Port St. Lucie",
 
           // Contact
           contact_title: "Contact Us",

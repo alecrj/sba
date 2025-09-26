@@ -192,11 +192,43 @@ const warehousesByCounty = {
       features: ["Material Handling Systems", "Transportation Access", "Energy Efficient", "Expansion Ready"],
       address: "1500 Old Boynton Rd, Boynton Beach, FL 33426"
     }
+  ],
+  "St. Lucie": [
+    {
+      id: 14,
+      title: "Port Industrial Center",
+      location: "Port St. Lucie, FL",
+      size: "55,000 SF",
+      sizeValue: 55000,
+      price: "$11.25",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+      available: true,
+      county: "St. Lucie",
+      description: "Modern warehouse facility in the growing Port St. Lucie industrial corridor with excellent highway access.",
+      features: ["Highway Access", "Modern Loading", "Flexible Layout", "Expansion Ready"],
+      address: "2500 SW Gatlin Blvd, Port St. Lucie, FL 34953"
+    },
+    {
+      id: 15,
+      title: "Treasure Coast Distribution",
+      location: "Fort Pierce, FL",
+      size: "85,000 SF",
+      sizeValue: 85000,
+      price: "$10.50",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      available: true,
+      county: "St. Lucie",
+      description: "Large distribution facility serving the Treasure Coast with rail and highway access for efficient logistics.",
+      features: ["Rail Access", "Highway Access", "Cross-Dock Design", "24-Hour Security"],
+      address: "1200 Industrial Blvd, Fort Pierce, FL 34982"
+    }
   ]
 };
 ---
 
-<BaseLayout title="South Florida Warehouses | Shallow Bay Advisors">
+<BaseLayout title="South Florida to Port St. Lucie Warehouses | Shallow Bay Advisors">
   <Navigation />
   <MobileAppHeader />
 
@@ -212,7 +244,7 @@ const warehousesByCounty = {
             Find your perfect warehouse
           </h1>
           <p class="text-sm min-[480px]:text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
-            Discover industrial properties across South Florida
+            Discover industrial properties from Miami-Dade to Port St. Lucie
           </p>
         </div>
 
@@ -227,6 +259,7 @@ const warehousesByCounty = {
                   <option value="Miami-Dade">Miami-Dade</option>
                   <option value="Broward">Broward</option>
                   <option value="Palm Beach">Palm Beach</option>
+                  <option value="St. Lucie">St. Lucie</option>
                 </select>
               </div>
               <div class="flex-1 px-6 py-4 border-r border-gray-300">
@@ -265,7 +298,7 @@ const warehousesByCounty = {
             Explore warehouses
           </h2>
           <p class="text-gray-500 text-sm md:text-base">
-            Find your perfect space across South Florida
+            Find your perfect space from Miami-Dade to Port St. Lucie
           </p>
         </div>
 
@@ -283,6 +316,7 @@ const warehousesByCounty = {
                   <option value="Miami-Dade">Miami-Dade</option>
                   <option value="Broward">Broward</option>
                   <option value="Palm Beach">Palm Beach</option>
+                  <option value="St. Lucie">St. Lucie</option>
                 </select>
               </div>
               <!-- Size -->
@@ -683,6 +717,32 @@ const warehousesByCounty = {
           type: "Distribution",
           typeValue: "distribution",
           image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+          available: true
+        }
+      ],
+      "St. Lucie": [
+        {
+          id: 14,
+          title: "Port Industrial Center",
+          location: "Port St. Lucie, FL",
+          size: "55,000 SF",
+          sizeValue: 55000,
+          price: "$11.25",
+          type: "Warehouse",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 15,
+          title: "Treasure Coast Distribution",
+          location: "Fort Pierce, FL",
+          size: "85,000 SF",
+          sizeValue: 85000,
+          price: "$10.50",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
           available: true
         }
       ]
