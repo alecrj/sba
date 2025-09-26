@@ -1,347 +1,435 @@
 ---
-// Updated services page with improved mobile centering and better text sizing
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
+import MobileAppHeader from '../components/MobileAppHeader.astro';
 import Footer from '../components/Footer.astro';
+
+// Warehouse data for filtering
+const warehousesByCounty = {
+  "Miami-Dade": [
+    {
+      id: 1,
+      title: "Modern Distribution Center",
+      location: "Doral, FL",
+      size: "85,000 SF",
+      sizeValue: 85000,
+      price: "$12.50",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      available: true,
+      county: "Miami-Dade",
+      description: "Premium distribution center featuring modern dock-high loading, 32-foot clear heights, and excellent highway access.",
+      features: ["Dock High Loading", "32' Clear Height", "Highway Access", "LED Lighting", "ESFR Sprinkler System"],
+      address: "8200 NW 36th St, Doral, FL 33166"
+    },
+    {
+      id: 2,
+      title: "Prime Warehouse Space",
+      location: "Hialeah, FL",
+      size: "45,000 SF",
+      sizeValue: 45000,
+      price: "$10.75",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+      available: true,
+      county: "Miami-Dade",
+      description: "Well-maintained warehouse space in prime Hialeah location. Features grade-level and dock-high doors.",
+      features: ["Grade Level Doors", "Dock High Doors", "Flexible Layout", "Ample Parking"],
+      address: "1150 W 29th St, Hialeah, FL 33012"
+    },
+    {
+      id: 3,
+      title: "Manufacturing Facility",
+      location: "Miami, FL",
+      size: "120,000 SF",
+      sizeValue: 120000,
+      price: "$15.00",
+      type: "Manufacturing",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+      available: true,
+      county: "Miami-Dade",
+      description: "Large-scale manufacturing facility with heavy power and crane-ready infrastructure.",
+      features: ["Heavy Power", "Crane Ready", "High Ceilings", "Rail Access"],
+      address: "3800 NW 25th St, Miami, FL 33142"
+    },
+    {
+      id: 7,
+      title: "Cold Storage Facility",
+      location: "Miami Beach, FL",
+      size: "35,000 SF",
+      sizeValue: 35000,
+      price: "$18.00",
+      type: "Cold Storage",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+      available: true,
+      county: "Miami-Dade",
+      description: "State-of-the-art cold storage facility with temperature-controlled environments and food-grade standards.",
+      features: ["Temperature Controlled", "Food Grade", "24/7 Security", "Loading Docks"],
+      address: "500 Alton Rd, Miami Beach, FL 33139"
+    }
+  ],
+  "Broward": [
+    {
+      id: 4,
+      title: "Flex Industrial Space",
+      location: "Pompano Beach, FL",
+      size: "25,000 SF",
+      sizeValue: 25000,
+      price: "$14.25",
+      type: "Flex Space",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+      available: true,
+      county: "Broward",
+      description: "Versatile flex industrial space perfect for light manufacturing, assembly, or warehouse operations with office component.",
+      features: ["Office Space", "Drive-In Doors", "Flexible Layout", "Good Highway Access"],
+      address: "1200 N Federal Hwy, Pompano Beach, FL 33062"
+    },
+    {
+      id: 5,
+      title: "Logistics Hub",
+      location: "Fort Lauderdale, FL",
+      size: "95,000 SF",
+      sizeValue: 95000,
+      price: "$11.80",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      available: true,
+      county: "Broward",
+      description: "Large-scale logistics and distribution facility with excellent interstate access and modern dock facilities.",
+      features: ["Multiple Dock Doors", "Interstate Access", "Cross-Dock Design", "24-Hour Operations"],
+      address: "3600 Davie Blvd, Fort Lauderdale, FL 33312"
+    },
+    {
+      id: 9,
+      title: "Distribution Warehouse",
+      location: "Hollywood, FL",
+      size: "75,000 SF",
+      sizeValue: 75000,
+      price: "$13.25",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+      available: true,
+      county: "Broward",
+      description: "Modern distribution warehouse with high-efficiency LED lighting and climate-controlled office areas.",
+      features: ["LED Lighting", "Climate Controlled Office", "Clear Span Design", "Ample Trailer Parking"],
+      address: "2850 Stirling Rd, Hollywood, FL 33312"
+    },
+    {
+      id: 11,
+      title: "Port Access Facility",
+      location: "Dania Beach, FL",
+      size: "60,000 SF",
+      sizeValue: 60000,
+      price: "$12.75",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+      available: true,
+      county: "Broward",
+      description: "Strategic warehouse location with direct port access for import/export operations and container storage.",
+      features: ["Port Access", "Container Storage", "Customs Bonded", "Security Fencing"],
+      address: "101 SE 2nd Ave, Dania Beach, FL 33004"
+    }
+  ],
+  "Palm Beach": [
+    {
+      id: 6,
+      title: "Industrial Complex",
+      location: "Boca Raton, FL",
+      size: "65,000 SF",
+      sizeValue: 65000,
+      price: "$13.50",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+      available: true,
+      county: "Palm Beach",
+      description: "Premium industrial complex in Boca Raton with modern amenities and professional office spaces.",
+      features: ["Professional Offices", "Modern Loading", "Secure Access", "Landscaped Grounds"],
+      address: "6500 Park of Commerce Blvd, Boca Raton, FL 33487"
+    },
+    {
+      id: 10,
+      title: "Tech Manufacturing Hub",
+      location: "Delray Beach, FL",
+      size: "110,000 SF",
+      sizeValue: 110000,
+      price: "$16.75",
+      type: "Manufacturing",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+      available: true,
+      county: "Palm Beach",
+      description: "High-tech manufacturing facility with clean room capabilities and advanced utilities for precision operations.",
+      features: ["Clean Room Ready", "Advanced Utilities", "High Power Load", "Precision HVAC"],
+      address: "15000 Jog Rd, Delray Beach, FL 33446"
+    },
+    {
+      id: 12,
+      title: "Multi-Use Industrial",
+      location: "West Palm Beach, FL",
+      size: "80,000 SF",
+      sizeValue: 80000,
+      price: "$14.50",
+      type: "Flex Space",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      available: true,
+      county: "Palm Beach",
+      description: "Multi-use industrial facility combining warehouse, light manufacturing, and office space in one location.",
+      features: ["Mixed Use Design", "Office Component", "Flexible Zoning", "Convenient Location"],
+      address: "2800 Corporate Way, West Palm Beach, FL 33407"
+    },
+    {
+      id: 13,
+      title: "Distribution Center",
+      location: "Boynton Beach, FL",
+      size: "90,000 SF",
+      sizeValue: 90000,
+      price: "$13.25",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+      available: true,
+      county: "Palm Beach",
+      description: "Efficient distribution center with modern material handling systems and excellent transportation access.",
+      features: ["Material Handling Systems", "Transportation Access", "Energy Efficient", "Expansion Ready"],
+      address: "1500 Old Boynton Rd, Boynton Beach, FL 33426"
+    }
+  ]
+};
 ---
 
-<BaseLayout 
-  title="Strategic Business Advisory Services | Shallow Bay Advisors"
-  description="Comprehensive business advisory services from strategic planning to implementation. Expert guidance to accelerate your growth."
->
+<BaseLayout title="Our Services | Shallow Bay Advisors">
   <Navigation />
+  <MobileAppHeader />
   
-  <main>
-    <!-- Hero Section - Matching Properties Page Structure -->
-    <section class="relative min-h-screen overflow-hidden flex items-start lg:items-center">
-      <!-- Video Background -->
-      <video 
-        autoplay 
-        muted 
-        loop 
-        playsinline
-        class="absolute inset-0 w-full h-full object-cover"
-        poster="/warehouse-hero.jpg"
-      >
-        <source src="/videos/video2.mp4" type="video/mp4">
-        <!-- Fallback for browsers that don't support video -->
-      </video>
-      
-      <!-- Video Overlay -->
-      <div class="absolute inset-0 bg-black/60"></div>
-      
-      <!-- Gradient Overlay for extra depth -->
-      <div class="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-slate-800/60 to-slate-900/80"></div>
-      
-      <!-- Background Elements (subtle over video) -->
-      <div class="absolute inset-0">
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl animate-float"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-float-reverse"></div>
-      </div>
-      
-      <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-44 sm:pt-32 lg:pt-16 pb-8">
-        <div class="text-center">
-          <h1 class="text-3xl sm:text-4xl lg:text-6xl font-black text-white leading-tight tracking-tight mb-4 sm:mb-6 animate-on-scroll drop-shadow-2xl">
-            STRATEGIC BUSINESS
-            <span class="block bg-gradient-to-r from-primary-400 to-blue-400 bg-clip-text text-transparent">
-              ADVISORY SERVICES
-            </span>
-          </h1>
-          <p class="text-base sm:text-lg lg:text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed mb-2 animate-on-scroll drop-shadow-lg">
-            Complete industrial tenant concierge services across South Florida.
-          </p>
-          <p class="text-sm sm:text-base text-gray-300 leading-relaxed mb-6 sm:mb-8 max-w-3xl mx-auto animate-on-scroll drop-shadow-lg">
-            <span class="text-white font-semibold">Cost to tenant: $0. Landlords pay brokerage fees.</span>
-          </p>
-          
-          <!-- Service Quality Stats - Matching Properties Page -->
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 animate-on-scroll mt-8 sm:mt-12">
-            <div class="group text-center p-4 sm:p-6 lg:p-8 bg-white/10 backdrop-blur-xl rounded-2xl lg:rounded-3xl border border-white/20 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 hover:bg-white/15 relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500">
-              <div class="relative z-10">
-                <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-1 sm:mb-2 lg:mb-3 drop-shadow-lg group-hover:text-primary-200 transition-colors duration-300">
-                  100%
-                </div>
-                <div class="text-white/80 text-xs sm:text-sm font-semibold uppercase tracking-wider drop-shadow-sm">Free Service</div>
-              </div>
-            </div>
-            <div class="group text-center p-4 sm:p-6 lg:p-8 bg-white/10 backdrop-blur-xl rounded-2xl lg:rounded-3xl border border-white/20 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 hover:bg-white/15 relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500">
-              <div class="relative z-10">
-                <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-1 sm:mb-2 lg:mb-3 drop-shadow-lg group-hover:text-green-200 transition-colors duration-300">
-                  South FL
-                </div>
-                <div class="text-white/80 text-xs sm:text-sm font-semibold uppercase tracking-wider drop-shadow-sm">Coverage</div>
-              </div>
-            </div>
-            <div class="group text-center p-4 sm:p-6 lg:p-8 bg-white/10 backdrop-blur-xl rounded-2xl lg:rounded-3xl border border-white/20 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 hover:bg-white/15 relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500">
-              <div class="relative z-10">
-                <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-1 sm:mb-2 lg:mb-3 drop-shadow-lg group-hover:text-blue-200 transition-colors duration-300">
-                  Local
-                </div>
-                <div class="text-white/80 text-xs sm:text-sm font-semibold uppercase tracking-wider drop-shadow-sm">Expertise</div>
-              </div>
-            </div>
-            <div class="group text-center p-4 sm:p-6 lg:p-8 bg-white/10 backdrop-blur-xl rounded-2xl lg:rounded-3xl border border-white/20 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 hover:bg-white/15 relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500">
-              <div class="relative z-10">
-                <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-1 sm:mb-2 lg:mb-3 drop-shadow-lg group-hover:text-cyan-200 transition-colors duration-300">
-                  Fast
-                </div>
-                <div class="text-white/80 text-xs sm:text-sm font-semibold uppercase tracking-wider drop-shadow-sm">Turnarounds</div>
-              </div>
-            </div>
-          </div>
-        </div>
+  <main class="pt-20">
+    <!-- Hero Section -->
+    <section class="pt-16 md:pt-28 pb-12 md:pb-20">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <h1 class="text-3xl md:text-5xl font-light text-gray-900 mb-6 font-['Poppins'] tracking-tight leading-tight">
+          Our Services
+        </h1>
+        <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          Comprehensive commercial real estate services specializing in small bay industrial warehouses across South Florida.
+        </p>
       </div>
     </section>
 
-    <!-- Main Services - Improved Text Sizing -->
-    <section class="py-24 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Section Header -->
-        <div class="text-center mb-16 animate-on-scroll">
-          <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-            Our 3-Step Process
-          </h2>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            From initial consultation to keys in hand, we provide comprehensive 
-            tenant representation to secure the perfect warehouse space for your business.
-          </p>
-        </div>
+    <!-- Main Services -->
+    <section class="py-16">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="grid md:grid-cols-3 gap-8">
 
-        <!-- Services Grid - Improved Text Sizing -->
-        <div class="grid md:grid-cols-3 gap-8 lg:gap-12 stagger-children">
-          
-          <!-- Step 1: Discovery & Search -->
-          <div class="text-center p-6 sm:p-8 lg:p-10 rounded-3xl bg-white hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 border border-gray-100">
-            <div class="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-3xl flex items-center justify-center mx-auto mb-6 lg:mb-8 shadow-lg">
-              <span class="text-3xl font-black text-white">1</span>
-            </div>
-            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Discovery & Search</h3>
-            
-            <!-- Detailed breakdown - Improved Text Sizes -->
-            <div class="space-y-4 lg:space-y-5 text-left">
-              <div class="flex items-start space-x-3">
-                <div class="w-2 h-2 bg-primary-500 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Needs Analysis</p>
-                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Power, clear height, loading, yard, office %, zoning, sprinkler, trailer parking requirements</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <div class="w-2 h-2 bg-primary-500 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Market Access</p>
-                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">On-market + off-market outreach to owners and brokers for comprehensive coverage</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 2: Evaluation & Negotiation -->
-          <div class="text-center p-6 sm:p-8 lg:p-10 rounded-3xl bg-white hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 border border-gray-100">
-            <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center mx-auto mb-6 lg:mb-8 shadow-lg">
-              <span class="text-3xl font-black text-white">2</span>
-            </div>
-            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Evaluation & Negotiation</h3>
-            
-            <!-- Detailed breakdown - Improved Text Sizes -->
-            <div class="space-y-4 lg:space-y-5 text-left">
-              <div class="flex items-start space-x-3">
-                <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Tours & Shortlist</p>
-                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Curated options, scheduled efficiently to maximize your time</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Financial Analysis</p>
-                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Market rent comps, OpEx/CAM review, escalation modeling</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Expert Negotiation</p>
-                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Base rent, free rent, tenant improvements, options, assignment/sublet terms</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 3: Documentation & Move-In -->
-          <div class="text-center p-6 sm:p-8 lg:p-10 rounded-3xl bg-white hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 border border-gray-100">
-            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 lg:mb-8 shadow-lg">
-              <span class="text-3xl font-black text-white">3</span>
-            </div>
-            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Documentation & Move-In</h3>
-            
-            <!-- Detailed breakdown - Improved Text Sizes -->
-            <div class="space-y-4 lg:space-y-5 text-left">
-              <div class="flex items-start space-x-3">
-                <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Legal Support</p>
-                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">LOI strategy and lease term guidance (with your attorney) to protect your interests</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p class="font-semibold text-gray-900 text-sm sm:text-base">Move-In Coordination</p>
-                  <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Vendor intros for racking, security, utilities, and permits for smooth transition</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Property Types -->
-    <section class="py-24 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Section Header -->
-        <div class="text-center mb-16 animate-on-scroll">
-          <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-            From 500 SF to 500,000 SF
-          </h2>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Any size, any stage: Start-ups, expansions, consolidations, relocations, renewals.
-          </p>
-        </div>
-
-        <!-- Property Types Grid -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 stagger-children">
-          <div class="text-center p-8 bg-gray-50 rounded-3xl hover:bg-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-            <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          <!-- Tenant Representation -->
+          <div class="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-200">
+            <div class="w-12 h-12 bg-sba-navy/10 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-sba-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
               </svg>
             </div>
-            <div class="text-2xl font-bold text-primary-600 mb-2">Distribution</div>
-            <div class="text-gray-600 text-sm">High cube, dock high, multi-tenant facilities</div>
+
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Tenant Representation</h3>
+            <p class="text-gray-600 mb-4">We help businesses find the perfect small bay industrial warehouse space across South Florida.</p>
+
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-start space-x-2">
+                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mt-2 flex-shrink-0"></div>
+                <span>Market search and property identification</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mt-2 flex-shrink-0"></div>
+                <span>Property tours and evaluation</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mt-2 flex-shrink-0"></div>
+                <span>Lease negotiation and terms review</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mt-2 flex-shrink-0"></div>
+                <span>Transaction management through closing</span>
+              </li>
+            </ul>
           </div>
-          
-          <div class="text-center p-8 bg-gray-50 rounded-3xl hover:bg-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-            <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-              </svg>
-            </div>
-            <div class="text-2xl font-bold text-green-600 mb-2">Manufacturing</div>
-            <div class="text-gray-600 text-sm">Production, assembly, processing facilities</div>
-          </div>
-          
-          <div class="text-center p-8 bg-gray-50 rounded-3xl hover:bg-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+          <!-- Landlord Services -->
+          <div class="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-200">
+            <div class="w-12 h-12 bg-sba-navy/10 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-sba-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
               </svg>
             </div>
-            <div class="text-2xl font-bold text-blue-600 mb-2">Flex/R&D</div>
-            <div class="text-gray-600 text-sm">Office/warehouse combinations</div>
+
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Landlord Services</h3>
+            <p class="text-gray-600 mb-4">Comprehensive property management and leasing services for warehouse owners and investors.</p>
+
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-start space-x-2">
+                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mt-2 flex-shrink-0"></div>
+                <span>Property marketing and tenant sourcing</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mt-2 flex-shrink-0"></div>
+                <span>Market analysis and rent optimization</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mt-2 flex-shrink-0"></div>
+                <span>Lease administration and renewals</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mt-2 flex-shrink-0"></div>
+                <span>Property maintenance coordination</span>
+              </li>
+            </ul>
           </div>
-          
-          <div class="text-center p-8 bg-gray-50 rounded-3xl hover:bg-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+
+          <!-- Investment Advisory -->
+          <div class="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-200">
+            <div class="w-12 h-12 bg-sba-navy/10 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-sba-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
               </svg>
             </div>
-            <div class="text-2xl font-bold text-purple-600 mb-2">Cold Storage</div>
-            <div class="text-gray-600 text-sm">Temperature-controlled facilities</div>
+
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Investment Advisory</h3>
+            <p class="text-gray-600 mb-4">Strategic guidance for investors looking to acquire or develop industrial warehouse properties.</p>
+
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-start space-x-2">
+                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mt-2 flex-shrink-0"></div>
+                <span>Market research and opportunity identification</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mt-2 flex-shrink-0"></div>
+                <span>Financial analysis and due diligence</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mt-2 flex-shrink-0"></div>
+                <span>Investment strategy development</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mt-2 flex-shrink-0"></div>
+                <span>Transaction structuring and execution</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Benefits Section -->
-    <section class="relative py-24 bg-gradient-to-br from-primary-600 to-blue-700 overflow-hidden">
-      <!-- Background Image -->
-      <div class="absolute inset-0 z-0">
-        <img 
-          src="/images/uploads/trucks.png" 
-          alt="Industrial trucks" 
-          class="w-full h-full object-cover opacity-40"
-        />
-      </div>
-      
-      <!-- Background Overlay -->
-      <div class="absolute inset-0 z-10 bg-gradient-to-br from-primary-600/85 to-blue-700/85"></div>
-      
-      <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-4xl sm:text-5xl font-bold text-white mb-6 animate-on-scroll">
-            Why Businesses Choose Our Process
+    <!-- Search for Properties Section -->
+    <section class="py-16">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
+            Search Available Properties
           </h2>
-          <p class="text-xl text-primary-100 max-w-3xl mx-auto animate-on-scroll">
-            Streamlined, efficient, and always in your best interests
+          <p class="text-gray-600">
+            Use the filters below to find properties that match your needs
           </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8 stagger-children">
-          <div class="text-center p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
-            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-              </svg>
+        <!-- Desktop Search Bar -->
+        <div class="hidden sm:flex justify-center mb-16">
+          <div id="floating-search-bar" class="bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 p-1 max-w-4xl w-full">
+            <div class="flex items-center">
+              <div class="flex-1 px-6 py-4 border-r border-gray-300">
+                <div class="text-xs font-semibold text-gray-700 mb-1">County</div>
+                <select id="county-select" class="text-sm text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
+                  <option value="">All counties</option>
+                  <option value="Miami-Dade">Miami-Dade</option>
+                  <option value="Broward">Broward</option>
+                  <option value="Palm Beach">Palm Beach</option>
+                  <option value="St. Lucie">St. Lucie</option>
+                </select>
+              </div>
+              <div class="flex-1 px-6 py-4 border-r border-gray-300">
+                <div class="text-xs font-semibold text-gray-700 mb-1">Size</div>
+                <select id="size-select" class="text-sm text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
+                  <option value="">Any size</option>
+                  <option value="small">5K - 25K SF</option>
+                  <option value="medium">25K - 100K SF</option>
+                  <option value="large">100K+ SF</option>
+                </select>
+              </div>
+              <div class="flex-1 px-6 py-4">
+                <div class="text-xs font-semibold text-gray-700 mb-1">Type</div>
+                <select id="type-select" class="text-sm text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
+                  <option value="">All types</option>
+                  <option value="warehouse">Warehouse</option>
+                  <option value="distribution">Distribution</option>
+                  <option value="manufacturing">Manufacturing</option>
+                  <option value="flex">Flex Space</option>
+                </select>
+              </div>
             </div>
-            <h3 class="text-xl font-bold text-white mb-4">100% Free Service</h3>
-            <p class="text-primary-100 leading-relaxed">
-              Complete tenant concierge services at zero cost to you. Landlords pay all brokerage fees.
-            </p>
-          </div>
-
-          <div class="text-center p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
-            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-white mb-4">Efficient Process</h3>
-            <p class="text-primary-100 leading-relaxed">
-              Streamlined 3-step approach minimizes your time investment while maximizing results.
-            </p>
-          </div>
-
-          <div class="text-center p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
-            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-white mb-4">Expert Advocacy</h3>
-            <p class="text-primary-100 leading-relaxed">
-              Industrial-only focus with deep market knowledge and strong negotiation skills.
-            </p>
           </div>
         </div>
 
-        <!-- Call to Action -->
-        <div class="text-center mt-16 animate-on-scroll">
-          <div class="inline-flex flex-col sm:flex-row gap-4">
-            <button 
-              onclick="openContactModal('services-cta')"
-              class="bg-white text-primary-600 px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-gray-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 transform"
-            >
-              Start Your Search Today
-            </button>
-            <a 
-              href="tel:954-937-9667" 
-              class="bg-white/10 backdrop-blur-sm text-white border-2 border-white/20 px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-white/20 hover:border-white/30 transition-all duration-300"
-            >
-              Call (954) 937-9667
-            </a>
+        <!-- Mobile Filter Bar -->
+        <div class="sm:hidden mb-6">
+          <div id="mobile-search-bar" class="bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 mx-4 overflow-hidden">
+            <div class="flex">
+              <div class="flex-1 px-3 py-3 border-r border-gray-100">
+                <div class="text-xs font-semibold text-gray-700 mb-1">County</div>
+                <select id="mobile-county-select" class="text-xs text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
+                  <option value="">All counties</option>
+                  <option value="Miami-Dade">Miami-Dade</option>
+                  <option value="Broward">Broward</option>
+                  <option value="Palm Beach">Palm Beach</option>
+                  <option value="St. Lucie">St. Lucie</option>
+                </select>
+              </div>
+              <div class="flex-1 px-3 py-3 border-r border-gray-100">
+                <div class="text-xs font-semibold text-gray-700 mb-1">Size</div>
+                <select id="mobile-size-select" class="text-xs text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
+                  <option value="">Any size</option>
+                  <option value="small">5K - 25K SF</option>
+                  <option value="medium">25K - 100K SF</option>
+                  <option value="large">100K+ SF</option>
+                </select>
+              </div>
+              <div class="flex-1 px-3 py-3">
+                <div class="text-xs font-semibold text-gray-700 mb-1">Type</div>
+                <select id="mobile-type-select" class="text-xs text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
+                  <option value="">All types</option>
+                  <option value="warehouse">Warehouse</option>
+                  <option value="distribution">Distribution</option>
+                  <option value="manufacturing">Manufacturing</option>
+                  <option value="flex">Flex Space</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <p class="text-primary-200 text-sm mt-4">
-            Free consultation • No obligation • Fast response
+        </div>
+
+        <!-- Properties Results -->
+        <div id="no-filters-message" class="text-center py-12">
+          <div class="text-gray-500 text-lg mb-4">
+            Select filters above to see available properties
+          </div>
+          <p class="text-gray-400 text-sm">
+            Use county, size, or type filters to find properties that match your needs
           </p>
+        </div>
+
+        <!-- Mobile Properties -->
+        <div class="sm:hidden">
+          <div id="mobile-properties" class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide px-4 hidden" style="scroll-snap-type: x mandatory; margin-right: -1rem;">
+          </div>
+        </div>
+
+        <!-- Desktop Properties Grid -->
+        <div id="desktop-properties" class="hidden sm:grid sm:grid-cols-4 sm:gap-3 lg:grid-cols-5 lg:gap-4 xl:gap-6 properties-hidden">
+        </div>
+
+        <!-- View All Properties Button -->
+        <div id="view-all-button" class="text-center mt-12 hidden">
+          <a
+            href="/properties"
+            class="inline-flex items-center px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold rounded-2xl transition-all duration-200"
+          >
+            Show all properties
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
         </div>
       </div>
     </section>
@@ -349,3 +437,522 @@ import Footer from '../components/Footer.astro';
   
   <Footer />
 </BaseLayout>
+
+<style>
+  /* Clean minimal styling */
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+  }
+
+  select:focus,
+  input:focus {
+    outline: none;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Text truncation utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Airbnb-style horizontal scroll */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Mobile property cards - Airbnb style */
+  @media (max-width: 640px) {
+    .property-container {
+      padding-right: calc(10% + 1rem);
+    }
+  }
+
+  /* Mobile app-style adjustments */
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+
+  select:focus-visible,
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid #1f2937;
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const floatingSearchBar = document.getElementById('floating-search-bar');
+    const mobileSearchBar = document.getElementById('mobile-search-bar');
+    const countySelect = document.getElementById('county-select');
+    const sizeSelect = document.getElementById('size-select');
+    const typeSelect = document.getElementById('type-select');
+
+    // Mobile selectors
+    const mobileCountySelect = document.getElementById('mobile-county-select');
+    const mobileSizeSelect = document.getElementById('mobile-size-select');
+    const mobileTypeSelect = document.getElementById('mobile-type-select');
+    const mobileContainer = document.getElementById('mobile-properties');
+    const desktopGrid = document.getElementById('desktop-properties');
+    const noFiltersMessage = document.getElementById('no-filters-message');
+    const viewAllButton = document.getElementById('view-all-button');
+
+    // All warehouse data for filtering - matching the type mapping from homepage
+    const warehouseData = {
+      "Miami-Dade": [
+        {
+          id: 1,
+          title: "Modern Distribution Center",
+          location: "Doral, FL",
+          size: "85,000 SF",
+          sizeValue: 85000,
+          price: "$12.50",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 2,
+          title: "Prime Warehouse Space",
+          location: "Hialeah, FL",
+          size: "45,000 SF",
+          sizeValue: 45000,
+          price: "$10.75",
+          type: "Warehouse",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 3,
+          title: "Manufacturing Facility",
+          location: "Miami, FL",
+          size: "120,000 SF",
+          sizeValue: 120000,
+          price: "$15.00",
+          type: "Manufacturing",
+          typeValue: "manufacturing",
+          image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 7,
+          title: "Cold Storage Facility",
+          location: "Miami Beach, FL",
+          size: "35,000 SF",
+          sizeValue: 35000,
+          price: "$18.00",
+          type: "Cold Storage",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+          available: true
+        }
+      ],
+      "Broward": [
+        {
+          id: 4,
+          title: "Flex Industrial Space",
+          location: "Pompano Beach, FL",
+          size: "25,000 SF",
+          sizeValue: 25000,
+          price: "$14.25",
+          type: "Flex Space",
+          typeValue: "flex",
+          image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 5,
+          title: "Logistics Hub",
+          location: "Fort Lauderdale, FL",
+          size: "95,000 SF",
+          sizeValue: 95000,
+          price: "$11.80",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 9,
+          title: "Distribution Warehouse",
+          location: "Hollywood, FL",
+          size: "75,000 SF",
+          sizeValue: 75000,
+          price: "$13.25",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 11,
+          title: "Port Access Facility",
+          location: "Dania Beach, FL",
+          size: "60,000 SF",
+          sizeValue: 60000,
+          price: "$12.75",
+          type: "Warehouse",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+          available: true
+        }
+      ],
+      "Palm Beach": [
+        {
+          id: 6,
+          title: "Industrial Complex",
+          location: "Boca Raton, FL",
+          size: "65,000 SF",
+          sizeValue: 65000,
+          price: "$13.50",
+          type: "Warehouse",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 10,
+          title: "Tech Manufacturing Hub",
+          location: "Delray Beach, FL",
+          size: "110,000 SF",
+          sizeValue: 110000,
+          price: "$16.75",
+          type: "Manufacturing",
+          typeValue: "manufacturing",
+          image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 12,
+          title: "Multi-Use Industrial",
+          location: "West Palm Beach, FL",
+          size: "80,000 SF",
+          sizeValue: 80000,
+          price: "$14.50",
+          type: "Flex Space",
+          typeValue: "flex",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 13,
+          title: "Distribution Center",
+          location: "Boynton Beach, FL",
+          size: "90,000 SF",
+          sizeValue: 90000,
+          price: "$13.25",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+          available: true
+        }
+      ],
+      "St. Lucie": [
+        {
+          id: 14,
+          title: "Port Industrial Center",
+          location: "Port St. Lucie, FL",
+          size: "55,000 SF",
+          sizeValue: 55000,
+          price: "$11.25",
+          type: "Warehouse",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          available: true
+        },
+        {
+          id: 15,
+          title: "Treasure Coast Distribution",
+          location: "Fort Pierce, FL",
+          size: "85,000 SF",
+          sizeValue: 85000,
+          price: "$10.50",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          available: true
+        }
+      ]
+    };
+
+    // Filter properties based on search criteria
+    function filterProperties() {
+      const county = (countySelect ? countySelect.value : '') || (mobileCountySelect ? mobileCountySelect.value : '');
+      const size = (sizeSelect ? sizeSelect.value : '') || (mobileSizeSelect ? mobileSizeSelect.value : '');
+      const type = (typeSelect ? typeSelect.value : '') || (mobileTypeSelect ? mobileTypeSelect.value : '');
+
+      // Check if any filter is selected
+      const hasFilters = county || size || type;
+
+      if (!hasFilters) {
+        // Show no filters message and hide properties
+        if (noFiltersMessage) noFiltersMessage.style.display = 'block';
+        if (mobileContainer) mobileContainer.classList.add('hidden');
+        if (desktopGrid) desktopGrid.classList.add('properties-hidden');
+        if (viewAllButton) viewAllButton.classList.add('hidden');
+        return [];
+      }
+
+      let filteredProperties = [];
+
+      // Get all properties or filter by county
+      if (county) {
+        filteredProperties = warehouseData[county] || [];
+      } else {
+        // Get all properties from all counties
+        filteredProperties = Object.values(warehouseData).flat();
+      }
+
+      // Filter by size
+      if (size) {
+        filteredProperties = filteredProperties.filter(property => {
+          switch (size) {
+            case 'small':
+              return property.sizeValue >= 5000 && property.sizeValue <= 25000;
+            case 'medium':
+              return property.sizeValue > 25000 && property.sizeValue <= 100000;
+            case 'large':
+              return property.sizeValue > 100000;
+            default:
+              return true;
+          }
+        });
+      }
+
+      // Filter by type
+      if (type) {
+        filteredProperties = filteredProperties.filter(property =>
+          property.typeValue === type
+        );
+      }
+
+      return filteredProperties;
+    }
+
+    // Render filtered properties
+    function renderProperties(properties) {
+      const hasFilters = properties.length > 0 ||
+        (countySelect && countySelect.value) ||
+        (sizeSelect && sizeSelect.value) ||
+        (typeSelect && typeSelect.value) ||
+        (mobileCountySelect && mobileCountySelect.value) ||
+        (mobileSizeSelect && mobileSizeSelect.value) ||
+        (mobileTypeSelect && mobileTypeSelect.value);
+
+      if (!hasFilters) {
+        // Show no filters message
+        if (noFiltersMessage) noFiltersMessage.style.display = 'block';
+        if (mobileContainer) mobileContainer.classList.add('hidden');
+        if (desktopGrid) desktopGrid.classList.add('properties-hidden');
+        if (viewAllButton) viewAllButton.classList.add('hidden');
+        return;
+      }
+
+      // Hide no filters message
+      if (noFiltersMessage) noFiltersMessage.style.display = 'none';
+
+      if (properties.length === 0) {
+        const noResultsHTML = `
+          <div class="col-span-full text-center py-12">
+            <div class="text-gray-500 text-lg">
+              No properties found matching your criteria.
+            </div>
+            <button onclick="clearFilters()" class="mt-4 text-sba-navy hover:text-sba-navy-dark font-medium">
+              Clear filters
+            </button>
+          </div>
+        `;
+
+        if (mobileContainer) {
+          mobileContainer.innerHTML = noResultsHTML;
+          mobileContainer.classList.remove('hidden');
+        }
+        if (desktopGrid) {
+          desktopGrid.innerHTML = noResultsHTML;
+          desktopGrid.classList.remove('properties-hidden');
+        }
+        if (viewAllButton) viewAllButton.classList.add('hidden');
+        return;
+      }
+
+      // Show properties and view all button
+      if (mobileContainer) mobileContainer.classList.remove('hidden');
+      if (desktopGrid) desktopGrid.classList.remove('properties-hidden');
+      if (viewAllButton) viewAllButton.classList.remove('hidden');
+
+      // Mobile horizontal scroll layout
+      const mobileHTML = properties.map(warehouse => `
+        <a href="/properties/${warehouse.id}" class="block group flex-none" style="scroll-snap-align: start; width: calc((100vw - 2rem - 1rem) / 2.1);">
+          <div class="bg-white rounded-xl overflow-hidden">
+            <div class="relative overflow-hidden rounded-xl" style="aspect-ratio: 1.15/1;">
+              <img
+                src="${warehouse.image}"
+                alt="${warehouse.title}"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div class="pt-3">
+              <h3 class="font-medium text-gray-900 text-sm leading-snug mb-1 line-clamp-2">
+                ${warehouse.title}
+              </h3>
+              <p class="text-gray-500 text-sm mb-1 truncate">
+                ${warehouse.location}
+              </p>
+              <div class="text-sm text-gray-500 mb-1">
+                <span class="truncate">${warehouse.size} • ${warehouse.type}</span>
+              </div>
+              <div class="text-sm font-semibold text-gray-900">
+                ${warehouse.price}<span class="font-normal">/SF</span>
+                ${warehouse.available ? '<span class="text-green-600 font-medium ml-2">Available</span>' : ''}
+              </div>
+            </div>
+          </div>
+        </a>
+      `).join('');
+
+      // Desktop grid layout
+      const desktopHTML = properties.map(warehouse => `
+        <a href="/properties/${warehouse.id}" class="block group">
+          <div class="bg-white rounded-xl overflow-hidden">
+            <div class="relative overflow-hidden rounded-xl" style="aspect-ratio: 1.15/1;">
+              <img
+                src="${warehouse.image}"
+                alt="${warehouse.title}"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div class="pt-2">
+              <h3 class="font-medium text-gray-900 text-xs leading-snug mb-1 line-clamp-2">
+                ${warehouse.title}
+              </h3>
+              <div class="text-sm font-semibold text-gray-900 mb-1">
+                ${warehouse.price}<span class="font-normal">/SF</span>
+              </div>
+              <p class="text-gray-500 text-xs mb-1 truncate">
+                ${warehouse.location}
+              </p>
+              <div class="text-xs text-gray-500 space-y-1">
+                <div class="flex items-center">
+                  <span class="truncate">${warehouse.size}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="truncate">${warehouse.type}</span>
+                  ${warehouse.available ? '<span class="text-green-600 font-medium whitespace-nowrap">Available</span>' : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      `).join('');
+
+      if (mobileContainer) mobileContainer.innerHTML = mobileHTML;
+      if (desktopGrid) desktopGrid.innerHTML = desktopHTML;
+    }
+
+    // Clear filters function (make it global so button can access it)
+    window.clearFilters = function() {
+      if (countySelect) countySelect.value = '';
+      if (sizeSelect) sizeSelect.value = '';
+      if (typeSelect) typeSelect.value = '';
+      if (mobileCountySelect) mobileCountySelect.value = '';
+      if (mobileSizeSelect) mobileSizeSelect.value = '';
+      if (mobileTypeSelect) mobileTypeSelect.value = '';
+      renderProperties([]);
+    };
+
+    // Live filtering - no search button needed
+    function performLiveFilter() {
+      const filteredProperties = filterProperties();
+      renderProperties(filteredProperties);
+    }
+
+    // Add live filtering to all select elements
+    if (countySelect) {
+      countySelect.addEventListener('change', performLiveFilter);
+    }
+
+    if (sizeSelect) {
+      sizeSelect.addEventListener('change', performLiveFilter);
+    }
+
+    if (typeSelect) {
+      typeSelect.addEventListener('change', performLiveFilter);
+    }
+
+    // Mobile filter event listeners
+    if (mobileCountySelect) {
+      mobileCountySelect.addEventListener('change', performLiveFilter);
+    }
+
+    if (mobileSizeSelect) {
+      mobileSizeSelect.addEventListener('change', performLiveFilter);
+    }
+
+    if (mobileTypeSelect) {
+      mobileTypeSelect.addEventListener('change', performLiveFilter);
+    }
+
+    // Enhanced search bar interactions
+    if (floatingSearchBar) {
+      const inputs = floatingSearchBar.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+          floatingSearchBar.classList.add('shadow-2xl');
+          floatingSearchBar.classList.remove('shadow-lg');
+        });
+
+        input.addEventListener('blur', function() {
+          setTimeout(() => {
+            if (!floatingSearchBar.contains(document.activeElement)) {
+              floatingSearchBar.classList.remove('shadow-2xl');
+              floatingSearchBar.classList.add('shadow-lg');
+            }
+          }, 100);
+        });
+      });
+    }
+
+    // Enhanced mobile search bar interactions
+    if (mobileSearchBar) {
+      const mobileInputs = mobileSearchBar.querySelectorAll('input, select');
+      mobileInputs.forEach(input => {
+        input.addEventListener('focus', function() {
+          mobileSearchBar.classList.add('shadow-2xl');
+          mobileSearchBar.classList.remove('shadow-lg');
+        });
+
+        input.addEventListener('blur', function() {
+          setTimeout(() => {
+            if (!mobileSearchBar.contains(document.activeElement)) {
+              mobileSearchBar.classList.remove('shadow-2xl');
+              mobileSearchBar.classList.add('shadow-lg');
+            }
+          }, 100);
+        });
+      });
+    }
+
+    // Initialize with no properties showing
+    renderProperties([]);
+  });
+</script>
