@@ -49,7 +49,7 @@ let averageSize = 0;
 
 try {
   const crmApiUrl = import.meta.env.CRM_API_URL || 'https://sbaycrm.netlify.app';
-  console.log('Fetching properties from CRM:', `${crmApiUrl}/api/public/properties`);
+  console.log('Fetching properties from CRM API:', `${crmApiUrl}/api/public/properties`);
   const response = await fetch(`${crmApiUrl}/api/public/properties`, {
     headers: {
       'Accept': 'application/json',
