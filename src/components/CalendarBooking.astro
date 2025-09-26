@@ -46,11 +46,11 @@ const appointmentTypes = [
   )}
 
   <!-- Calendar Booking Form -->
-  <form id="calendar-booking-form" class="space-y-8">
+  <form id="calendar-booking-form" class="space-y-6">
     <!-- Contact Information -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <label for="booking-name" class="block text-sm font-semibold text-sba-navy mb-3">
+        <label for="booking-name" class="block text-sm font-medium text-gray-700 mb-2">
           Full Name *
         </label>
         <input
@@ -58,12 +58,12 @@ const appointmentTypes = [
           id="booking-name"
           name="name"
           required
-          class="w-full px-5 py-4 rounded-2xl border-2 border-gray-200/50 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white/80 backdrop-blur-sm text-lg transition-all duration-300 hover:bg-white"
+          class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white text-sm transition-all duration-300"
           placeholder="Your name"
         />
       </div>
       <div>
-        <label for="booking-email" class="block text-sm font-semibold text-sba-navy mb-3">
+        <label for="booking-email" class="block text-sm font-medium text-gray-700 mb-2">
           Email Address *
         </label>
         <input
@@ -71,12 +71,12 @@ const appointmentTypes = [
           id="booking-email"
           name="email"
           required
-          class="w-full px-5 py-4 rounded-2xl border-2 border-gray-200/50 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white/80 backdrop-blur-sm text-lg transition-all duration-300 hover:bg-white"
+          class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white text-sm transition-all duration-300"
           placeholder="your@email.com"
         />
       </div>
       <div>
-        <label for="booking-phone" class="block text-sm font-semibold text-sba-navy mb-3">
+        <label for="booking-phone" class="block text-sm font-medium text-gray-700 mb-2">
           Phone Number *
         </label>
         <input
@@ -84,36 +84,36 @@ const appointmentTypes = [
           id="booking-phone"
           name="phone"
           required
-          class="w-full px-5 py-4 rounded-2xl border-2 border-gray-200/50 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white/80 backdrop-blur-sm text-lg transition-all duration-300 hover:bg-white"
+          class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white text-sm transition-all duration-300"
           placeholder="(555) 123-4567"
         />
       </div>
       <div>
-        <label for="booking-company" class="block text-sm font-semibold text-sba-navy mb-3">
+        <label for="booking-company" class="block text-sm font-medium text-gray-700 mb-2">
           Company
         </label>
         <input
           type="text"
           id="booking-company"
           name="company"
-          class="w-full px-5 py-4 rounded-2xl border-2 border-gray-200/50 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white/80 backdrop-blur-sm text-lg transition-all duration-300 hover:bg-white"
+          class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white text-sm transition-all duration-300"
           placeholder="Company name"
         />
       </div>
     </div>
 
     <!-- Appointment Details Row -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="space-y-4">
       <!-- Appointment Type -->
       <div>
-        <label for="appointment-type" class="block text-sm font-semibold text-sba-navy mb-3">
+        <label for="appointment-type" class="block text-sm font-medium text-gray-700 mb-2">
           Appointment Type *
         </label>
         <select
           id="appointment-type"
           name="appointment_type"
           required
-          class="w-full px-5 py-4 rounded-2xl border-2 border-gray-200/50 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white/80 backdrop-blur-sm text-lg transition-all duration-300 hover:bg-white"
+          class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white text-sm transition-all duration-300"
         >
           <option value="">Select appointment type...</option>
           {appointmentTypes.map(type => (
@@ -124,36 +124,39 @@ const appointmentTypes = [
         </select>
       </div>
 
-      <!-- Date Selection -->
-      <div>
-        <label for="appointment-date" class="block text-sm font-semibold text-sba-navy mb-3">
-          Preferred Date *
-        </label>
-        <input
-          type="date"
-          id="appointment-date"
-          name="appointment_date"
-          required
-          class="w-full px-5 py-4 rounded-2xl border-2 border-gray-200/50 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white/80 backdrop-blur-sm text-lg transition-all duration-300 hover:bg-white"
-        />
-      </div>
+      <!-- Date and Time Row -->
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Date Selection -->
+        <div>
+          <label for="appointment-date" class="block text-sm font-medium text-gray-700 mb-2">
+            Preferred Date *
+          </label>
+          <input
+            type="date"
+            id="appointment-date"
+            name="appointment_date"
+            required
+            class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white text-sm transition-all duration-300"
+          />
+        </div>
 
-      <!-- Time Selection -->
-      <div>
-        <label for="appointment-time" class="block text-sm font-semibold text-sba-navy mb-3">
-          Preferred Time *
-        </label>
-        <select
-          id="appointment-time"
-          name="appointment_time"
-          required
-          class="w-full px-5 py-4 rounded-2xl border-2 border-gray-200/50 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white/80 backdrop-blur-sm text-lg transition-all duration-300 hover:bg-white"
-        >
-          <option value="">Select time...</option>
-          {timeSlots.map(time => (
-            <option value={time}>{time}</option>
-          ))}
-        </select>
+        <!-- Time Selection -->
+        <div>
+          <label for="appointment-time" class="block text-sm font-medium text-gray-700 mb-2">
+            Preferred Time *
+          </label>
+          <select
+            id="appointment-time"
+            name="appointment_time"
+            required
+            class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white text-sm transition-all duration-300"
+          >
+            <option value="">Select time...</option>
+            {timeSlots.map(time => (
+              <option value={time}>{time}</option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
 
@@ -168,24 +171,24 @@ const appointmentTypes = [
 
     <!-- Message -->
     <div>
-      <label for="booking-message" class="block text-sm font-semibold text-sba-navy mb-3">
+      <label for="booking-message" class="block text-sm font-medium text-gray-700 mb-2">
         Additional Details
       </label>
       <textarea
         id="booking-message"
         name="message"
-        rows="4"
-        class="w-full px-5 py-4 rounded-2xl border-2 border-gray-200/50 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white/80 backdrop-blur-sm text-lg resize-none transition-all duration-300 hover:bg-white"
-        placeholder="Tell us about your requirements or any specific questions..."
+        rows="3"
+        class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sba-navy/20 focus:border-sba-navy bg-white text-sm resize-none transition-all duration-300"
+        placeholder="Tell us about your requirements..."
       ></textarea>
     </div>
 
     <!-- Submit Button -->
-    <div class="flex justify-center pt-4">
+    <div class="pt-4">
       <button
         type="submit"
         id="booking-submit-btn"
-        class="px-12 py-5 bg-gradient-to-r from-sba-navy to-sba-navy-dark text-white rounded-2xl font-bold text-xl hover:from-sba-navy-dark hover:to-slate-900 focus:outline-none focus:ring-4 focus:ring-sba-navy/30 transition-all duration-300 disabled:opacity-50 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+        class="w-full px-6 py-3 bg-sba-navy text-white rounded-lg font-semibold hover:bg-sba-navy-dark focus:outline-none focus:ring-4 focus:ring-sba-navy/30 transition-all duration-300 disabled:opacity-50"
       >
         <span class="submit-text">{buttonText}</span>
         <span class="loading-text hidden">Booking Appointment...</span>

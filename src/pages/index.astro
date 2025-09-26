@@ -311,8 +311,63 @@ const warehousesByCounty = {
           </div>
         </div>
 
-        <!-- Responsive Grid: 3→4→5 cards per row -->
-        <div class="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 lg:grid-cols-5 lg:gap-4 xl:gap-6">
+        <!-- Mobile: Airbnb-style horizontal scroll with 2.1 cards visible -->
+        <!-- Desktop: Responsive Grid -->
+        <div class="sm:hidden">
+          <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide px-4" style="scroll-snap-type: x mandatory; margin-right: -1rem;">
+            {Object.entries(warehousesByCounty).flatMap(([county, warehouses]) =>
+              warehouses.slice(0, 12).map((warehouse, index) => (
+                <a href={`/properties/${warehouse.id}`} class="block group flex-none" style="scroll-snap-align: start; width: calc((100vw - 2rem - 1rem) / 2.1);">
+
+                  <!-- Clean Property Card -->
+                  <div class="bg-white rounded-xl overflow-hidden">
+
+                    <!-- Property Image - Optimized aspect ratio -->
+                    <div class="relative overflow-hidden rounded-xl" style="aspect-ratio: 1.15/1;">
+                      <img
+                        src={warehouse.image}
+                        alt={warehouse.title}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+
+                    <!-- Compact Content -->
+                    <div class="pt-3">
+                      <!-- Title - Full width to prevent cutoff -->
+                      <h3 class="font-medium text-gray-900 text-sm leading-snug mb-1 line-clamp-2">
+                        {warehouse.title}
+                      </h3>
+
+                      <!-- Location -->
+                      <p class="text-gray-500 text-sm mb-1 truncate">
+                        {warehouse.location}
+                      </p>
+
+                      <!-- Size and Type - Single line with separator -->
+                      <div class="text-sm text-gray-500 mb-1">
+                        <span class="truncate">{warehouse.size} • {warehouse.type}</span>
+                      </div>
+
+                      <!-- Price -->
+                      <div class="text-sm font-semibold text-gray-900">
+                        {warehouse.price}<span class="font-normal">/SF</span>
+                        {warehouse.available && (
+                          <span class="text-green-600 font-medium ml-2">Available</span>
+                        )}
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </a>
+              ))
+            )}
+          </div>
+        </div>
+
+        <!-- Desktop Grid: 4→5 cards per row -->
+        <div class="hidden sm:grid sm:grid-cols-4 sm:gap-3 lg:grid-cols-5 lg:gap-4 xl:gap-6">
           {Object.entries(warehousesByCounty).flatMap(([county, warehouses]) =>
             warehouses.slice(0, 12).map((warehouse) => (
               <a href={`/properties/${warehouse.id}`} class="block group">
@@ -431,6 +486,23 @@ const warehousesByCounty = {
     overflow: hidden;
   }
 
+  /* Airbnb-style horizontal scroll */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Mobile property cards - Airbnb style */
+  @media (max-width: 640px) {
+    .property-container {
+      padding-right: calc(10% + 1rem);
+    }
+  }
+
   /* Mobile app-style adjustments */
   @media (max-width: 768px) {
     .container {
@@ -459,7 +531,8 @@ const warehousesByCounty = {
     const mobileCountySelect = document.getElementById('mobile-county-select');
     const mobileSizeSelect = document.getElementById('mobile-size-select');
     const mobileTypeSelect = document.getElementById('mobile-type-select');
-    const propertiesGrid = document.querySelector('.grid.grid-cols-3');
+    const mobileContainer = document.querySelector('.sm\\:hidden .flex.gap-3');
+    const desktopGrid = document.querySelector('.hidden.sm\\:grid');
 
     // All warehouse data for filtering
     const warehouseData = {
@@ -694,14 +767,9 @@ const warehousesByCounty = {
     // Render filtered properties
     function renderProperties(properties) {
       console.log('Rendering properties:', properties.length, 'properties found');
-      console.log('Properties grid element:', propertiesGrid);
-      if (!propertiesGrid) {
-        console.error('Properties grid not found!');
-        return;
-      }
 
       if (properties.length === 0) {
-        propertiesGrid.innerHTML = `
+        const noResultsHTML = `
           <div class="col-span-full text-center py-12">
             <div class="text-gray-500 text-lg">
               No properties found matching your criteria.
@@ -711,36 +779,79 @@ const warehousesByCounty = {
             </button>
           </div>
         `;
+
+        if (mobileContainer) mobileContainer.innerHTML = noResultsHTML;
+        if (desktopGrid) desktopGrid.innerHTML = noResultsHTML;
         return;
       }
 
-      propertiesGrid.innerHTML = properties.map(warehouse => `
-        <div class="group cursor-pointer transition-all duration-200">
-          <div class="relative overflow-hidden rounded-lg mb-3" style="aspect-ratio: 20/19;">
-            <img
-              src="${warehouse.image}"
-              alt="${warehouse.title}"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-            />
-          </div>
-          <div class="space-y-2">
-            <h3 class="font-semibold text-sba-navy text-sm leading-tight">
-              ${warehouse.title}
-            </h3>
-            <p class="text-gray-600 text-sm">
-              ${warehouse.location}
-            </p>
-            <div class="flex items-center justify-between">
-              <div class="text-sm text-gray-600">
-                ${warehouse.size} • ${warehouse.type}
+      // Mobile horizontal scroll layout
+      const mobileHTML = properties.map(warehouse => `
+        <a href="/properties/${warehouse.id}" class="block group flex-none" style="scroll-snap-align: start; width: calc((100vw - 2rem - 1rem) / 2.1);">
+          <div class="bg-white rounded-xl overflow-hidden">
+            <div class="relative overflow-hidden rounded-xl" style="aspect-ratio: 1.15/1;">
+              <img
+                src="${warehouse.image}"
+                alt="${warehouse.title}"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div class="pt-3">
+              <h3 class="font-medium text-gray-900 text-sm leading-snug mb-1 line-clamp-2">
+                ${warehouse.title}
+              </h3>
+              <p class="text-gray-500 text-sm mb-1 truncate">
+                ${warehouse.location}
+              </p>
+              <div class="text-sm text-gray-500 mb-1">
+                <span class="truncate">${warehouse.size} • ${warehouse.type}</span>
               </div>
-              <div class="font-semibold text-sba-navy">
-                ${warehouse.price}/SF
+              <div class="text-sm font-semibold text-gray-900">
+                ${warehouse.price}<span class="font-normal">/SF</span>
+                ${warehouse.available ? '<span class="text-green-600 font-medium ml-2">Available</span>' : ''}
               </div>
             </div>
           </div>
-        </div>
+        </a>
       `).join('');
+
+      // Desktop grid layout
+      const desktopHTML = properties.map(warehouse => `
+        <a href="/properties/${warehouse.id}" class="block group">
+          <div class="bg-white rounded-xl overflow-hidden">
+            <div class="relative overflow-hidden rounded-xl" style="aspect-ratio: 1.15/1;">
+              <img
+                src="${warehouse.image}"
+                alt="${warehouse.title}"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div class="pt-2">
+              <h3 class="font-medium text-gray-900 text-xs leading-snug mb-1 line-clamp-2">
+                ${warehouse.title}
+              </h3>
+              <div class="text-sm font-semibold text-gray-900 mb-1">
+                ${warehouse.price}<span class="font-normal">/SF</span>
+              </div>
+              <p class="text-gray-500 text-xs mb-1 truncate">
+                ${warehouse.location}
+              </p>
+              <div class="text-xs text-gray-500 space-y-1">
+                <div class="flex items-center">
+                  <span class="truncate">${warehouse.size}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="truncate">${warehouse.type}</span>
+                  ${warehouse.available ? '<span class="text-green-600 font-medium whitespace-nowrap">Available</span>' : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      `).join('');
+
+      if (mobileContainer) mobileContainer.innerHTML = mobileHTML;
+      if (desktopGrid) desktopGrid.innerHTML = desktopHTML;
     }
 
     // Clear filters function (make it global so button can access it)
