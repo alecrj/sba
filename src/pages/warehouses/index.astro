@@ -9,9 +9,10 @@ interface Property {
   title: string;
   location: string;
   price: string;
-  size: number;
+  size: string;  // CRM returns size as string
   description: string;
-  images?: string[];
+  image?: string;  // CRM returns single featured image
+  gallery?: string[];  // CRM returns gallery array
   features?: string[];
   featured?: boolean;
   available?: boolean;
@@ -68,9 +69,9 @@ try {
         title: property.title,
         location: property.location,
         price: property.price,
-        size: property.size,
+        size: parseInt(property.size) || 0,
         description: property.description,
-        images: property.images,
+        images: property.image ? [property.image, ...(property.gallery || [])] : (property.gallery || []),
         features: property.features,
         featured: property.featured,
         availability: property.available ? 'available' : 'unavailable',
