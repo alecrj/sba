@@ -1,0 +1,787 @@
+---
+// Dynamic Property Detail Page
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import CalendarBooking from '../../components/CalendarBooking.astro';
+
+export async function getStaticPaths() {
+  // Warehouse data - moved inside getStaticPaths for build-time access
+  const warehousesByCounty = {
+    "Miami-Dade": [
+      {
+        id: 1,
+        title: "Modern Distribution Center",
+        location: "Doral, FL",
+        size: "85,000 SF",
+        sizeValue: 85000,
+        price: "$12.50",
+        type: "Distribution",
+        image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+        photos: [
+          "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop"
+        ],
+        available: true,
+        county: "Miami-Dade",
+        description: "Premium distribution center featuring modern dock-high loading, 32-foot clear heights, and excellent highway access.",
+        features: ["Dock High Loading", "32' Clear Height", "Highway Access", "LED Lighting", "ESFR Sprinkler System", "Climate Control"],
+        address: "8200 NW 36th St, Doral, FL 33166"
+      },
+      {
+        id: 2,
+        title: "Prime Warehouse Space",
+        location: "Hialeah, FL",
+        size: "45,000 SF",
+        sizeValue: 45000,
+        price: "$10.75",
+        type: "Warehouse",
+        image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+        photos: [
+          "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop"
+        ],
+        available: true,
+        county: "Miami-Dade",
+        description: "Well-maintained warehouse space in prime Hialeah location. Features grade-level and dock-high doors.",
+        features: ["Grade Level Doors", "Dock High Doors", "Flexible Layout", "Ample Parking"],
+        address: "1150 W 29th St, Hialeah, FL 33012"
+      },
+      {
+        id: 3,
+        title: "Manufacturing Facility",
+        location: "Miami, FL",
+        size: "120,000 SF",
+        sizeValue: 120000,
+        price: "$15.00",
+        type: "Manufacturing",
+        image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+        photos: [
+          "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop"
+        ],
+        available: true,
+        county: "Miami-Dade",
+        description: "Large-scale manufacturing facility with heavy power and crane-ready infrastructure.",
+        features: ["Heavy Power", "Crane Ready"],
+        address: "3800 NW 25th St, Miami, FL 33142"
+      },
+      {
+        id: 7,
+        title: "Cold Storage Facility",
+        location: "Miami Beach, FL",
+        size: "35,000 SF",
+        sizeValue: 35000,
+        price: "$18.00",
+        type: "Cold Storage",
+        image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+        available: true,
+        county: "Miami-Dade",
+        description: "State-of-the-art cold storage facility with temperature-controlled environments and food-grade standards.",
+        features: ["Temperature Controlled", "Food Grade", "24/7 Security", "Loading Docks"],
+        address: "500 Alton Rd, Miami Beach, FL 33139"
+      }
+    ],
+    "Broward": [
+      {
+        id: 4,
+        title: "Flex Industrial Space",
+        location: "Pompano Beach, FL",
+        size: "25,000 SF",
+        sizeValue: 25000,
+        price: "$14.25",
+        type: "Flex Space",
+        image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+        available: true,
+        county: "Broward",
+        description: "Versatile flex industrial space perfect for light manufacturing, assembly, or warehouse operations with office component.",
+        features: ["Office Space", "Drive-In Doors", "Flexible Layout", "Good Highway Access"],
+        address: "1200 N Federal Hwy, Pompano Beach, FL 33062"
+      },
+      {
+        id: 5,
+        title: "Logistics Hub",
+        location: "Fort Lauderdale, FL",
+        size: "95,000 SF",
+        sizeValue: 95000,
+        price: "$11.80",
+        type: "Distribution",
+        image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+        available: true,
+        county: "Broward",
+        description: "Large-scale logistics and distribution facility with excellent interstate access and modern dock facilities.",
+        features: ["Multiple Dock Doors", "Interstate Access", "Cross-Dock Design", "24-Hour Operations"],
+        address: "3600 Davie Blvd, Fort Lauderdale, FL 33312"
+      },
+      {
+        id: 9,
+        title: "Distribution Warehouse",
+        location: "Hollywood, FL",
+        size: "75,000 SF",
+        sizeValue: 75000,
+        price: "$13.25",
+        type: "Distribution",
+        image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+        available: true,
+        county: "Broward",
+        description: "Modern distribution warehouse with high-efficiency LED lighting and climate-controlled office areas.",
+        features: ["LED Lighting", "Climate Controlled Office", "Clear Span Design", "Ample Trailer Parking"],
+        address: "2850 Stirling Rd, Hollywood, FL 33312"
+      },
+      {
+        id: 11,
+        title: "Port Access Facility",
+        location: "Dania Beach, FL",
+        size: "60,000 SF",
+        sizeValue: 60000,
+        price: "$12.75",
+        type: "Warehouse",
+        image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+        available: true,
+        county: "Broward",
+        description: "Strategic warehouse location with direct port access for import/export operations and container storage.",
+        features: ["Port Access", "Container Storage", "Customs Bonded", "Security Fencing"],
+        address: "101 SE 2nd Ave, Dania Beach, FL 33004"
+      }
+    ],
+    "Palm Beach": [
+      {
+        id: 6,
+        title: "Industrial Complex",
+        location: "Boca Raton, FL",
+        size: "65,000 SF",
+        sizeValue: 65000,
+        price: "$13.50",
+        type: "Warehouse",
+        image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+        available: true,
+        county: "Palm Beach",
+        description: "Premium industrial complex in Boca Raton with modern amenities and professional office spaces.",
+        features: ["Professional Offices", "Modern Loading", "Secure Access", "Landscaped Grounds"],
+        address: "6500 Park of Commerce Blvd, Boca Raton, FL 33487"
+      },
+      {
+        id: 10,
+        title: "Tech Manufacturing Hub",
+        location: "Delray Beach, FL",
+        size: "110,000 SF",
+        sizeValue: 110000,
+        price: "$16.75",
+        type: "Manufacturing",
+        image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+        available: true,
+        county: "Palm Beach",
+        description: "High-tech manufacturing facility with clean room capabilities and advanced utilities for precision operations.",
+        features: ["Clean Room Ready", "Advanced Utilities", "High Power Load", "Precision HVAC"],
+        address: "15000 Jog Rd, Delray Beach, FL 33446"
+      },
+      {
+        id: 12,
+        title: "Multi-Use Industrial",
+        location: "West Palm Beach, FL",
+        size: "80,000 SF",
+        sizeValue: 80000,
+        price: "$14.50",
+        type: "Flex Space",
+        image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+        available: true,
+        county: "Palm Beach",
+        description: "Multi-use industrial facility combining warehouse, light manufacturing, and office space in one location.",
+        features: ["Mixed Use Design", "Office Component", "Flexible Zoning", "Convenient Location"],
+        address: "2800 Corporate Way, West Palm Beach, FL 33407"
+      },
+      {
+        id: 13,
+        title: "Distribution Center",
+        location: "Boynton Beach, FL",
+        size: "90,000 SF",
+        sizeValue: 90000,
+        price: "$13.25",
+        type: "Distribution",
+        image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+        available: true,
+        county: "Palm Beach",
+        description: "Efficient distribution center with modern material handling systems and excellent transportation access.",
+        features: ["Material Handling Systems", "Transportation Access", "Energy Efficient", "Expansion Ready"],
+        address: "1500 Old Boynton Rd, Boynton Beach, FL 33426"
+      }
+    ],
+    "St. Lucie": [
+      {
+        id: 14,
+        title: "Port Industrial Center",
+        location: "Port St. Lucie, FL",
+        size: "55,000 SF",
+        sizeValue: 55000,
+        price: "$11.25",
+        type: "Warehouse",
+        image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+        available: true,
+        county: "St. Lucie",
+        description: "Modern warehouse facility in the growing Port St. Lucie industrial corridor with excellent highway access.",
+        features: ["Highway Access", "Modern Loading", "Flexible Layout", "Expansion Ready"],
+        address: "2500 SW Gatlin Blvd, Port St. Lucie, FL 34953"
+      },
+      {
+        id: 15,
+        title: "Treasure Coast Distribution",
+        location: "Fort Pierce, FL",
+        size: "85,000 SF",
+        sizeValue: 85000,
+        price: "$10.50",
+        type: "Distribution",
+        image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+        available: true,
+        county: "St. Lucie",
+        description: "Large distribution facility serving the Treasure Coast with rail and highway access for efficient logistics.",
+        features: ["Rail Access", "Highway Access", "Cross-Dock Capable", "Expansion Ready"],
+        address: "4200 Orange Ave, Fort Pierce, FL 34947"
+      }
+    ]
+  };
+
+  const allWarehouses = Object.values(warehousesByCounty).flat();
+  return allWarehouses.map((warehouse) => ({
+    params: { id: warehouse.id.toString() },
+    props: { warehouse },
+  }));
+}
+
+const { warehouse } = Astro.props;
+
+// Recreate warehouse data for component scope (needed for related properties)
+const warehousesByCounty = {
+  "Miami-Dade": [
+    {
+      id: 1,
+      title: "Modern Distribution Center",
+      location: "Doral, FL",
+      size: "85,000 SF",
+      sizeValue: 85000,
+      price: "$12.50",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      photos: [
+        "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop"
+      ],
+      available: true,
+      county: "Miami-Dade",
+      description: "Premium distribution center featuring modern dock-high loading, 32-foot clear heights, and excellent highway access.",
+      features: ["Dock High Loading", "32' Clear Height", "Highway Access", "LED Lighting", "ESFR Sprinkler System", "Climate Control"],
+      address: "8200 NW 36th St, Doral, FL 33166"
+    },
+    {
+      id: 2,
+      title: "Prime Warehouse Space",
+      location: "Hialeah, FL",
+      size: "45,000 SF",
+      sizeValue: 45000,
+      price: "$10.75",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+      photos: [
+        "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop"
+      ],
+      available: true,
+      county: "Miami-Dade",
+      description: "Well-maintained warehouse space in prime Hialeah location. Features grade-level and dock-high doors.",
+      features: ["Grade Level Doors", "Dock High Doors", "Flexible Layout", "Ample Parking"],
+      address: "1150 W 29th St, Hialeah, FL 33012"
+    },
+    {
+      id: 3,
+      title: "Manufacturing Facility",
+      location: "Miami, FL",
+      size: "120,000 SF",
+      sizeValue: 120000,
+      price: "$15.00",
+      type: "Manufacturing",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+      photos: [
+        "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop"
+      ],
+      available: true,
+      county: "Miami-Dade",
+      description: "Large-scale manufacturing facility with heavy power and crane-ready infrastructure.",
+      features: ["Heavy Power", "Crane Ready"],
+      address: "3800 NW 25th St, Miami, FL 33142"
+    },
+    {
+      id: 7,
+      title: "Cold Storage Facility",
+      location: "Miami Beach, FL",
+      size: "35,000 SF",
+      sizeValue: 35000,
+      price: "$18.00",
+      type: "Cold Storage",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+      available: true,
+      county: "Miami-Dade",
+      description: "State-of-the-art cold storage facility with temperature-controlled environments and food-grade standards.",
+      features: ["Temperature Controlled", "Food Grade", "24/7 Security", "Loading Docks"],
+      address: "500 Alton Rd, Miami Beach, FL 33139"
+    }
+  ],
+  "Broward": [
+    {
+      id: 4,
+      title: "Flex Industrial Space",
+      location: "Pompano Beach, FL",
+      size: "25,000 SF",
+      sizeValue: 25000,
+      price: "$14.25",
+      type: "Flex Space",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+      available: true,
+      county: "Broward",
+      description: "Versatile flex industrial space perfect for light manufacturing, assembly, or warehouse operations with office component.",
+      features: ["Office Space", "Drive-In Doors", "Flexible Layout", "Good Highway Access"],
+      address: "1200 N Federal Hwy, Pompano Beach, FL 33062"
+    },
+    {
+      id: 5,
+      title: "Logistics Hub",
+      location: "Fort Lauderdale, FL",
+      size: "95,000 SF",
+      sizeValue: 95000,
+      price: "$11.80",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      available: true,
+      county: "Broward",
+      description: "Large-scale logistics and distribution facility with excellent interstate access and modern dock facilities.",
+      features: ["Multiple Dock Doors", "Interstate Access", "Cross-Dock Design", "24-Hour Operations"],
+      address: "3600 Davie Blvd, Fort Lauderdale, FL 33312"
+    },
+    {
+      id: 9,
+      title: "Distribution Warehouse",
+      location: "Hollywood, FL",
+      size: "75,000 SF",
+      sizeValue: 75000,
+      price: "$13.25",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+      available: true,
+      county: "Broward",
+      description: "Modern distribution warehouse with high-efficiency LED lighting and climate-controlled office areas.",
+      features: ["LED Lighting", "Climate Controlled Office", "Clear Span Design", "Ample Trailer Parking"],
+      address: "2850 Stirling Rd, Hollywood, FL 33312"
+    },
+    {
+      id: 11,
+      title: "Port Access Facility",
+      location: "Dania Beach, FL",
+      size: "60,000 SF",
+      sizeValue: 60000,
+      price: "$12.75",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+      available: true,
+      county: "Broward",
+      description: "Strategic warehouse location with direct port access for import/export operations and container storage.",
+      features: ["Port Access", "Container Storage", "Customs Bonded", "Security Fencing"],
+      address: "101 SE 2nd Ave, Dania Beach, FL 33004"
+    }
+  ],
+  "Palm Beach": [
+    {
+      id: 6,
+      title: "Industrial Complex",
+      location: "Boca Raton, FL",
+      size: "65,000 SF",
+      sizeValue: 65000,
+      price: "$13.50",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+      available: true,
+      county: "Palm Beach",
+      description: "Premium industrial complex in Boca Raton with modern amenities and professional office spaces.",
+      features: ["Professional Offices", "Modern Loading", "Secure Access", "Landscaped Grounds"],
+      address: "6500 Park of Commerce Blvd, Boca Raton, FL 33487"
+    },
+    {
+      id: 10,
+      title: "Tech Manufacturing Hub",
+      location: "Delray Beach, FL",
+      size: "110,000 SF",
+      sizeValue: 110000,
+      price: "$16.75",
+      type: "Manufacturing",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+      available: true,
+      county: "Palm Beach",
+      description: "High-tech manufacturing facility with clean room capabilities and advanced utilities for precision operations.",
+      features: ["Clean Room Ready", "Advanced Utilities", "High Power Load", "Precision HVAC"],
+      address: "15000 Jog Rd, Delray Beach, FL 33446"
+    },
+    {
+      id: 12,
+      title: "Multi-Use Industrial",
+      location: "West Palm Beach, FL",
+      size: "80,000 SF",
+      sizeValue: 80000,
+      price: "$14.50",
+      type: "Flex Space",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      available: true,
+      county: "Palm Beach",
+      description: "Multi-use industrial facility combining warehouse, light manufacturing, and office space in one location.",
+      features: ["Mixed Use Design", "Office Component", "Flexible Zoning", "Convenient Location"],
+      address: "2800 Corporate Way, West Palm Beach, FL 33407"
+    },
+    {
+      id: 13,
+      title: "Distribution Center",
+      location: "Boynton Beach, FL",
+      size: "90,000 SF",
+      sizeValue: 90000,
+      price: "$13.25",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+      available: true,
+      county: "Palm Beach",
+      description: "Efficient distribution center with modern material handling systems and excellent transportation access.",
+      features: ["Material Handling Systems", "Transportation Access", "Energy Efficient", "Expansion Ready"],
+      address: "1500 Old Boynton Rd, Boynton Beach, FL 33426"
+    }
+  ],
+  "St. Lucie": [
+    {
+      id: 14,
+      title: "Port Industrial Center",
+      location: "Port St. Lucie, FL",
+      size: "55,000 SF",
+      sizeValue: 55000,
+      price: "$11.25",
+      type: "Warehouse",
+      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+      available: true,
+      county: "St. Lucie",
+      description: "Modern warehouse facility in the growing Port St. Lucie industrial corridor with excellent highway access.",
+      features: ["Highway Access", "Modern Loading", "Flexible Layout", "Expansion Ready"],
+      address: "2500 SW Gatlin Blvd, Port St. Lucie, FL 34953"
+    },
+    {
+      id: 15,
+      title: "Treasure Coast Distribution",
+      location: "Fort Pierce, FL",
+      size: "85,000 SF",
+      sizeValue: 85000,
+      price: "$10.50",
+      type: "Distribution",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      available: true,
+      county: "St. Lucie",
+      description: "Large distribution facility serving the Treasure Coast with rail and highway access for efficient logistics.",
+      features: ["Rail Access", "Highway Access", "Cross-Dock Capable", "Expansion Ready"],
+      address: "4200 Orange Ave, Fort Pierce, FL 34947"
+    }
+  ]
+};
+
+// Related properties (same county, different property)
+const allWarehouses = Object.values(warehousesByCounty).flat();
+const relatedProperties = allWarehouses
+  .filter(w => w.county === warehouse.county && w.id !== warehouse.id)
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title={`${warehouse.title} | Warehouse for Lease | Shallow Bay Advisors`}
+  description={`${warehouse.description} - ${warehouse.sizeValue?.toLocaleString()} SF warehouse in ${warehouse.location}. ${warehouse.price} per SF. Available for immediate lease.`}
+  image={warehouse.image}
+>
+  <Navigation />
+
+  <main class="pt-20">
+    <!-- Breadcrumb -->
+    <div class="bg-white border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-6 py-4">
+        <nav class="text-sm">
+          <a href="/" class="text-gray-600 hover:text-sba-navy">Home</a>
+          <span class="mx-2 text-gray-400">></span>
+          <span class="text-sba-navy font-medium">{warehouse.title}</span>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Property Title Section -->
+    <section class="bg-white border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-6 py-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 class="text-3xl font-semibold text-gray-900 mb-2">{warehouse.title}</h1>
+            <div class="flex items-center text-gray-600 mb-2 md:mb-0">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              {warehouse.address}
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="text-right">
+              <div class="text-2xl font-bold text-gray-900">{warehouse.price}<span class="text-lg font-normal">/SF</span></div>
+              <div class="text-sm text-gray-600">{warehouse.size} • {warehouse.type}</div>
+            </div>
+            <div class={`px-3 py-1 rounded-full text-sm font-medium ${warehouse.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+              {warehouse.available ? 'Available' : 'Leased'}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Airbnb-Style Main Section -->
+    <section class="bg-white">
+      <div class="max-w-7xl mx-auto px-6 py-8">
+
+        <!-- Two Column Layout -->
+        <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+
+          <!-- Left Column: Photo Gallery (60%) -->
+          <div class="lg:col-span-7">
+            <!-- Consistent Photo Gallery Layout -->
+            <!-- Main Large Image -->
+            <div class="relative aspect-[4/3] rounded-xl overflow-hidden mb-4">
+              <img
+                src={warehouse.image}
+                alt={warehouse.title}
+                class="w-full h-full object-cover"
+              />
+              <button class="absolute bottom-4 right-4 bg-white text-gray-900 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 shadow-lg">
+                <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"/>
+                </svg>
+                Show all photos
+              </button>
+            </div>
+
+            <!-- Horizontal Gallery Under Main Image -->
+            <div class="flex gap-3 overflow-x-auto scrollbar-hide pb-4 mb-8" style="scroll-snap-type: x mandatory;">
+              {(warehouse.photos || [warehouse.image]).map((photo, index) => (
+                <div class="flex-none w-24 aspect-[4/3] rounded-lg overflow-hidden" style="scroll-snap-align: start;">
+                  <img
+                    src={photo}
+                    alt={`${warehouse.title} - Photo ${index + 1}`}
+                    class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <!-- Property Details Cards Below Photos -->
+            <div class="mt-8">
+              <h2 class="text-xl font-semibold text-gray-900 mb-6">Property Details</h2>
+
+              <!-- Key Details Grid -->
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                  <div class="text-sm text-gray-600 mb-1">Total Square Footage</div>
+                  <div class="text-lg font-semibold text-gray-900">{warehouse.size}</div>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                  <div class="text-sm text-gray-600 mb-1">Property Type</div>
+                  <div class="text-lg font-semibold text-gray-900">{warehouse.type}</div>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                  <div class="text-sm text-gray-600 mb-1">Lease Rate</div>
+                  <div class="text-lg font-semibold text-gray-900">{warehouse.price}/SF annually</div>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                  <div class="text-sm text-gray-600 mb-1">County</div>
+                  <div class="text-lg font-semibold text-gray-900">{warehouse.county}</div>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                  <div class="text-sm text-gray-600 mb-1">Location</div>
+                  <div class="text-lg font-semibold text-gray-900">{warehouse.location}</div>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                  <div class="text-sm text-gray-600 mb-1">Availability</div>
+                  <div class="text-lg font-semibold text-green-600">
+                    {warehouse.available ? 'Available Now' : 'Coming Soon'}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Property Features -->
+              <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Key Features</h3>
+                <!-- Adaptive Grid Container - Fixed Height -->
+                <div class="h-32">
+                  <div class={`grid gap-3 h-full ${
+                    warehouse.features.length === 1 ? 'grid-cols-1 place-items-center' :
+                    warehouse.features.length === 2 ? 'grid-cols-2' :
+                    warehouse.features.length === 3 ? 'grid-cols-3' :
+                    warehouse.features.length === 4 ? 'grid-cols-2 grid-rows-2' :
+                    warehouse.features.length === 5 ? 'grid-cols-3 grid-rows-2' :
+                    'grid-cols-3 grid-rows-2'
+                  }`}>
+                    {warehouse.features.map((feature, index) => (
+                      <div class={`bg-gradient-to-br from-sba-navy to-sba-navy-dark text-white rounded-xl flex items-center justify-center text-center p-4 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 transform ${
+                        warehouse.features.length === 5 && index === 4 ? 'col-start-2' : ''
+                      }`}>
+                        <span class="font-semibold text-base leading-tight">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Property Info + Booking (40%) -->
+          <div class="lg:col-span-5 mt-8 lg:mt-0">
+            <div class="lg:sticky lg:top-24">
+
+              <!-- Booking Form -->
+              <div class="border border-gray-200 rounded-xl p-6 bg-gray-50">
+                <CalendarBooking
+                  title="Schedule a Tour"
+                  subtitle="Book a consultation with our team"
+                  buttonText="Schedule Property Tour"
+                  propertyId={warehouse.id.toString()}
+                  propertyTitle={warehouse.title}
+                />
+              </div>
+
+              <!-- Contact Info -->
+              <div class="mt-6 p-6 bg-gradient-to-br from-sba-navy to-sba-navy-dark rounded-xl text-center shadow-lg">
+                <div class="flex items-center justify-center mb-3">
+                  <svg class="w-5 h-5 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21L6.16 11.37a11.045 11.045 0 006.516 6.516l1.983-4.064a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                  </svg>
+                  <p class="text-white font-medium">Need immediate assistance?</p>
+                </div>
+                <a href="tel:954-937-9667" class="inline-block bg-white text-sba-navy font-bold text-lg px-6 py-3 rounded-lg hover:bg-gray-50 hover:scale-105 transition-all duration-300 shadow-md">
+                  (954) 937-9667
+                </a>
+                <p class="text-white/80 text-sm mt-3">Available Mon-Fri, 9AM-6PM EST</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Google Maps Location Section -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Property Location</h2>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+          <!-- Location Details -->
+          <div class="lg:col-span-1">
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">Address</h3>
+              <p class="text-gray-700 mb-4">{warehouse.address}</p>
+
+              <div class="space-y-3">
+                <div class="flex items-center">
+                  <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  <span class="text-gray-700">{warehouse.location}</span>
+                </div>
+                <div class="flex items-center">
+                  <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m-6 3a1 1 0 102 0v10a1 1 0 11-2 0V7z"/>
+                  </svg>
+                  <span class="text-gray-700">{warehouse.county} County</span>
+                </div>
+              </div>
+
+              <div class="mt-6 pt-6 border-t border-gray-200">
+                <a
+                  href={`https://maps.google.com/maps?q=${encodeURIComponent(warehouse.address)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center text-sba-navy hover:text-sba-navy-dark font-medium"
+                >
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                  </svg>
+                  Open in Google Maps
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Google Maps Embed -->
+          <div class="lg:col-span-2">
+            <div class="w-full h-96 rounded-xl overflow-hidden border border-gray-200">
+              <iframe
+                width="100%"
+                height="100%"
+                frameborder="0"
+                style="border:0"
+                src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBGHNGaThd-Qhp-kRGdNL1V4HZDRJaQr5M&q=${encodeURIComponent(warehouse.address)}&maptype=roadmap&zoom=15`}
+                allowfullscreen>
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Property Description -->
+    <section class="py-16 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-4xl mx-auto">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">About This Property</h2>
+          <p class="text-lg text-gray-700 leading-relaxed">{warehouse.description}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Properties -->
+    {relatedProperties.length > 0 && (
+      <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+          <h2 class="text-2xl font-bold text-gray-900 mb-8">Other Properties in {warehouse.county}</h2>
+
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {relatedProperties.map((property) => (
+              <a href={`/property/${property.id}`} class="group">
+                <div class="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow">
+                  <div class="aspect-[4/3] overflow-hidden">
+                    <img
+                      src={property.image}
+                      alt={property.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div class="p-6">
+                    <h3 class="font-semibold text-gray-900 mb-2">{property.title}</h3>
+                    <p class="text-gray-600 mb-3">{property.location}</p>
+                    <div class="flex justify-between items-center">
+                      <span class="text-sm text-gray-500">{property.size} • {property.type}</span>
+                      <span class="font-semibold text-sba-navy">{property.price}/SF</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+  </main>
+
+  <Footer />
+</BaseLayout>

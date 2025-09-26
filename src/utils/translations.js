@@ -3,7 +3,6 @@ export const translations = {
   en: {
     // Navigation
     nav_home: "Home",
-    nav_properties: "Properties",
     nav_book_consultation: "Book Consultation",
     nav_about: "About",
     nav_contact: "Contact",
@@ -56,7 +55,6 @@ export const translations = {
   es: {
     // Navigation
     nav_home: "Inicio",
-    nav_properties: "Propiedades",
     nav_book_consultation: "Reservar Consulta",
     nav_about: "Acerca de",
     nav_contact: "Contacto",

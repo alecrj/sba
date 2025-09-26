@@ -3,9 +3,25 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
-import { getCollection } from 'astro:content';
+// Define proper types based on CRM API structure
+interface Property {
+  id: string;
+  title: string;
+  location: string;
+  price: string;
+  size: number;
+  description: string;
+  images?: string[];
+  features?: string[];
+  featured?: boolean;
+  available?: boolean;
+  slug?: string;
+  county?: string;
+  type?: string;
+  created_at?: string;
+  updated_at?: string;
+}
 
-// Define proper types
 interface WarehouseData {
   title: string;
   location: string;
@@ -17,14 +33,14 @@ interface WarehouseData {
   featured?: boolean;
   availability?: string;
   slug: string;
-  county?: string; // Added optional county field
+  county?: string;
 }
 
 interface Warehouse {
   data: WarehouseData;
 }
 
-// Get warehouse data from CMS
+// Get warehouse data from CRM API
 let allWarehouses: Warehouse[] = [];
 let availableWarehouses: Warehouse[] = [];
 let pendingWarehouses: Warehouse[] = [];
@@ -32,17 +48,43 @@ let totalSqFt = 0;
 let averageSize = 0;
 
 try {
-  allWarehouses = await getCollection('warehouses');
-  availableWarehouses = allWarehouses.filter((w: Warehouse) => w.data.availability === 'available');
-  pendingWarehouses = allWarehouses.filter((w: Warehouse) => w.data.availability === 'pending');
-  totalSqFt = allWarehouses.reduce((sum: number, w: Warehouse) => sum + (w.data.size || 0), 0);
-  averageSize = allWarehouses.length > 0 ? Math.round(totalSqFt / allWarehouses.length) : 0;
+  const crmApiUrl = import.meta.env.CRM_API_URL || 'https://sbaycrm.netlify.app';
+  const response = await fetch(`${crmApiUrl}/api/public/properties?available=true`);
+
+  if (response.ok) {
+    const result = await response.json();
+    const properties: Property[] = result.properties || [];
+
+    // Transform CRM properties to warehouse format for compatibility
+    allWarehouses = properties.map((property: Property) => ({
+      data: {
+        title: property.title,
+        location: property.location,
+        price: property.price,
+        size: property.size,
+        description: property.description,
+        images: property.images,
+        features: property.features,
+        featured: property.featured,
+        availability: property.available ? 'available' : 'unavailable',
+        slug: property.slug || property.id,
+        county: property.county
+      }
+    }));
+
+    availableWarehouses = allWarehouses.filter((w: Warehouse) => w.data.availability === 'available');
+    pendingWarehouses = allWarehouses.filter((w: Warehouse) => w.data.availability === 'pending');
+    totalSqFt = allWarehouses.reduce((sum: number, w: Warehouse) => sum + (w.data.size || 0), 0);
+    averageSize = allWarehouses.length > 0 ? Math.round(totalSqFt / allWarehouses.length) : 0;
+  } else {
+    console.log('Failed to fetch properties from CRM:', response.status, response.statusText);
+  }
 } catch (error) {
-  console.log('No warehouse data yet:', error);
+  console.log('Error fetching properties from CRM:', error);
 }
 
-// Fixed counties array - these are the 3 South Florida counties
-const counties = ['Miami-Dade', 'Palm Beach', 'Broward'];
+// Fixed counties array - these are the 4 South Florida counties
+const counties = ['Miami-Dade', 'Palm Beach', 'Broward', 'St. Lucie'];
 
 // Get search parameters
 const url = Astro.url;
