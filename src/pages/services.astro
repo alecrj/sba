@@ -586,7 +586,7 @@ const warehousesByCounty = {
         <!-- View All Properties Button -->
         <div id="view-all-button" class="text-center mt-12 hidden">
           <a
-            href="/properties"
+            href="/contact"
             class="inline-flex items-center px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold rounded-2xl transition-all duration-200"
           >
             Show all properties
@@ -999,7 +999,7 @@ const warehousesByCounty = {
 
       // Mobile horizontal scroll layout
       const mobileHTML = properties.map(warehouse => `
-        <a href="/properties/${warehouse.id}" class="block group flex-none" style="scroll-snap-align: start; width: calc((100vw - 2rem - 1rem) / 2.1);">
+        <a href="/contact" class="block group flex-none" style="scroll-snap-align: start; width: calc((100vw - 2rem - 1rem) / 2.1);">
           <div class="bg-white rounded-xl overflow-hidden">
             <div class="relative overflow-hidden rounded-xl" style="aspect-ratio: 1.15/1;">
               <img
@@ -1029,7 +1029,7 @@ const warehousesByCounty = {
 
       // Desktop grid layout
       const desktopHTML = properties.map(warehouse => `
-        <a href="/properties/${warehouse.id}" class="block group">
+        <a href="/contact" class="block group">
           <div class="bg-white rounded-xl overflow-hidden">
             <div class="relative overflow-hidden rounded-xl" style="aspect-ratio: 1.15/1;">
               <img
@@ -1281,7 +1281,7 @@ const warehousesByCounty = {
                   </span>
                 </div>
                 <a
-                  href="/properties/${property.id}"
+                  href="/contact"
                   class="inline-flex items-center px-4 py-2 bg-sba-navy text-white font-semibold rounded-lg hover:bg-sba-navy-dark transition-all duration-200 shadow-sm hover:shadow-md"
                 >
                   View Full Details
