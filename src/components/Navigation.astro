@@ -15,49 +15,57 @@ const isActive = (path: string) => {
     <div class="flex items-center justify-between h-20">
 
       <!-- Logo (Left) - 2x bigger -->
-      <div class="flex-shrink-0">
-        <a href="/" class="flex items-center">
+      <div class="flex-shrink-0" style="min-width: 120px; width: 120px;">
+        <a href="/" class="flex items-center" style="display: block; width: 120px; height: 64px; background-color: transparent;">
           <img
             src="/images/uploads/sba-transparent.png"
             alt="Shallow Bay Advisors"
             class="h-16 w-auto"
+            style="width: 120px; height: 64px; object-fit: contain; display: block; opacity: 1; transition: none;"
+            loading="eager"
+            decoding="sync"
           />
         </a>
       </div>
 
       <!-- Center Navigation Links -->
-      <div class="hidden sm:flex items-center justify-center flex-1 space-x-6">
+      <div class="hidden sm:flex items-center justify-center flex-1 space-x-6" style="min-width: 300px;">
         <a
           href="/"
           class="text-sm font-medium text-sba-navy hover:text-sba-navy-dark transition-colors duration-200 px-3 py-2 rounded-full hover:bg-white/20 backdrop-blur-sm"
+          style="min-width: 60px; text-align: center;"
         >
           Find
         </a>
         <a
           href="/about"
           class="text-sm font-medium text-sba-navy hover:text-sba-navy-dark transition-colors duration-200 px-3 py-2 rounded-full hover:bg-white/20 backdrop-blur-sm"
+          style="min-width: 60px; text-align: center;"
         >
           About
         </a>
         <a
           href="/services"
           class="text-sm font-medium text-sba-navy hover:text-sba-navy-dark transition-colors duration-200 px-3 py-2 rounded-full hover:bg-white/20 backdrop-blur-sm"
+          style="min-width: 70px; text-align: center;"
         >
           Services
         </a>
         <a
           href="/contact"
           class="text-sm font-medium text-sba-navy hover:text-sba-navy-dark transition-colors duration-200 px-3 py-2 rounded-full hover:bg-white/20 backdrop-blur-sm"
+          style="min-width: 70px; text-align: center;"
         >
           Contact
         </a>
       </div>
 
       <!-- Right Side: Book Tour Button -->
-      <div class="hidden sm:flex items-center">
+      <div class="hidden sm:flex items-center" style="min-width: 120px; justify-content: flex-end;">
         <a
           href="/book-consultation"
-          class="bg-sba-navy/90 backdrop-blur-sm text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-sba-navy transition-all duration-200 shadow-md hover:shadow-lg border border-sba-navy/30"
+          class="bg-sba-navy/90 backdrop-blur-sm text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-sba-navy transition-all duration-300 shadow-md hover:shadow-xl border border-sba-navy/30 hover:scale-105 hover:-translate-y-0.5 active:scale-95"
+          style="min-width: 100px; text-align: center;"
         >
           Book Tour
         </a>
@@ -74,30 +82,39 @@ const isActive = (path: string) => {
     let lastScrollY = window.scrollY;
     const nav = document.getElementById('main-nav');
 
+    // Ensure nav starts visible and stable
+    if (nav) {
+      nav.style.transform = 'translateY(0)';
+      nav.style.transition = 'transform 0.3s ease-in-out';
+    }
+
     function updateNavOnScroll() {
       const currentScrollY = window.scrollY;
 
       if (currentScrollY > lastScrollY && currentScrollY > 80) {
         // Scrolling down & past initial threshold - hide nav
-        nav.style.transform = 'translateY(-100%)';
+        if (nav) nav.style.transform = 'translateY(-100%)';
       } else {
         // Scrolling up or at top - show nav
-        nav.style.transform = 'translateY(0)';
+        if (nav) nav.style.transform = 'translateY(0)';
       }
 
       lastScrollY = currentScrollY;
     }
 
-    // Throttle scroll events for performance
-    let ticking = false;
-    window.addEventListener('scroll', function() {
-      if (!ticking) {
-        requestAnimationFrame(updateNavOnScroll);
-        ticking = true;
-        setTimeout(() => { ticking = false; }, 10);
-      }
-    });
-
+    // Small delay to prevent flash on page load
+    setTimeout(() => {
+      // Throttle scroll events for performance
+      let ticking = false;
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          requestAnimationFrame(updateNavOnScroll);
+          ticking = true;
+          setTimeout(() => { ticking = false; }, 10);
+        }
+      });
+    }, 100);
 
   });
 </script>
+
