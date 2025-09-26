@@ -25,7 +25,7 @@ const warehousesByCounty = {
       available: true,
       county: "Miami-Dade",
       description: "Premium distribution center featuring modern dock-high loading, 32-foot clear heights, and excellent highway access.",
-      features: ["Dock High Loading", "32' Clear Height", "Highway Access", "LED Lighting", "ESFR Sprinkler System"],
+      features: ["Dock High Loading", "32' Clear Height", "Highway Access", "LED Lighting", "ESFR Sprinkler System", "Climate Control"],
       address: "8200 NW 36th St, Doral, FL 33166"
     },
     {
@@ -65,7 +65,7 @@ const warehousesByCounty = {
       available: true,
       county: "Miami-Dade",
       description: "Large-scale manufacturing facility with heavy power and crane-ready infrastructure.",
-      features: ["Heavy Power", "Crane Ready", "High Ceilings", "Rail Access"],
+      features: ["Heavy Power", "Crane Ready"],
       address: "3800 NW 25th St, Miami, FL 33142"
     },
     {
@@ -540,13 +540,24 @@ const relatedProperties = allWarehouses
               <!-- Property Features -->
               <div class="bg-white rounded-lg border border-gray-200 p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Key Features</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {warehouse.features.map(feature => (
-                    <div class="flex items-center space-x-2">
-                      <div class="w-2 h-2 bg-sba-navy rounded-full"></div>
-                      <span class="text-gray-700">{feature}</span>
-                    </div>
-                  ))}
+                <!-- Adaptive Grid Container - Fixed Height -->
+                <div class="h-32">
+                  <div class={`grid gap-3 h-full ${
+                    warehouse.features.length === 1 ? 'grid-cols-1 place-items-center' :
+                    warehouse.features.length === 2 ? 'grid-cols-2' :
+                    warehouse.features.length === 3 ? 'grid-cols-3' :
+                    warehouse.features.length === 4 ? 'grid-cols-2 grid-rows-2' :
+                    warehouse.features.length === 5 ? 'grid-cols-3 grid-rows-2' :
+                    'grid-cols-3 grid-rows-2'
+                  }`}>
+                    {warehouse.features.map((feature, index) => (
+                      <div class={`bg-gradient-to-br from-sba-navy to-sba-navy-dark text-white rounded-xl flex items-center justify-center text-center p-4 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 transform ${
+                        warehouse.features.length === 5 && index === 4 ? 'col-start-2' : ''
+                      }`}>
+                        <span class="font-semibold text-base leading-tight">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -568,13 +579,17 @@ const relatedProperties = allWarehouses
               </div>
 
               <!-- Contact Info -->
-              <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-                <div class="text-center">
-                  <p class="text-sm text-gray-600 mb-2">Need immediate assistance?</p>
-                  <a href="tel:954-937-9667" class="text-sba-navy font-semibold hover:text-sba-navy-dark">
-                    (954) 937-9667
-                  </a>
+              <div class="mt-6 p-6 bg-gradient-to-br from-sba-navy to-sba-navy-dark rounded-xl text-center shadow-lg">
+                <div class="flex items-center justify-center mb-3">
+                  <svg class="w-5 h-5 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21L6.16 11.37a11.045 11.045 0 006.516 6.516l1.983-4.064a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                  </svg>
+                  <p class="text-white font-medium">Need immediate assistance?</p>
                 </div>
+                <a href="tel:954-937-9667" class="inline-block bg-white text-sba-navy font-bold text-lg px-6 py-3 rounded-lg hover:bg-gray-50 hover:scale-105 transition-all duration-300 shadow-md">
+                  (954) 937-9667
+                </a>
+                <p class="text-white/80 text-sm mt-3">Available Mon-Fri, 9AM-6PM EST</p>
               </div>
 
             </div>
