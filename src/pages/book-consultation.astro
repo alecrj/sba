@@ -1,348 +1,128 @@
 ---
-// Professional Consultation Booking Page
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
+import MobileAppHeader from '../components/MobileAppHeader.astro';
 import Footer from '../components/Footer.astro';
-
-// Available time slots
-const timeSlots = [
-  '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
-  '12:00 PM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM',
-  '3:30 PM', '4:00 PM', '4:30 PM', '5:00 PM'
-];
-
-// Consultation types
-const consultationTypes = [
-  {
-    title: 'Tenant Consultation',
-    description: 'Find the perfect warehouse space for your business',
-    duration: '30 minutes',
-    icon: 'search'
-  },
-  {
-    title: 'Landlord Consultation',
-    description: 'Maximize your property value and occupancy',
-    duration: '45 minutes',
-    icon: 'building'
-  },
-  {
-    title: 'Investment Advisory',
-    description: 'Commercial real estate investment opportunities',
-    duration: '60 minutes',
-    icon: 'chart'
-  }
-];
+import CalendarBooking from '../components/CalendarBooking.astro';
 ---
 
-<BaseLayout
-  title="Book a Consultation | Shallow Bay Advisors"
-  description="Schedule a consultation with our commercial real estate experts. Find warehouse space, maximize property value, or explore investment opportunities in South Florida."
->
+<BaseLayout title="Book Property Tour | Shallow Bay Advisors">
   <Navigation />
+  <MobileAppHeader />
 
-  <main class="pt-44">
-
+  <main class="pt-20">
     <!-- Hero Section -->
-    <section class="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="font-display text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-          Schedule Your Consultation
+    <section class="pt-16 md:pt-28 pb-12 md:pb-20">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <h1 class="text-3xl md:text-5xl font-light text-gray-900 mb-6 font-['Poppins'] tracking-tight leading-tight">
+          Book Property Tour
         </h1>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-          Connect with our commercial real estate experts and discover the perfect warehouse solution for your business needs in South Florida.
+        <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          Schedule a tour of any property that caught your interest. Our team will show you around and answer all your questions.
         </p>
-        <div class="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-            Free consultation
-          </div>
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-            Expert guidance
-          </div>
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-            No obligation
-          </div>
+      </div>
+    </section>
+
+
+    <!-- Property Tour Booking -->
+    <section class="py-16">
+      <div class="max-w-2xl mx-auto px-6">
+        <div class="bg-white rounded-xl p-8 shadow-lg border border-gray-200">
+          <CalendarBooking
+            title=""
+            subtitle=""
+            buttonText="Schedule Property Tour"
+          />
         </div>
       </div>
     </section>
 
-    <!-- Consultation Types -->
+    <!-- What to Expect -->
     <section class="py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto px-6">
         <div class="text-center mb-12">
-          <h2 class="font-display text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-            Choose Your Consultation Type
+          <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
+            What to Expect on Your Tour
           </h2>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-            Select the consultation that best fits your commercial real estate needs
+          <p class="text-gray-600">
+            Professional property tours designed to help you make informed decisions
           </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8 mb-16">
-          {consultationTypes.map((consultation) => (
-            <div class="card p-8 text-center hover:shadow-xl transition-all duration-300 cursor-pointer group border-2 border-transparent hover:border-primary/20">
-              <div class="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-2xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                {consultation.icon === 'search' && (
-                  <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                  </svg>
-                )}
-                {consultation.icon === 'building' && (
-                  <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                  </svg>
-                )}
-                {consultation.icon === 'chart' && (
-                  <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                  </svg>
-                )}
-              </div>
-              <h3 class="font-display text-xl font-semibold text-gray-900 mb-3">
-                {consultation.title}
-              </h3>
-              <p class="text-gray-600 mb-4">
-                {consultation.description}
-              </p>
-              <span class="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
-                {consultation.duration}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- Booking Form -->
-    <section class="py-16 bg-gray-50">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
-          <div class="text-center mb-10">
-            <h2 class="font-display text-3xl font-bold text-gray-900 mb-4">
-              Book Your Consultation
-            </h2>
-            <p class="text-gray-600">
-              Fill out the form below and we'll contact you to confirm your appointment
-            </p>
-          </div>
-
-          <form id="consultation-booking-form" class="space-y-8">
-            <input type="hidden" name="source" value="consultation-booking" />
-
-            <!-- Personal Information -->
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <label for="firstName" class="block text-sm font-semibold text-gray-700 mb-2">
-                  First Name *
-                </label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="name"
-                  required
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
-                  placeholder="John"
-                />
-              </div>
-              <div>
-                <label for="lastName" class="block text-sm font-semibold text-gray-700 mb-2">
-                  Last Name *
-                </label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  required
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
-                  placeholder="Smith"
-                />
-              </div>
-            </div>
-
-            <!-- Contact Information -->
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
-                  placeholder="john@company.com"
-                />
-              </div>
-              <div>
-                <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">
-                  Phone Number *
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  required
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
-                  placeholder="(555) 123-4567"
-                />
-              </div>
-            </div>
-
-            <!-- Company & Consultation Type -->
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <label for="company" class="block text-sm font-semibold text-gray-700 mb-2">
-                  Company Name
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
-                  placeholder="Your Company"
-                />
-              </div>
-              <div>
-                <label for="consultationType" class="block text-sm font-semibold text-gray-700 mb-2">
-                  Consultation Type *
-                </label>
-                <select
-                  id="consultationType"
-                  name="consultationType"
-                  required
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors appearance-none bg-white"
-                >
-                  <option value="">Select consultation type</option>
-                  <option value="tenant">Tenant Consultation</option>
-                  <option value="landlord">Landlord Consultation</option>
-                  <option value="investment">Investment Advisory</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Preferred Date & Time -->
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <label for="preferredDate" class="block text-sm font-semibold text-gray-700 mb-2">
-                  Preferred Date *
-                </label>
-                <input
-                  type="date"
-                  id="preferredDate"
-                  name="appointmentDate"
-                  required
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
-                />
-              </div>
-              <div>
-                <label for="preferredTime" class="block text-sm font-semibold text-gray-700 mb-2">
-                  Preferred Time *
-                </label>
-                <select
-                  id="preferredTime"
-                  name="appointmentTime"
-                  required
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors appearance-none bg-white"
-                >
-                  <option value="">Select time</option>
-                  {timeSlots.map((time) => (
-                    <option value={time}>{time}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <!-- Space Requirements -->
-            <div>
-              <label for="spaceRequirements" class="block text-sm font-semibold text-gray-700 mb-2">
-                Space Requirements & Details
-              </label>
-              <textarea
-                id="spaceRequirements"
-                name="message"
-                rows={4}
-                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors resize-none"
-                placeholder="Tell us about your space requirements, preferred location, size, special features, timeline, or any other details that would help us prepare for your consultation..."
-              ></textarea>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="text-center pt-4">
-              <button
-                type="submit"
-                class="btn btn-primary px-12 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
-              >
-                Schedule Consultation
-              </button>
-              <p class="text-sm text-gray-500 mt-4">
-                We'll contact you within 24 hours to confirm your appointment
-              </p>
-            </div>
-
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- Why Choose Us -->
-    <section class="py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="font-display text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-            Why Choose Shallow Bay Advisors?
-          </h2>
-        </div>
-
         <div class="grid md:grid-cols-3 gap-8">
-          <div class="text-center">
-            <div class="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-2xl flex items-center justify-center">
-              <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          <div class="bg-white border border-gray-200 rounded-xl p-6 text-center hover:shadow-lg transition-all duration-200">
+            <div class="w-12 h-12 mx-auto mb-4 bg-sba-navy/10 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-sba-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
               </svg>
             </div>
-            <h3 class="font-display text-xl font-semibold text-gray-900 mb-3">
-              Local Expertise
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">
+              Detailed Walkthrough
             </h3>
             <p class="text-gray-600">
-              Deep knowledge of South Florida's industrial and warehouse markets across Miami-Dade, Broward, and Palm Beach counties.
+              See every inch of the property including loading docks, office space, utilities, and special features.
             </p>
           </div>
 
-          <div class="text-center">
-            <div class="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-2xl flex items-center justify-center">
-              <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="bg-white border border-gray-200 rounded-xl p-6 text-center hover:shadow-lg transition-all duration-200">
+            <div class="w-12 h-12 mx-auto mb-4 bg-sba-navy/10 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-sba-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">
+              Expert Insights
+            </h3>
+            <p class="text-gray-600">
+              Get answers about zoning, permits, lease terms, market rates, and operational considerations.
+            </p>
+          </div>
+
+          <div class="bg-white border border-gray-200 rounded-xl p-6 text-center hover:shadow-lg transition-all duration-200">
+            <div class="w-12 h-12 mx-auto mb-4 bg-sba-navy/10 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-sba-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </div>
-            <h3 class="font-display text-xl font-semibold text-gray-900 mb-3">
-              Fast Results
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">
+              Your Timeline
             </h3>
             <p class="text-gray-600">
-              Our efficient process and extensive network help you find the right space quickly, saving you time and money.
+              Tours typically last 30-45 minutes. No pressure, no obligation - just honest guidance.
             </p>
           </div>
+        </div>
 
+        <!-- Additional Benefits -->
+        <div class="mt-12 bg-gray-50 rounded-xl p-8">
           <div class="text-center">
-            <div class="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-2xl flex items-center justify-center">
-              <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-              </svg>
-            </div>
-            <h3 class="font-display text-xl font-semibold text-gray-900 mb-3">
-              Trusted Advisor
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              Why Choose Shallow Bay Advisors?
             </h3>
-            <p class="text-gray-600">
-              Professional guidance throughout your commercial real estate journey with transparent, expert advice.
-            </p>
+            <div class="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+              <div class="flex items-start space-x-3">
+                <div class="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-gray-700 font-medium">Deep Local Knowledge</p>
+                  <p class="text-gray-600 text-sm">15+ years in South Florida industrial markets</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-gray-700 font-medium">Completely Free Service</p>
+                  <p class="text-gray-600 text-sm">Landlords pay our commission - zero cost to you</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -353,135 +133,4 @@ const consultationTypes = [
   <Footer />
 </BaseLayout>
 
-<style>
-  /* Enhanced form styling */
-  input:focus,
-  select:focus,
-  textarea:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
-  }
 
-  /* Custom select dropdown */
-  select {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 12px center;
-    background-repeat: no-repeat;
-    background-size: 16px;
-  }
-
-  /* Consultation card animations */
-  .card {
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .card:hover {
-    transform: translateY(-4px);
-  }
-
-  /* Form animations */
-  form {
-    animation: slideInUp 0.6s ease-out;
-  }
-
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('consultation-booking-form');
-
-  if (form) {
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      const submitButton = form.querySelector('button[type="submit"]');
-      const originalText = submitButton.textContent;
-
-      try {
-        submitButton.textContent = 'Scheduling...';
-        submitButton.disabled = true;
-
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-
-        // Combine first and last name
-        const firstName = data.name || '';
-        const lastName = data.lastName || '';
-        const fullName = `${firstName} ${lastName}`.trim();
-
-        // Convert consultation type to location
-        const typeMapping = {
-          'tenant': 'Office Meeting',
-          'landlord': 'Office Meeting',
-          'investment': 'Office Meeting'
-        };
-
-        const appointmentData = {
-          name: fullName,
-          email: data.email,
-          phone: data.phone,
-          company: data.company || '',
-          appointmentDate: data.appointmentDate,
-          appointmentTime: data.appointmentTime,
-          location: typeMapping[data.consultationType] || 'Office Meeting',
-          message: data.message || '',
-          title: `${data.consultationType || 'Consultation'} - ${fullName}`,
-          duration: 60,
-          source: 'consultation-booking'
-        };
-
-        const response = await fetch('/.netlify/functions/process-appointment', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: fullName,
-            email: data.email,
-            phone: data.phone,
-            company: data.company || '',
-            appointment_type: data.consultationType || 'consultation',
-            appointment_date: data.appointmentDate,
-            appointment_time: data.appointmentTime,
-            message: data.message || '',
-            source: 'consultation-booking'
-          })
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-          // Redirect to success page
-          window.location.href = '/success';
-        } else {
-          throw new Error(result.error || 'Booking failed');
-        }
-
-      } catch (error) {
-        console.error('Booking error:', error);
-        alert('Sorry, there was an error booking your consultation. Please try again or call us at (954) 937-9667.');
-
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
-      }
-    });
-  }
-
-  // Set minimum date to today
-  const dateInput = document.getElementById('appointmentDate');
-  if (dateInput) {
-    const today = new Date().toISOString().split('T')[0];
-    dateInput.min = today;
-  }
-});
-</script>

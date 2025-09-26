@@ -1,11 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
+import MobileAppHeader from '../components/MobileAppHeader.astro';
+import Footer from '../components/Footer.astro';
 import CalendarBooking from '../components/CalendarBooking.astro';
 ---
 
 <BaseLayout title="Contact Us - Shallow Bay Advisors">
   <Navigation />
+  <MobileAppHeader />
 
   <main class="pt-20">
     <!-- Hero Section -->
@@ -284,6 +287,8 @@ import CalendarBooking from '../components/CalendarBooking.astro';
     </section>
 
   </main>
+
+  <Footer />
 </BaseLayout>
 
 <style>
