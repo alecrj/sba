@@ -20,9 +20,9 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Scheduled functions for automated notifications
+# Functions configuration
 [functions]
-  schedule = "*/15 * * * *"  # Run every 15 minutes
+  directory = "netlify/functions"
 
 # Automated follow-up emails
 [[functions]]
