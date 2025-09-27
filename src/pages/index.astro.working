@@ -25,58 +25,23 @@ try {
     console.log(`Loaded ${properties.length} properties from CRM`);
 
     // Transform CRM properties to website format
-    const transformedProperties = properties.map((property, index) => {
-      // Parse size and ensure it's numeric
-      const sizeValue = parseInt(property.size?.toString().replace(/[^\d]/g, '')) || 0;
-
-      // Format size for display
-      const displaySize = sizeValue > 0 ? `${sizeValue.toLocaleString()} SF` : property.size || 'N/A';
-
-      // Map property type to typeValue for filtering
-      const typeMapping = {
-        'warehouse': 'warehouse',
-        'distribution': 'distribution',
-        'manufacturing': 'manufacturing',
-        'industrial': 'manufacturing',
-        'flex': 'flex',
-        'office': 'flex'
-      };
-      const typeValue = typeMapping[property.type?.toLowerCase()] || 'warehouse';
-
-      // Generate coordinates based on county if not provided
-      const countyCoords = {
-        'Miami-Dade': { baseLat: 25.7617, baseLng: -80.1918 },
-        'Broward': { baseLat: 26.1901, baseLng: -80.3659 },
-        'Palm Beach': { baseLat: 26.7153, baseLng: -80.0533 },
-        'St. Lucie': { baseLat: 27.2730, baseLng: -80.3582 }
-      };
-
-      const county = property.county || 'Miami-Dade';
-      const coords = countyCoords[county] || countyCoords['Miami-Dade'];
-
-      // Add small random offset for each property to avoid overlap
-      const latOffset = (Math.random() - 0.5) * 0.1;
-      const lngOffset = (Math.random() - 0.5) * 0.1;
-
-      return {
-        id: property.id,
-        title: property.title,
-        location: property.location,
-        size: displaySize,
-        sizeValue: sizeValue,
-        price: `$${property.price}`,
-        type: property.type,
-        typeValue: typeValue,
-        image: property.image || (property.gallery && property.gallery.length > 0 ? property.gallery[0] : "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop"),
-        available: property.available,
-        county: county,
-        description: property.description,
-        features: property.features || [],
-        address: `${property.street_address || ''}, ${property.city || ''}, ${property.state || 'FL'} ${property.zip_code || ''}`.trim(),
-        lat: coords.baseLat + latOffset,
-        lng: coords.baseLng + lngOffset
-      };
-    });
+    const transformedProperties = properties.map((property, index) => ({
+      id: property.id,
+      title: property.title,
+      location: property.location,
+      size: property.size,
+      sizeValue: parseInt(property.size) || 0,
+      price: `$${property.price}`,
+      type: property.type,
+      image: property.image || "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+      available: property.available,
+      county: property.county || "Other",
+      description: property.description,
+      features: property.features || [],
+      address: `${property.street_address || ''}, ${property.city || ''}, ${property.state || 'FL'} ${property.zip_code || ''}`.trim(),
+      lat: 25.8198 + (index * 0.01), // Default coords with small offset
+      lng: -80.3565 + (index * 0.01)
+    }));
 
     // Group properties by county
     warehousesByCounty = transformedProperties.reduce((acc, property) => {
@@ -372,7 +337,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
         <div class="hidden sm:flex justify-center mb-16">
           <div id="floating-search-bar" class="bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 p-1 max-w-4xl w-full">
             <div class="flex items-center">
-              <div class="flex-1 px-4 py-4 border-r border-gray-300">
+              <div class="flex-1 px-6 py-4 border-r border-gray-300">
                 <div class="text-xs font-semibold text-gray-700 mb-1">County</div>
                 <select id="county-select" class="text-sm text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
                   <option value="">All counties</option>
@@ -382,7 +347,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
                   <option value="St. Lucie">St. Lucie</option>
                 </select>
               </div>
-              <div class="flex-1 px-4 py-4 border-r border-gray-300">
+              <div class="flex-1 px-6 py-4 border-r border-gray-300">
                 <div class="text-xs font-semibold text-gray-700 mb-1">Size</div>
                 <select id="size-select" class="text-sm text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
                   <option value="">Any size</option>
@@ -391,7 +356,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
                   <option value="large">100K+ SF</option>
                 </select>
               </div>
-              <div class="flex-1 px-4 py-4 border-r border-gray-300">
+              <div class="flex-1 px-6 py-4">
                 <div class="text-xs font-semibold text-gray-700 mb-1">Type</div>
                 <select id="type-select" class="text-sm text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
                   <option value="">All types</option>
@@ -399,17 +364,6 @@ if (Object.keys(warehousesByCounty).length === 0) {
                   <option value="distribution">Distribution</option>
                   <option value="manufacturing">Manufacturing</option>
                   <option value="flex">Flex Space</option>
-                </select>
-              </div>
-              <div class="flex-1 px-4 py-4">
-                <div class="text-xs font-semibold text-gray-700 mb-1">Sort by</div>
-                <select id="sort-select" class="text-sm text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
-                  <option value="">Default</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="size-small">Size: Small to Large</option>
-                  <option value="size-large">Size: Large to Small</option>
-                  <option value="newest">Newest First</option>
                 </select>
               </div>
             </div>
@@ -440,7 +394,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
             <!-- All Filters in One Row -->
             <div class="flex">
               <!-- County -->
-              <div class="flex-1 px-2 py-3 border-r border-gray-100">
+              <div class="flex-1 px-3 py-3 border-r border-gray-100">
                 <div class="text-xs font-semibold text-gray-700 mb-1">County</div>
                 <select id="mobile-county-select" class="text-xs text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
                   <option value="">All counties</option>
@@ -451,7 +405,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
                 </select>
               </div>
               <!-- Size -->
-              <div class="flex-1 px-2 py-3 border-r border-gray-100">
+              <div class="flex-1 px-3 py-3 border-r border-gray-100">
                 <div class="text-xs font-semibold text-gray-700 mb-1">Size</div>
                 <select id="mobile-size-select" class="text-xs text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
                   <option value="">Any size</option>
@@ -461,7 +415,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
                 </select>
               </div>
               <!-- Type -->
-              <div class="flex-1 px-2 py-3 border-r border-gray-100">
+              <div class="flex-1 px-3 py-3">
                 <div class="text-xs font-semibold text-gray-700 mb-1">Type</div>
                 <select id="mobile-type-select" class="text-xs text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
                   <option value="">All types</option>
@@ -469,18 +423,6 @@ if (Object.keys(warehousesByCounty).length === 0) {
                   <option value="distribution">Distribution</option>
                   <option value="manufacturing">Manufacturing</option>
                   <option value="flex">Flex Space</option>
-                </select>
-              </div>
-              <!-- Sort -->
-              <div class="flex-1 px-2 py-3">
-                <div class="text-xs font-semibold text-gray-700 mb-1">Sort</div>
-                <select id="mobile-sort-select" class="text-xs text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
-                  <option value="">Default</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="size-small">Size: Small to Large</option>
-                  <option value="size-large">Size: Large to Small</option>
-                  <option value="newest">Newest First</option>
                 </select>
               </div>
             </div>
@@ -712,18 +654,217 @@ if (Object.keys(warehousesByCounty).length === 0) {
     const countySelect = document.getElementById('county-select');
     const sizeSelect = document.getElementById('size-select');
     const typeSelect = document.getElementById('type-select');
-    const sortSelect = document.getElementById('sort-select');
 
     // Mobile selectors
     const mobileCountySelect = document.getElementById('mobile-county-select');
     const mobileSizeSelect = document.getElementById('mobile-size-select');
     const mobileTypeSelect = document.getElementById('mobile-type-select');
-    const mobileSortSelect = document.getElementById('mobile-sort-select');
     const mobileContainer = document.querySelector('.sm\\:hidden .flex.gap-3');
     const desktopGrid = document.querySelector('.hidden.sm\\:grid');
 
     // Use the server-side fetched data for client-side filtering
     const warehouseData = warehousesByCounty;
+          location: "Doral, FL",
+          size: "85,000 SF",
+          sizeValue: 85000,
+          price: "$12.50",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          available: true,
+          lat: 25.8198,
+          lng: -80.3565
+        },
+        {
+          id: 2,
+          title: "Prime Warehouse Space",
+          location: "Hialeah, FL",
+          size: "45,000 SF",
+          sizeValue: 45000,
+          price: "$10.75",
+          type: "Warehouse",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          available: true,
+          lat: 25.8576,
+          lng: -80.3017
+        },
+        {
+          id: 3,
+          title: "Manufacturing Facility",
+          location: "Miami, FL",
+          size: "120,000 SF",
+          sizeValue: 120000,
+          price: "$15.00",
+          type: "Manufacturing",
+          typeValue: "manufacturing",
+          image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+          available: true,
+          lat: 25.7717,
+          lng: -80.3018
+        },
+        {
+          id: 7,
+          title: "Cold Storage Facility",
+          location: "Miami Beach, FL",
+          size: "35,000 SF",
+          sizeValue: 35000,
+          price: "$18.00",
+          type: "Cold Storage",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+          available: true,
+          lat: 25.7907,
+          lng: -80.1300
+        }
+      ],
+      "Broward": [
+        {
+          id: 4,
+          title: "Flex Industrial Space",
+          location: "Pompano Beach, FL",
+          size: "25,000 SF",
+          sizeValue: 25000,
+          price: "$14.25",
+          type: "Flex Space",
+          typeValue: "flex",
+          image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+          available: true,
+          lat: 26.2379,
+          lng: -80.1248
+        },
+        {
+          id: 5,
+          title: "Logistics Hub",
+          location: "Fort Lauderdale, FL",
+          size: "95,000 SF",
+          sizeValue: 95000,
+          price: "$11.80",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          available: true,
+          lat: 26.1224,
+          lng: -80.1918
+        },
+        {
+          id: 9,
+          title: "Distribution Warehouse",
+          location: "Hollywood, FL",
+          size: "75,000 SF",
+          sizeValue: 75000,
+          price: "$13.25",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          available: true,
+          lat: 26.0179,
+          lng: -80.1956
+        },
+        {
+          id: 11,
+          title: "Port Access Facility",
+          location: "Dania Beach, FL",
+          size: "60,000 SF",
+          sizeValue: 60000,
+          price: "$12.75",
+          type: "Warehouse",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+          available: true,
+          lat: 26.0523,
+          lng: -80.1439
+        }
+      ],
+      "Palm Beach": [
+        {
+          id: 6,
+          title: "Industrial Complex",
+          location: "Boca Raton, FL",
+          size: "65,000 SF",
+          sizeValue: 65000,
+          price: "$13.50",
+          type: "Warehouse",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          available: true,
+          lat: 26.3683,
+          lng: -80.1289
+        },
+        {
+          id: 10,
+          title: "Tech Manufacturing Hub",
+          location: "Delray Beach, FL",
+          size: "110,000 SF",
+          sizeValue: 110000,
+          price: "$16.75",
+          type: "Manufacturing",
+          typeValue: "manufacturing",
+          image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
+          available: true,
+          lat: 26.4615,
+          lng: -80.1918
+        },
+        {
+          id: 12,
+          title: "Multi-Use Industrial",
+          location: "West Palm Beach, FL",
+          size: "80,000 SF",
+          sizeValue: 80000,
+          price: "$14.50",
+          type: "Flex Space",
+          typeValue: "flex",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          available: true,
+          lat: 26.7153,
+          lng: -80.0533
+        },
+        {
+          id: 13,
+          title: "Distribution Center",
+          location: "Boynton Beach, FL",
+          size: "90,000 SF",
+          sizeValue: 90000,
+          price: "$13.25",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
+          available: true,
+          lat: 26.5312,
+          lng: -80.0756
+        }
+      ],
+      "St. Lucie": [
+        {
+          id: 14,
+          title: "Port Industrial Center",
+          location: "Port St. Lucie, FL",
+          size: "55,000 SF",
+          sizeValue: 55000,
+          price: "$11.25",
+          type: "Warehouse",
+          typeValue: "warehouse",
+          image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
+          available: true,
+          lat: 27.2730,
+          lng: -80.3582
+        },
+        {
+          id: 15,
+          title: "Treasure Coast Distribution",
+          location: "Fort Pierce, FL",
+          size: "85,000 SF",
+          sizeValue: 85000,
+          price: "$10.50",
+          type: "Distribution",
+          typeValue: "distribution",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
+          available: true,
+          lat: 27.4467,
+          lng: -80.3256
+        }
+      ]
+    };
 
     // Search bar shrinking behavior on scroll
     let lastScrollY = window.scrollY;
@@ -764,28 +905,20 @@ if (Object.keys(warehousesByCounty).length === 0) {
       const county = (countySelect ? countySelect.value : '') || (mobileCountySelect ? mobileCountySelect.value : '');
       const size = (sizeSelect ? sizeSelect.value : '') || (mobileSizeSelect ? mobileSizeSelect.value : '');
       const type = (typeSelect ? typeSelect.value : '') || (mobileTypeSelect ? mobileTypeSelect.value : '');
-      const sort = (sortSelect ? sortSelect.value : '') || (mobileSortSelect ? mobileSortSelect.value : '');
-
-      console.log('Filter values - County:', county, 'Size:', size, 'Type:', type, 'Sort:', sort);
-      console.log('Available warehouse data keys:', Object.keys(warehouseData));
 
       let filteredProperties = [];
 
       // Get all properties or filter by county
-      if (county && county !== '') {
+      if (county) {
         filteredProperties = warehouseData[county] || [];
-        console.log('Filtering by county:', county, 'Found properties:', filteredProperties.length);
       } else {
         // Get all properties from all counties
         filteredProperties = Object.values(warehouseData).flat();
-        console.log('Showing all properties:', filteredProperties.length);
       }
 
       // Filter by size
-      if (size && size !== '') {
-        const beforeSizeFilter = filteredProperties.length;
+      if (size) {
         filteredProperties = filteredProperties.filter(property => {
-          console.log('Property sizeValue:', property.sizeValue, 'Size filter:', size);
           switch (size) {
             case 'small':
               return property.sizeValue >= 5000 && property.sizeValue <= 25000;
@@ -797,55 +930,15 @@ if (Object.keys(warehousesByCounty).length === 0) {
               return true;
           }
         });
-        console.log('Size filter reduced properties from', beforeSizeFilter, 'to', filteredProperties.length);
       }
 
       // Filter by type
-      if (type && type !== '') {
-        const beforeTypeFilter = filteredProperties.length;
-        filteredProperties = filteredProperties.filter(property => {
-          console.log('Property typeValue:', property.typeValue, 'Type filter:', type);
-          return property.typeValue === type;
-        });
-        console.log('Type filter reduced properties from', beforeTypeFilter, 'to', filteredProperties.length);
+      if (type) {
+        filteredProperties = filteredProperties.filter(property =>
+          property.typeValue === type
+        );
       }
 
-      // Sort properties
-      if (sort && sort !== '') {
-        console.log('Sorting properties by:', sort);
-        switch (sort) {
-          case 'price-low':
-            filteredProperties.sort((a, b) => {
-              const priceA = parseFloat(a.price.replace(/[^\d.]/g, '')) || 0;
-              const priceB = parseFloat(b.price.replace(/[^\d.]/g, '')) || 0;
-              return priceA - priceB;
-            });
-            break;
-          case 'price-high':
-            filteredProperties.sort((a, b) => {
-              const priceA = parseFloat(a.price.replace(/[^\d.]/g, '')) || 0;
-              const priceB = parseFloat(b.price.replace(/[^\d.]/g, '')) || 0;
-              return priceB - priceA;
-            });
-            break;
-          case 'size-small':
-            filteredProperties.sort((a, b) => a.sizeValue - b.sizeValue);
-            break;
-          case 'size-large':
-            filteredProperties.sort((a, b) => b.sizeValue - a.sizeValue);
-            break;
-          case 'newest':
-            // Sort by title/id for consistency since we don't have creation dates
-            filteredProperties.sort((a, b) => b.id.localeCompare(a.id));
-            break;
-          default:
-            // Default sort - keep original order
-            break;
-        }
-        console.log('Properties sorted by:', sort);
-      }
-
-      console.log('Final filtered properties:', filteredProperties.length);
       return filteredProperties;
     }
 
@@ -963,20 +1056,16 @@ if (Object.keys(warehousesByCounty).length === 0) {
       if (countySelect) countySelect.value = '';
       if (sizeSelect) sizeSelect.value = '';
       if (typeSelect) typeSelect.value = '';
-      if (sortSelect) sortSelect.value = '';
       if (mobileCountySelect) mobileCountySelect.value = '';
       if (mobileSizeSelect) mobileSizeSelect.value = '';
       if (mobileTypeSelect) mobileTypeSelect.value = '';
-      if (mobileSortSelect) mobileSortSelect.value = '';
       renderProperties(Object.values(warehouseData).flat());
     };
 
     // Live filtering - no search button needed
     function performLiveFilter() {
       const filteredProperties = filterProperties();
-      console.log('Performing live filter, found properties:', filteredProperties.length);
       renderProperties(filteredProperties);
-      renderHomepageMapView(filteredProperties);
     }
 
     // Add live filtering to all select elements
@@ -1010,16 +1099,6 @@ if (Object.keys(warehousesByCounty).length === 0) {
       console.log('Type select not found');
     }
 
-    if (sortSelect) {
-      console.log('Sort select found, adding listener');
-      sortSelect.addEventListener('change', function() {
-        console.log('Sort changed to:', sortSelect.value);
-        performLiveFilter();
-      });
-    } else {
-      console.log('Sort select not found');
-    }
-
     // Mobile filter event listeners
     if (mobileCountySelect) {
       mobileCountySelect.addEventListener('change', function() {
@@ -1038,13 +1117,6 @@ if (Object.keys(warehousesByCounty).length === 0) {
     if (mobileTypeSelect) {
       mobileTypeSelect.addEventListener('change', function() {
         console.log('Mobile type changed to:', mobileTypeSelect.value);
-        performLiveFilter();
-      });
-    }
-
-    if (mobileSortSelect) {
-      mobileSortSelect.addEventListener('change', function() {
-        console.log('Mobile sort changed to:', mobileSortSelect.value);
         performLiveFilter();
       });
     }

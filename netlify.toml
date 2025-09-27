@@ -19,3 +19,22 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Scheduled functions for automated notifications
+[functions]
+  schedule = "*/15 * * * *"  # Run every 15 minutes
+
+# Automated follow-up emails
+[[functions]]
+  path = "automated-followups"
+  schedule = "*/30 * * * *"  # Every 30 minutes
+
+# Appointment reminders
+[[functions]]
+  path = "send-appointment-reminders"
+  schedule = "0 8,12,16 * * *"  # 8am, 12pm, 4pm daily
+
+# Scheduled reminders
+[[functions]]
+  path = "scheduled-reminders"
+  schedule = "0 9 * * *"  # 9am daily
