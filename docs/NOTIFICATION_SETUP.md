@@ -1,26 +1,34 @@
 # Notification System Setup Guide
 
-## ✅ **System Upgraded to Resend (No Client Passwords Required!)**
+## ✅ **System Architecture: CRM-Based Notifications (No Client Passwords Required!)**
 
-The notification system has been upgraded to use **Resend API** instead of SMTP, which means:
+The notification system works through the **CRM application** using **Resend API**, which means:
 - **No need for client email passwords**
 - **Better email deliverability**
 - **Professional email sending**
 - **Simple setup with just an API key**
+- **Centralized notification management through CRM**
+
+## 🏗️ **How It Works**
+
+1. **Website Form Submission** → Main website (shabay.netlify.app)
+2. **API Call** → CRM application (sbaycrm.netlify.app/api/public/leads)
+3. **Lead Storage** → Supabase database
+4. **Notification Trigger** → CRM calls internal notification API
+5. **Email Sending** → Resend API sends emails
 
 ## 🔧 **Required Environment Variables**
 
-Set these in **Netlify Dashboard > Site Settings > Environment Variables**:
+### **For CRM Application (sbaycrm.netlify.app)**
+Set these in **CRM Netlify Dashboard > Site Settings > Environment Variables**:
 
-### **📧 Email Configuration (Resend)**
 ```bash
 # Resend API Configuration (Primary - Required)
 RESEND_API_KEY=re_your_resend_api_key_here
-RESEND_FROM_EMAIL=noreply@yourdomain.com
-RESEND_FROM_NAME=Your Business Name
+EMAIL_PROVIDER=resend
 
-# Notification recipient
-NOTIFICATION_EMAIL=your-business-email@domain.com
+# Admin notification email
+ADMIN_EMAIL=your-business-email@domain.com
 ```
 
 ### **📊 Lead Storage (GitHub Integration)**
@@ -47,16 +55,23 @@ SUPABASE_ANON_KEY=your_supabase_anon_key
 3. Generate API key in dashboard
 4. Copy the API key (starts with `re_`)
 
-### **Step 2: Configure Netlify Environment Variables**
-1. Go to **Netlify Dashboard** → Your Site → **Site Settings** → **Environment Variables**
+### **Step 2: Configure CRM Environment Variables**
+1. Go to **CRM Netlify Dashboard** → sbaycrm Site → **Site Settings** → **Environment Variables**
 2. Add the following variables:
 
 | Variable Name | Value | Example |
 |---------------|-------|---------|
 | `RESEND_API_KEY` | Your Resend API key | `re_AbCd1234_XYZ...` |
-| `RESEND_FROM_EMAIL` | Your verified sender email | `noreply@yourdomain.com` |
-| `RESEND_FROM_NAME` | Your business name | `Acme Real Estate` |
-| `NOTIFICATION_EMAIL` | Where to receive lead alerts | `info@yourbusiness.com` |
+| `EMAIL_PROVIDER` | Email service provider | `resend` |
+| `ADMIN_EMAIL` | Where to receive lead alerts | `info@yourbusiness.com` |
+
+### **Step 2b: Configure Supabase (for lead storage)**
+1. Ensure these variables are set in the CRM:
+
+| Variable Name | Value | Example |
+|---------------|-------|---------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase URL | `https://xyz.supabase.co` |
+| `SUPABASE_SERVICE_ROLE_KEY` | Service role key | `eyJ...` |
 
 ### **Step 3: Test the System**
 After deployment, test by submitting a contact form on your website.
