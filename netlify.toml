@@ -11,7 +11,6 @@
     baseUrl = "https://shabay.netlify.app"
     sitemapPath = "/sitemap-index.xml"
 
-# Headers for security
 [[headers]]
   for = "/*"
   [headers.values]
@@ -20,21 +19,5 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Functions configuration
 [functions]
   directory = "netlify/functions"
-
-# Automated follow-up emails
-[[functions]]
-  path = "automated-followups"
-  schedule = "*/30 * * * *"  # Every 30 minutes
-
-# Appointment reminders
-[[functions]]
-  path = "send-appointment-reminders"
-  schedule = "0 8,12,16 * * *"  # 8am, 12pm, 4pm daily
-
-# Scheduled reminders
-[[functions]]
-  path = "scheduled-reminders"
-  schedule = "0 9 * * *"  # 9am daily
