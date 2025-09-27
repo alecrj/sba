@@ -32,6 +32,16 @@ try {
       // Format size for display
       const displaySize = sizeValue > 0 ? `${sizeValue.toLocaleString()} SF` : property.size || 'N/A';
 
+      // Format price correctly - avoid double dollar signs
+      let formattedPrice = property.price || '0';
+      if (!formattedPrice.toString().includes('$')) {
+        formattedPrice = `$${formattedPrice}`;
+      }
+      // Ensure consistent format - if it doesn't have /SF/YR, add it
+      if (!formattedPrice.includes('/') && !formattedPrice.toLowerCase().includes('year')) {
+        formattedPrice = `${formattedPrice}/SF/YR`;
+      }
+
       // Map property type to typeValue for filtering
       const typeMapping = {
         'warehouse': 'warehouse',
@@ -64,7 +74,7 @@ try {
         location: property.location,
         size: displaySize,
         sizeValue: sizeValue,
-        price: `$${property.price}`,
+        price: formattedPrice,
         type: property.type,
         typeValue: typeValue,
         image: property.image || (property.gallery && property.gallery.length > 0 ? property.gallery[0] : "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop"),
@@ -74,7 +84,8 @@ try {
         features: property.features || [],
         address: `${property.street_address || ''}, ${property.city || ''}, ${property.state || 'FL'} ${property.zip_code || ''}`.trim(),
         lat: coords.baseLat + latOffset,
-        lng: coords.baseLng + lngOffset
+        lng: coords.baseLng + lngOffset,
+        created_at: property.created_at
       };
     });
 
@@ -401,7 +412,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
                   <option value="flex">Flex Space</option>
                 </select>
               </div>
-              <div class="flex-1 px-4 py-4">
+              <div class="flex-1 px-4 py-4 border-r border-gray-300">
                 <div class="text-xs font-semibold text-gray-700 mb-1">Sort by</div>
                 <select id="sort-select" class="text-sm text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
                   <option value="">Default</option>
@@ -411,6 +422,15 @@ if (Object.keys(warehousesByCounty).length === 0) {
                   <option value="size-large">Size: Large to Small</option>
                   <option value="newest">Newest First</option>
                 </select>
+              </div>
+              <div class="px-4 py-4 flex items-center">
+                <button
+                  id="clear-filters-btn"
+                  onclick="clearFilters()"
+                  class="text-xs text-gray-600 hover:text-sba-navy font-medium border border-gray-300 rounded-md px-3 py-2 hover:border-sba-navy transition-colors"
+                >
+                  Clear
+                </button>
               </div>
             </div>
           </div>
@@ -472,7 +492,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
                 </select>
               </div>
               <!-- Sort -->
-              <div class="flex-1 px-2 py-3">
+              <div class="flex-1 px-2 py-3 border-r border-gray-100">
                 <div class="text-xs font-semibold text-gray-700 mb-1">Sort</div>
                 <select id="mobile-sort-select" class="text-xs text-gray-800 w-full border-none outline-none bg-transparent appearance-none cursor-pointer">
                   <option value="">Default</option>
@@ -482,6 +502,16 @@ if (Object.keys(warehousesByCounty).length === 0) {
                   <option value="size-large">Size: Large to Small</option>
                   <option value="newest">Newest First</option>
                 </select>
+              </div>
+              <!-- Clear -->
+              <div class="px-2 py-3 flex items-center">
+                <button
+                  id="mobile-clear-filters-btn"
+                  onclick="clearFilters()"
+                  class="text-xs text-gray-600 hover:text-sba-navy font-medium border border-gray-300 rounded-md px-2 py-1 hover:border-sba-navy transition-colors"
+                >
+                  Clear
+                </button>
               </div>
             </div>
 
@@ -705,8 +735,10 @@ if (Object.keys(warehousesByCounty).length === 0) {
   }
 </style>
 
-<script>
+<script define:vars={{ warehousesByCounty }}>
   document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Filter system initializing...');
+    console.log('DEBUG: Script is running!');
     const floatingSearchBar = document.getElementById('floating-search-bar');
     const mobileSearchBar = document.getElementById('mobile-search-bar');
     const countySelect = document.getElementById('county-select');
@@ -724,6 +756,8 @@ if (Object.keys(warehousesByCounty).length === 0) {
 
     // Use the server-side fetched data for client-side filtering
     const warehouseData = warehousesByCounty;
+    console.log('💾 Warehouse data loaded:', warehouseData);
+    console.log('💾 Available counties:', Object.keys(warehouseData));
 
     // Search bar shrinking behavior on scroll
     let lastScrollY = window.scrollY;
@@ -818,6 +852,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
             filteredProperties.sort((a, b) => {
               const priceA = parseFloat(a.price.replace(/[^\d.]/g, '')) || 0;
               const priceB = parseFloat(b.price.replace(/[^\d.]/g, '')) || 0;
+              console.log('Price sorting low to high:', a.title, a.price, '→', priceA, 'vs', b.title, b.price, '→', priceB);
               return priceA - priceB;
             });
             break;
@@ -825,6 +860,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
             filteredProperties.sort((a, b) => {
               const priceA = parseFloat(a.price.replace(/[^\d.]/g, '')) || 0;
               const priceB = parseFloat(b.price.replace(/[^\d.]/g, '')) || 0;
+              console.log('Price sorting high to low:', a.title, a.price, '→', priceA, 'vs', b.title, b.price, '→', priceB);
               return priceB - priceA;
             });
             break;
@@ -835,8 +871,13 @@ if (Object.keys(warehousesByCounty).length === 0) {
             filteredProperties.sort((a, b) => b.sizeValue - a.sizeValue);
             break;
           case 'newest':
-            // Sort by title/id for consistency since we don't have creation dates
-            filteredProperties.sort((a, b) => b.id.localeCompare(a.id));
+            // Sort by creation date if available, otherwise by id
+            filteredProperties.sort((a, b) => {
+              if (a.created_at && b.created_at) {
+                return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+              }
+              return b.id.localeCompare(a.id);
+            });
             break;
           default:
             // Default sort - keep original order
