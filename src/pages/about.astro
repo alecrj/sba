@@ -1,5 +1,5 @@
 ---
-// About Page - Shallow Bay Advisors Commercial Real Estate
+// About Us Page - Streamlined & Focused
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
 import MobileAppHeader from '../components/MobileAppHeader.astro';
@@ -26,27 +26,11 @@ const teamMembers = [
     image: "/images/team/placeholder-analyst.jpg"
   }
 ];
-
-// Markets served
-const markets = [
-  {
-    name: "Miami-Dade County",
-    areas: ["Doral", "Hialeah", "Medley", "Airport West", "Downtown Miami"]
-  },
-  {
-    name: "Broward County",
-    areas: ["Fort Lauderdale", "Pompano Beach", "Davie", "Sunrise", "Hollywood"]
-  },
-  {
-    name: "Palm Beach County",
-    areas: ["West Palm Beach", "Riviera Beach", "Boca Raton", "Delray Beach"]
-  }
-];
 ---
 
 <BaseLayout
   title="About Us | Shallow Bay Advisors"
-  description="Premier commercial real estate brokerage specializing in warehouse and industrial properties from Miami-Dade to Port St. Lucie. Licensed, experienced, and focused on results."
+  description="Meet the licensed commercial real estate professionals at Shallow Bay Advisors. Specializing in warehouse and industrial properties from Miami-Dade to Port St. Lucie."
 >
   <Navigation />
   <MobileAppHeader />
@@ -64,102 +48,43 @@ const markets = [
       </div>
     </section>
 
-    <!-- Company Overview -->
-    <section class="py-16">
-      <div class="max-w-6xl mx-auto px-6">
-        <div class="grid md:grid-cols-3 gap-8 mb-16">
-          <!-- Stats Cards -->
-          <div class="bg-white border border-gray-200 rounded-xl p-8 text-center">
-            <div class="text-3xl md:text-4xl font-bold text-sba-navy mb-2">Licensed</div>
-            <div class="text-gray-600">Florida Real Estate Brokerage</div>
-          </div>
-
-          <div class="bg-white border border-gray-200 rounded-xl p-8 text-center">
-            <div class="text-3xl md:text-4xl font-bold text-sba-navy mb-2">Specialized</div>
-            <div class="text-gray-600">Industrial & Warehouse Focus</div>
-          </div>
-
-          <div class="bg-white border border-gray-200 rounded-xl p-8 text-center">
-            <div class="text-3xl md:text-4xl font-bold text-sba-navy mb-2">Coverage</div>
-            <div class="text-gray-600">Miami-Dade to Port St. Lucie</div>
-          </div>
-        </div>
-
-        <!-- Company Description -->
-        <div class="max-w-4xl mx-auto text-center">
-          <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 mb-8">
-            Expertise That Delivers Results
-          </h2>
-          <div class="space-y-6 text-lg text-gray-600 leading-relaxed">
-            <p>
-              Founded on the principle that commercial real estate requires specialized knowledge,
-              Shallow Bay Advisors has established itself as the trusted partner for
-              warehouse and industrial property transactions.
-            </p>
-            <p>
-              Our team combines deep market knowledge with cutting-edge technology to deliver
-              exceptional results for tenants, landlords, and investors. We understand the
-              unique requirements of industrial businesses and provide tailored solutions
-              that drive success.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Team Section -->
-    <section class="py-16 bg-gray-50">
-      <div class="max-w-6xl mx-auto px-6">
-        <div class="text-center mb-12">
-          <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 mb-4 font-['Poppins']">
-            Our Team
-          </h2>
-          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            Experienced professionals dedicated to delivering exceptional results in commercial real estate
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8">
-          {teamMembers.map((member, index) => (
-            <div class="bg-white border border-gray-200 rounded-xl p-8 text-center hover:shadow-lg transition-all duration-200">
-              <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-10 h-10 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                </svg>
-              </div>
-
-              <h3 class="text-xl font-semibold text-gray-900 mb-2 font-['Poppins']">{member.name}</h3>
-              <p class="text-sba-navy font-medium mb-4">{member.title}</p>
-              <p class="text-gray-600 leading-relaxed">{member.bio}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- Markets Section -->
     <section class="py-16">
       <div class="max-w-6xl mx-auto px-6">
-        <div class="text-center mb-12">
+        <div class="text-center mb-16">
           <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
-            Markets We Serve
+            Meet Our Team
           </h2>
-          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            Comprehensive coverage from Miami-Dade to Port St. Lucie's premier industrial corridors
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Licensed professionals dedicated to delivering exceptional results in commercial real estate
           </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
-          {markets.map((market, index) => (
-            <div class="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-200">
-              <h3 class="text-xl font-semibold text-gray-900 mb-6">{market.name}</h3>
-              <div class="space-y-3">
-                {market.areas.map(area => (
-                  <div class="flex items-center">
-                    <div class="w-2 h-2 bg-sba-navy rounded-full mr-3 flex-shrink-0"></div>
-                    <span class="text-gray-600">{area}</span>
+        <div class="space-y-16">
+          {teamMembers.map((member, index) => (
+            <div class={`grid md:grid-cols-2 gap-12 items-center ${index % 2 === 1 ? 'md:grid-flow-col-dense' : ''}`}>
+              <!-- Photo -->
+              <div class={index % 2 === 1 ? 'md:col-start-2' : ''}>
+                <div class="aspect-square bg-gray-200 rounded-2xl overflow-hidden">
+                  <div class="w-full h-full bg-gradient-to-br from-sba-navy to-blue-700 flex items-center justify-center">
+                    <svg class="w-32 h-32 text-white opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
                   </div>
-                ))}
+                </div>
+              </div>
+
+              <!-- Content -->
+              <div class={index % 2 === 1 ? 'md:col-start-1' : ''}>
+                <div class="space-y-4">
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">{member.name}</h3>
+                    <p class="text-sba-navy font-medium mb-4">{member.title}</p>
+                  </div>
+                  <p class="text-gray-600 leading-relaxed">
+                    {member.bio}
+                  </p>
+                </div>
               </div>
             </div>
           ))}
@@ -167,416 +92,75 @@ const markets = [
       </div>
     </section>
 
-    <!-- Why Choose Us Section -->
+    <!-- Values Section -->
     <section class="py-16 bg-gray-50">
       <div class="max-w-6xl mx-auto px-6">
         <div class="text-center mb-16">
           <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
-            Why Choose Shallow Bay Advisors
+            Why Choose Us
           </h2>
-          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            Setting the standard for commercial real estate excellence in South Florida
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            What sets us apart in South Florida's industrial real estate market
           </p>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          <!-- Deep Market Knowledge -->
-          <div class="text-center">
-            <div class="w-16 h-16 bg-sba-navy rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-3">Deep Market Knowledge</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="bg-white border border-gray-200 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">No Cost to Tenants</h3>
             <p class="text-gray-600 text-sm">
-              Intimate understanding of every industrial corridor from Miami-Dade to Port St. Lucie
+              Our services are completely free to tenants - landlords pay our commission
             </p>
           </div>
 
-          <!-- Industrial Specialization -->
-          <div class="text-center">
-            <div class="w-16 h-16 bg-sba-navy rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-              </svg>
-            </div>
+          <div class="bg-white border border-gray-200 rounded-xl p-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-3">Industrial Specialization</h3>
             <p class="text-gray-600 text-sm">
               Exclusive focus on warehouse and industrial properties - we know this market inside out
             </p>
           </div>
 
-          <!-- Proven Track Record -->
-          <div class="text-center">
-            <div class="w-16 h-16 bg-sba-navy rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-3">Proven Track Record</h3>
+          <div class="bg-white border border-gray-200 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">Licensed & Experienced</h3>
             <p class="text-gray-600 text-sm">
-              Successful transactions representing both Fortune 500 companies and growing businesses
+              Florida licensed professionals with deep market knowledge and proven track record
             </p>
           </div>
 
-          <!-- Technology Advantage -->
-          <div class="text-center">
-            <div class="w-16 h-16 bg-sba-navy rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-3">Technology Advantage</h3>
+          <div class="bg-white border border-gray-200 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">Regional Coverage</h3>
             <p class="text-gray-600 text-sm">
-              Advanced market analytics and real-time property data for faster, smarter decisions
+              Complete coverage from Miami-Dade to Port St. Lucie's premier industrial corridors
             </p>
-          </div>
-        </div>
-
-        <!-- Available Properties Counter -->
-        <div class="bg-sba-navy rounded-xl p-8 text-center text-white">
-          <div class="max-w-2xl mx-auto">
-            <h3 class="text-2xl font-semibold mb-4">Currently Available Properties</h3>
-            <div class="text-4xl font-bold mb-2" id="property-counter">15</div>
-            <p class="text-gray-300 mb-6">
-              Active warehouse and industrial listings across South Florida
-            </p>
-            <a href="/contact" class="bg-white text-sba-navy px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
-              View All Properties
-            </a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Services Overview -->
-    <section class="py-16">
-      <div class="max-w-6xl mx-auto px-6">
-        <!-- Section Header -->
-        <div class="text-center mb-16">
-          <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
-            What We Do
-          </h2>
-          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            Comprehensive commercial real estate services tailored to industrial markets
-          </p>
-        </div>
-
-        <!-- Services Grid -->
-        <div class="grid md:grid-cols-3 gap-8">
-          <!-- Tenant Representation -->
-          <div class="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-200 service-card" data-service="tenant">
-            <div class="w-12 h-12 bg-sba-navy/10 rounded-lg flex items-center justify-center mb-6">
-              <svg class="w-6 h-6 text-sba-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center justify-between cursor-pointer">
-              Tenant Representation
-              <svg class="w-5 h-5 text-gray-400 expand-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-              </svg>
-            </h3>
-            <p class="text-gray-600 service-summary mb-4">
-              Find the perfect warehouse or industrial space for your business needs with expert guidance through site selection, lease negotiation, and market analysis.
-            </p>
-            <div class="service-details hidden mt-4 pt-4 border-t border-gray-200">
-              <ul class="space-y-2 text-sm text-gray-600">
-                <li class="flex items-start">
-                  <div class="w-2 h-2 bg-sba-navy rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  Site selection and market analysis
-                </li>
-                <li class="flex items-start">
-                  <div class="w-2 h-2 bg-sba-navy rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  Lease negotiation and terms optimization
-                </li>
-                <li class="flex items-start">
-                  <div class="w-2 h-2 bg-sba-navy rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  Due diligence and property evaluation
-                </li>
-                <li class="flex items-start">
-                  <div class="w-2 h-2 bg-sba-navy rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  Portfolio management and expansion planning
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Landlord Representation -->
-          <div class="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-200 service-card" data-service="landlord">
-            <div class="w-12 h-12 bg-sba-navy/10 rounded-lg flex items-center justify-center mb-6">
-              <svg class="w-6 h-6 text-sba-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center justify-between cursor-pointer">
-              Landlord Representation
-              <svg class="w-5 h-5 text-gray-400 expand-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-              </svg>
-            </h3>
-            <p class="text-gray-600 service-summary mb-4">
-              Maximize occupancy and value for your commercial properties with strategic marketing, tenant screening, and market positioning services.
-            </p>
-            <div class="service-details hidden mt-4 pt-4 border-t border-gray-200">
-              <ul class="space-y-2 text-sm text-gray-600">
-                <li class="flex items-start">
-                  <div class="w-2 h-2 bg-sba-navy rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  Strategic property marketing and positioning
-                </li>
-                <li class="flex items-start">
-                  <div class="w-2 h-2 bg-sba-navy rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  Tenant screening and qualification
-                </li>
-                <li class="flex items-start">
-                  <div class="w-2 h-2 bg-sba-navy rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  Lease structure optimization
-                </li>
-                <li class="flex items-start">
-                  <div class="w-2 h-2 bg-sba-navy rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  Property performance analysis
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Investment Sales -->
-          <div class="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-200 service-card" data-service="investment">
-            <div class="w-12 h-12 bg-sba-navy/10 rounded-lg flex items-center justify-center mb-6">
-              <svg class="w-6 h-6 text-sba-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center justify-between cursor-pointer">
-              Investment Sales
-              <svg class="w-5 h-5 text-gray-400 expand-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-              </svg>
-            </h3>
-            <p class="text-gray-600 service-summary mb-4">
-              Expert guidance for buying and selling commercial real estate investments with comprehensive property valuation and market insights.
-            </p>
-            <div class="service-details hidden mt-4 pt-4 border-t border-gray-200">
-              <ul class="space-y-2 text-sm text-gray-600">
-                <li class="flex items-start">
-                  <div class="w-2 h-2 bg-sba-navy rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  Property valuation and market analysis
-                </li>
-                <li class="flex items-start">
-                  <div class="w-2 h-2 bg-sba-navy rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  Investment strategy and portfolio optimization
-                </li>
-                <li class="flex items-start">
-                  <div class="w-2 h-2 bg-sba-navy rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  Transaction management and closing coordination
-                </li>
-                <li class="flex items-start">
-                  <div class="w-2 h-2 bg-sba-navy rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  1031 exchange facilitation
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Property Type Specializations -->
+    <!-- Contact CTA Section -->
     <section class="py-16 bg-gray-50">
       <div class="max-w-6xl mx-auto px-6">
-        <div class="text-center mb-16">
+        <div class="bg-white border border-gray-200 rounded-xl p-8 md:p-12 text-center">
           <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
-            Property Type Specializations
+            Ready to Work Together?
           </h2>
-          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-            Deep expertise across all industrial and warehouse property types in South Florida
+          <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+            Let our experienced team help you find the perfect industrial property solution.
+            Professional representation at no cost to tenants.
           </p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          <!-- Warehouse & Distribution -->
-          <div class="card-feature">
-            <div class="w-16 h-16 bg-gradient-to-br from-sba-navy to-sba-navy-light rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-              </svg>
-            </div>
-            <h3 class="heading-card mb-4">Warehouse & Distribution</h3>
-            <p class="text-body mb-6">
-              Large-scale distribution centers and logistics facilities with modern loading dock configurations and clear heights.
-            </p>
-            <ul class="text-body space-y-3">
-              <li class="flex items-center">
-                <div class="w-2 h-2 bg-gradient-to-br from-sba-navy to-sba-navy-light rounded-full mr-3"></div>
-                24-36' clear heights
-              </li>
-              <li class="flex items-center">
-                <div class="w-2 h-2 bg-gradient-to-br from-sba-navy to-sba-navy-light rounded-full mr-3"></div>
-                Cross-dock capabilities
-              </li>
-              <li class="flex items-center">
-                <div class="w-2 h-2 bg-gradient-to-br from-sba-navy to-sba-navy-light rounded-full mr-3"></div>
-                ESFR sprinkler systems
-              </li>
-            </ul>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="/contact"
+              class="inline-flex items-center px-8 py-3 bg-sba-navy text-white font-semibold rounded-lg"
+            >
+              Contact Our Team
+            </a>
+            <a
+              href="/book-consultation"
+              class="inline-flex items-center px-8 py-3 border-2 border-sba-navy text-sba-navy font-semibold rounded-lg"
+            >
+              Schedule Consultation
+            </a>
           </div>
-
-          <!-- Manufacturing Facilities -->
-          <div class="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-200">
-            <div class="w-12 h-12 bg-sba-navy rounded-lg flex items-center justify-center mb-6">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Manufacturing Facilities</h3>
-            <p class="text-gray-600 mb-4">
-              Purpose-built manufacturing spaces with specialized power, ventilation, and equipment requirements.
-            </p>
-            <ul class="text-sm text-gray-600 space-y-2">
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Heavy power infrastructure
-              </li>
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Crane capabilities
-              </li>
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Environmental controls
-              </li>
-            </ul>
-          </div>
-
-          <!-- Flex Space -->
-          <div class="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-200">
-            <div class="w-12 h-12 bg-sba-navy rounded-lg flex items-center justify-center mb-6">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Flex Space</h3>
-            <p class="text-gray-600 mb-4">
-              Versatile industrial buildings combining warehouse, office, and light manufacturing space.
-            </p>
-            <ul class="text-sm text-gray-600 space-y-2">
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Office/warehouse combo
-              </li>
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Flexible configurations
-              </li>
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Grade-level access
-              </li>
-            </ul>
-          </div>
-
-          <!-- Cold Storage -->
-          <div class="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-200">
-            <div class="w-12 h-12 bg-sba-navy rounded-lg flex items-center justify-center mb-6">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Cold Storage</h3>
-            <p class="text-gray-600 mb-4">
-              Temperature-controlled facilities for food distribution, pharmaceuticals, and specialty storage needs.
-            </p>
-            <ul class="text-sm text-gray-600 space-y-2">
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Multi-temperature zones
-              </li>
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Blast freezer capabilities
-              </li>
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                USDA/FDA compliance
-              </li>
-            </ul>
-          </div>
-
-          <!-- Data Centers -->
-          <div class="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-200">
-            <div class="w-12 h-12 bg-sba-navy rounded-lg flex items-center justify-center mb-6">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Data Centers</h3>
-            <p class="text-gray-600 mb-4">
-              Mission-critical facilities with specialized power, cooling, and security infrastructure for data operations.
-            </p>
-            <ul class="text-sm text-gray-600 space-y-2">
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Redundant power systems
-              </li>
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Advanced cooling
-              </li>
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Enhanced security
-              </li>
-            </ul>
-          </div>
-
-          <!-- Last Mile Delivery -->
-          <div class="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-200">
-            <div class="w-12 h-12 bg-sba-navy rounded-lg flex items-center justify-center mb-6">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Last Mile Delivery</h3>
-            <p class="text-gray-600 mb-4">
-              Strategic urban locations optimized for e-commerce fulfillment and rapid delivery operations.
-            </p>
-            <ul class="text-sm text-gray-600 space-y-2">
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Urban accessibility
-              </li>
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Van court layouts
-              </li>
-              <li class="flex items-center">
-                <div class="w-1.5 h-1.5 bg-sba-navy rounded-full mr-3"></div>
-                Fast turnaround design
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- CTA Section -->
-    <section class="py-16 bg-sba-navy">
-      <div class="max-w-6xl mx-auto px-6 text-center">
-        <h2 class="text-3xl font-semibold text-white mb-6">
-          Ready to Work With Us?
-        </h2>
-        <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-12">
-          Experience the difference that specialized knowledge and dedicated service can make
-          for your commercial real estate needs.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-6 justify-center">
-          <a href="/contact" class="bg-white text-sba-navy px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
-            View Properties
-          </a>
-          <a href="/contact" class="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-sba-navy transition-colors inline-block">
-            Contact Our Team
-          </a>
         </div>
       </div>
     </section>
@@ -585,59 +169,3 @@ const markets = [
   <Footer />
 </BaseLayout>
 
-<style>
-  /* Enhanced typography */
-  .gradient-sba {
-    background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6b 50%, #8b9199 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Premium card effects */
-  .hover\:-translate-y-2:hover {
-    transform: translateY(-8px);
-  }
-
-  /* Smooth scroll */
-  html {
-    scroll-behavior: smooth;
-  }
-
-  /* Mobile responsive improvements */
-  @media (max-width: 640px) {
-    .container {
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-  }
-</style>
-
-<script>
-  // Service card expansion functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    const serviceCards = document.querySelectorAll('.service-card');
-
-    serviceCards.forEach(card => {
-      const header = card.querySelector('h3');
-      const details = card.querySelector('.service-details');
-      const icon = card.querySelector('.expand-icon');
-
-      header.addEventListener('click', function() {
-        // Toggle details visibility
-        details.classList.toggle('hidden');
-
-        // Rotate icon
-        icon.style.transform = details.classList.contains('hidden')
-          ? 'rotate(0deg)'
-          : 'rotate(180deg)';
-
-        // Add cursor pointer on hover
-        header.style.cursor = 'pointer';
-      });
-
-      // Set initial cursor
-      header.style.cursor = 'pointer';
-    });
-  });
-</script>
