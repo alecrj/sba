@@ -264,21 +264,19 @@ const propertiesByCounty = {
           const formData = new FormData(form);
           const data = Object.fromEntries(formData.entries());
 
-          // Add appointment-specific metadata
-          data.source = 'calendar_booking';
-          data.type = 'property_showing';
-          data.appointment_type = 'showing';
-          data.lead_source = 'appointment_booking';
-
-          // Add property title for reference
+          // Map data for CRM API
           const selectedProperty = document.getElementById('property-selection');
           if (selectedProperty && selectedProperty.value) {
             const propertyTitle = selectedProperty.options[selectedProperty.selectedIndex].text;
-            data.property_title = propertyTitle;
+            data.property_interest = propertyTitle;
           }
 
-          // Submit to CRM function
-          const response = await fetch('/.netlify/functions/process-appointment', {
+          // Set appointment booking flags
+          data.source = 'appointment_booking';
+          data.appointment_type = 'consultation';
+
+          // Submit to CRM API
+          const response = await fetch('https://sbaycrm.netlify.app/api/public/leads', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
