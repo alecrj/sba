@@ -580,10 +580,10 @@ if (Object.keys(warehousesByCounty).length === 0) {
               <a href={`/property/${warehouse.id}`} class="block group">
 
                 <!-- Clean Property Card -->
-                <div class="bg-white rounded-xl overflow-hidden">
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
 
                   <!-- Property Image - Optimized aspect ratio -->
-                  <div class="relative overflow-hidden rounded-xl" style="aspect-ratio: 1.15/1;">
+                  <div class="relative overflow-hidden rounded-t-xl" style="aspect-ratio: 1.15/1;">
                     <img
                       src={warehouse.image}
                       alt={warehouse.title}
@@ -591,31 +591,34 @@ if (Object.keys(warehousesByCounty).length === 0) {
                     />
                   </div>
 
-                  <!-- Desktop Content -->
-                  <div class="pt-3">
-                    <!-- Title - Larger text, no truncation -->
-                    <h3 class="font-medium text-gray-900 text-sm leading-snug mb-2 line-clamp-2">
+                  <!-- Title Box - Flush with image -->
+                  <div class="bg-gradient-to-r from-sba-navy via-slate-800 to-sba-navy-dark text-white px-4 py-3 h-16 flex items-center justify-center shadow-sm">
+                    <h3 class="font-bold text-sm leading-snug line-clamp-2 text-center tracking-wide font-['Poppins']">
                       {warehouse.title}
                     </h3>
+                  </div>
+
+                  <!-- Desktop Content -->
+                  <div class="p-4 min-h-[100px] flex flex-col rounded-b-xl bg-gradient-to-b from-white to-gray-50 border-t border-gray-100">
 
                     <!-- Price -->
                     <div class="text-base font-semibold text-gray-900 mb-2">
                       {warehouse.price}<span class="font-normal text-sm">/SF</span>
                     </div>
 
-                    <!-- Location -->
-                    <p class="text-gray-500 text-sm mb-2 line-clamp-1">
+                    <!-- Location - Allow more space -->
+                    <p class="text-gray-500 text-sm mb-2">
                       {warehouse.location}
                     </p>
 
-                    <!-- Size and Type -->
-                    <div class="text-sm text-gray-500 mb-1">
-                      <div class="line-clamp-1">{warehouse.size}</div>
+                    <!-- Size - Remove clamp -->
+                    <div class="text-sm text-gray-500 mb-2">
+                      <div>{warehouse.size}</div>
                     </div>
 
                     <!-- Type and Availability -->
-                    <div class="flex items-center justify-between">
-                      <span class="text-sm text-gray-500 line-clamp-1">{warehouse.type}</span>
+                    <div class="flex items-center justify-between mt-auto">
+                      <span class="text-sm text-gray-500">{warehouse.type}</span>
                       {warehouse.available && (
                         <span class="text-green-600 font-medium text-xs">Available</span>
                       )}

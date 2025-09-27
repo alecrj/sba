@@ -1,6 +1,6 @@
 // Automated follow-up email sequences after appointments
 const { createClient } = require('@supabase/supabase-js');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 exports.handler = async (event, context) => {
   try {
@@ -116,16 +116,10 @@ async function sendFollowUpEmail(appointment, sequence, supabase) {
     return;
   }
 
-  // Create SMTP transporter
-  const transporter = nodemailer.createTransporter({
-    host: 'smtp-mail.outlook.com',
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-    }
-  });
+  // Initialize Resend
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const fromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
+  const fromName = process.env.RESEND_FROM_NAME || 'Shallow Bay Advisors';
 
   const appointmentDate = new Date(appointment.start_time).toLocaleDateString('en-US', {
     weekday: 'long',
@@ -155,13 +149,17 @@ async function sendFollowUpEmail(appointment, sequence, supabase) {
       emailHtml = getGenericFollowUpEmail(lead, appointment, appointmentDate);
   }
 
-  // Send follow-up email
-  await transporter.sendMail({
-    from: `"Shallow Bay Advisors" <${process.env.SMTP_USER}>`,
-    to: lead.email,
+  // Send follow-up email using Resend
+  const { data, error } = await resend.emails.send({
+    from: `${fromName} <${fromEmail}>`,
+    to: [lead.email],
     subject: subject,
-    html: emailHtml
+    html: emailHtml,
   });
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message}`);
+  }
 
   // Update appointment to mark follow-up as sent
   const updateField = `followup_${sequence.type}_sent`;
