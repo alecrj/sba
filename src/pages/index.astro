@@ -7,12 +7,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 // Fetch warehouse data from CRM API
 let warehousesByCounty = {};
+let allWarehouses = [];
 
 try {
   const crmApiUrl = 'https://sbaycrm.netlify.app';
   console.log('Fetching properties from CRM API:', `${crmApiUrl}/api/public/properties`);
 
-  const response = await fetch(`${crmApiUrl}/api/public/properties?limit=12`, {
+  const response = await fetch(`${crmApiUrl}/api/public/properties`, {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -88,6 +89,9 @@ try {
         created_at: property.created_at
       };
     });
+
+    // Store all warehouses for expansion functionality
+    allWarehouses = transformedProperties;
 
     // Group properties by county
     warehousesByCounty = transformedProperties.reduce((acc, property) => {
@@ -633,14 +637,29 @@ if (Object.keys(warehousesByCounty).length === 0) {
           )}
         </div>
 
+        <!-- Additional Properties (Hidden Initially) -->
+        <div id="additionalProperties" class="hidden">
+          <!-- Mobile: Additional properties -->
+          <div class="sm:hidden mt-6">
+            <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide px-4" style="scroll-snap-type: x mandatory; margin-right: -1rem;" id="additionalMobileGrid">
+              <!-- Will be populated by JavaScript -->
+            </div>
+          </div>
+
+          <!-- Desktop: Additional properties -->
+          <div class="hidden sm:grid sm:grid-cols-4 sm:gap-3 lg:grid-cols-5 lg:gap-4 xl:gap-6 mt-6" id="additionalDesktopGrid">
+            <!-- Will be populated by JavaScript -->
+          </div>
+        </div>
+
         <!-- View All Properties Button -->
         <div class="text-center mt-8">
-          <a href="/all-properties" class="inline-flex items-center justify-center bg-sba-navy text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-sba-navy-dark transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform-gpu">
-            View All Properties
-            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button id="viewAllBtn" class="inline-flex items-center justify-center bg-sba-navy text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-sba-navy-dark transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform-gpu">
+            <span id="btnText">View All Properties</span>
+            <svg id="btnIcon" class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
             </svg>
-          </a>
+          </button>
         </div>
 
         <!-- Interactive Map Section -->
@@ -747,10 +766,92 @@ if (Object.keys(warehousesByCounty).length === 0) {
   }
 </style>
 
-<script define:vars={{ warehousesByCounty }}>
+<script define:vars={{ warehousesByCounty, allWarehouses }}>
   document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Filter system initializing...');
     console.log('DEBUG: Script is running!');
+
+    // View All Properties functionality
+    let showingAll = false;
+    const viewAllBtn = document.getElementById('viewAllBtn');
+    const btnText = document.getElementById('btnText');
+    const btnIcon = document.getElementById('btnIcon');
+    const additionalProperties = document.getElementById('additionalProperties');
+    const additionalMobileGrid = document.getElementById('additionalMobileGrid');
+    const additionalDesktopGrid = document.getElementById('additionalDesktopGrid');
+
+    if (viewAllBtn) {
+      viewAllBtn.addEventListener('click', function() {
+        if (!showingAll) {
+          // Show all properties
+          const additionalWarehouses = allWarehouses.slice(12); // Skip first 12
+
+          // Render additional mobile properties
+          if (additionalMobileGrid && additionalWarehouses.length > 0) {
+            additionalMobileGrid.innerHTML = additionalWarehouses.map(warehouse => {
+              return `
+                <a href="/property/${warehouse.id}" class="block group flex-none" style="scroll-snap-align: start; width: calc((100vw - 2rem - 1rem) / 2.1);">
+                  <div class="bg-white rounded-xl overflow-hidden">
+                    <div class="aspect-[4/3] overflow-hidden relative">
+                      <img src="${warehouse.image}" alt="${warehouse.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" />
+                      ${warehouse.featured ? '<div class="absolute top-2 left-2 bg-sba-gold text-sba-navy px-2 py-1 rounded-full text-xs font-semibold">Featured</div>' : ''}
+                      ${warehouse.available ? '<div class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">Available</div>' : ''}
+                    </div>
+                    <div class="p-3">
+                      <div class="text-base font-semibold text-gray-900 mb-1 line-clamp-2">${warehouse.title}</div>
+                      <div class="text-sba-navy font-bold text-lg mb-1">${warehouse.price}<span class="font-normal text-sm">/SF</span></div>
+                      <p class="text-gray-500 text-xs mb-1">${warehouse.location}</p>
+                      <div class="text-xs text-gray-500 mb-2">${warehouse.size}</div>
+                      <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-500">${warehouse.type}</span>
+                        ${warehouse.available ? '<span class="text-green-600 font-medium text-xs">Available</span>' : ''}
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              `;
+            }).join('');
+          }
+
+          // Render additional desktop properties
+          if (additionalDesktopGrid && additionalWarehouses.length > 0) {
+            additionalDesktopGrid.innerHTML = additionalWarehouses.map(warehouse => {
+              return `
+                <a href="/property/${warehouse.id}" class="block group">
+                  <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="aspect-[4/3] overflow-hidden relative">
+                      <img src="${warehouse.image}" alt="${warehouse.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" />
+                      ${warehouse.featured ? '<div class="absolute top-3 left-3 bg-sba-gold text-sba-navy px-2 py-1 rounded-full text-xs font-semibold">Featured</div>' : ''}
+                      ${warehouse.available ? '<div class="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">Available</div>' : ''}
+                    </div>
+                    <div class="p-4 min-h-[100px] flex flex-col rounded-b-xl bg-gradient-to-b from-white to-gray-50 border-t border-gray-100">
+                      <div class="text-base font-semibold text-gray-900 mb-2">${warehouse.price}<span class="font-normal text-sm">/SF</span></div>
+                      <p class="text-gray-500 text-sm mb-2">${warehouse.location}</p>
+                      <div class="text-sm text-gray-500 mb-2">${warehouse.size}</div>
+                      <div class="flex items-center justify-between mt-auto">
+                        <span class="text-sm text-gray-500">${warehouse.type}</span>
+                        ${warehouse.available ? '<span class="text-green-600 font-medium text-xs">Available</span>' : ''}
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              `;
+            }).join('');
+          }
+
+          additionalProperties.classList.remove('hidden');
+          btnText.textContent = 'Show Less';
+          btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l4-4m0 0l4 4m-4-4v12"/>'; // Up arrow
+          showingAll = true;
+        } else {
+          // Hide additional properties
+          additionalProperties.classList.add('hidden');
+          btnText.textContent = 'View All Properties';
+          btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>'; // Right arrow
+          showingAll = false;
+        }
+      });
+    }
     const floatingSearchBar = document.getElementById('floating-search-bar');
     const mobileSearchBar = document.getElementById('mobile-search-bar');
     const countySelect = document.getElementById('county-select');
