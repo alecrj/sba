@@ -1,0 +1,105 @@
+// Direct database integration for calendar availability
+// This connects to the CRM database to fetch real calendar configurations
+import { createClient } from '@supabase/supabase-js';
+
+// Use the same Supabase connection as your CRM
+const supabaseUrl = process.env.PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co';
+const supabaseKey = process.env.PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+export async function get({ url }) {
+  try {
+    const propertyId = url.searchParams.get('propertyId');
+    const date = url.searchParams.get('date');
+
+    if (!propertyId || !date) {
+      return new Response(JSON.stringify({
+        error: 'propertyId and date are required'
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Get the day of week for the requested date
+    const requestDate = new Date(date);
+    const dayOfWeek = requestDate.getDay();
+
+    // Check if property has calendar configuration
+    const { data: calendar, error: calendarError } = await supabase
+      .from('property_calendars')
+      .select('id, is_active')
+      .eq('property_id', propertyId)
+      .single();
+
+    if (calendarError || !calendar || !calendar.is_active) {
+      return new Response(JSON.stringify({
+        available: false,
+        reason: 'No calendar configured or calendar inactive'
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Check if this day of week is available
+    const { data: availability, error: availError } = await supabase
+      .from('calendar_availability')
+      .select('start_time, end_time, is_active')
+      .eq('property_id', propertyId)
+      .eq('day_of_week', dayOfWeek)
+      .eq('is_active', true)
+      .single();
+
+    if (availError || !availability) {
+      return new Response(JSON.stringify({
+        available: false,
+        reason: 'Day not available'
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Check for blocked dates
+    const { data: blocked } = await supabase
+      .from('calendar_blocked_dates')
+      .select('id')
+      .eq('calendar_id', calendar.id)
+      .eq('blocked_date', date)
+      .eq('is_active', true);
+
+    if (blocked && blocked.length > 0) {
+      return new Response(JSON.stringify({
+        available: false,
+        reason: 'Date is blocked'
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Return availability with time slots
+    return new Response(JSON.stringify({
+      available: true,
+      property_id: propertyId,
+      date: date,
+      day_of_week: dayOfWeek,
+      start_time: availability.start_time,
+      end_time: availability.end_time
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  } catch (error) {
+    console.error('Calendar availability error:', error);
+    return new Response(JSON.stringify({
+      available: false,
+      error: 'Internal server error'
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+}

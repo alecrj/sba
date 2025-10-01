@@ -277,7 +277,7 @@ const propertiesByCounty = {
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', function() {
-    const CRM_API_BASE = 'https://sbay-crm.netlify.app/api/public';
+    const CRM_API_BASE = '/api'; // Use local API for direct database access
     let availableDates = new Set();
     let currentSelectedDate = null;
     let currentMonth = new Date().getMonth();
@@ -480,7 +480,7 @@ const propertiesByCounty = {
         testDate.setDate(testDate.getDate() + 1); // Tomorrow
         const dateStr = testDate.toISOString().split('T')[0];
 
-        const response = await fetch(`${CRM_API_BASE}/appointments/availability?propertyId=${propertyId}&date=${dateStr}`);
+        const response = await fetch(`${CRM_API_BASE}/calendar-availability?propertyId=${propertyId}&date=${dateStr}`);
 
         const hasCalendar = response.ok && response.status !== 404;
 
@@ -507,13 +507,8 @@ const propertiesByCounty = {
         // Skip past dates
         if (checkDate < today) continue;
 
-        const dayOfWeek = checkDate.getDay();
-        // Temporary fallback while CRM API deploys: Tuesday and Thursday
-        // TODO: Remove this once CRM API is working - system should pull from database
-        if (dayOfWeek === 2 || dayOfWeek === 4) {
-          const dateStr = checkDate.toISOString().split('T')[0];
-          availableDates.add(dateStr);
-        }
+        // No fallback - system requires proper CRM calendar configuration
+        // All availability must come from database via API calls
       }
     }
 
@@ -525,16 +520,17 @@ const propertiesByCounty = {
       console.log(`Checking availability pattern for ${propertyId} with sample dates:`, sampleDates);
 
       for (const dateStr of sampleDates) {
-        const hasAvailability = await checkDateAvailability(propertyId, dateStr);
-        if (hasAvailability) {
-          availableDates.add(dateStr);
+        const response = await fetch(`${CRM_API_BASE}/calendar-availability?propertyId=${propertyId}&date=${dateStr}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.available) {
+            availableDates.add(dateStr);
 
-          // If we find availability on a day, check if there's a weekly pattern
-          const date = new Date(dateStr);
-          const dayOfWeek = date.getDay();
-
-          // Add same day of week for the entire month
-          addSameDayOfWeekForMonth(dayOfWeek, year, month);
+            // If we find availability on a day, add same day of week for the entire month
+            const date = new Date(dateStr);
+            const dayOfWeek = date.getDay();
+            addSameDayOfWeekForMonth(dayOfWeek, year, month);
+          }
         }
       }
     }
