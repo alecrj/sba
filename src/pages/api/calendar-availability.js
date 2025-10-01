@@ -3,14 +3,20 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Use the same Supabase connection as your CRM
-const supabaseUrl = process.env.PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co';
-const supabaseKey = process.env.PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key';
+const supabaseUrl = import.meta.env.SUPABASE_URL || 'https://otdstubixarpsirhcpcq.supabase.co';
+const supabaseKey = import.meta.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90ZHN0dWJpeGFycHNpcmhjcGNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0MTk0OTAsImV4cCI6MjA3Mzk5NTQ5MH0.K3mftgyz41BtZ-7GxLHzKapoGN7xK0foXEFFyIYOaBI';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export async function get({ url }) {
+export const GET = async ({ request, url }) => {
   try {
-    const propertyId = url.searchParams.get('propertyId');
-    const date = url.searchParams.get('date');
+    console.log('Calendar availability API called with URL:', url?.toString());
+    console.log('Request URL:', request?.url);
+
+    // Try to get parameters from both url and request.url
+    const urlObj = new URL(request.url);
+    const propertyId = urlObj.searchParams.get('propertyId');
+    const date = urlObj.searchParams.get('date');
+    console.log('Parsed parameters:', { propertyId, date });
 
     if (!propertyId || !date) {
       return new Response(JSON.stringify({
