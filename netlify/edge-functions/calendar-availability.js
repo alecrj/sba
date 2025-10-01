@@ -1,34 +1,34 @@
-// Direct database integration for calendar availability
-// This connects to the CRM database to fetch real calendar configurations
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // Use the same Supabase connection as your CRM
 const supabaseUrl = 'https://otdstubixarpsirhcpcq.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90ZHN0dWJpeGFycHNpcmhjcGNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0MTk0OTAsImV4cCI6MjA3Mzk5NTQ5MH0.K3mftgyz41BtZ-7GxLHzKapoGN7xK0foXEFFyIYOaBI';
-const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Make this route server-rendered so it can access query parameters
-export const prerender = false;
-
-export const GET = async ({ request, url }) => {
+export default async (request, context) => {
   try {
-    console.log('🟢 LOCAL CALENDAR API CALLED - NEW VERSION v2.4 - SERVER RENDERED');
+    console.log('🟢 NETLIFY EDGE FUNCTION CALENDAR API CALLED');
 
-    // With server-side rendering enabled, we can access query parameters properly
+    // Parse query parameters from the URL
+    const url = new URL(request.url);
     const propertyId = url.searchParams.get('propertyId');
     const date = url.searchParams.get('date');
 
     console.log('Query parameters:', { propertyId, date });
-    console.log('Full URL:', url.toString());
 
     if (!propertyId || !date) {
       return new Response(JSON.stringify({
         error: 'propertyId and date are required'
       }), {
         status: 400,
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
       });
     }
+
+    // Initialize Supabase client
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Get the day of week for the requested date (0 = Sunday, 1 = Monday, etc.)
     const requestDate = new Date(date);
@@ -50,7 +50,10 @@ export const GET = async ({ request, url }) => {
         error: calendarError.message
       }), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
       });
     }
 
@@ -62,7 +65,10 @@ export const GET = async ({ request, url }) => {
         reason: 'Property not found or no calendar configured'
       }), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
       });
     }
 
@@ -82,7 +88,10 @@ export const GET = async ({ request, url }) => {
         reason: 'Day not available'
       }), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
       });
     }
 
@@ -119,7 +128,10 @@ export const GET = async ({ request, url }) => {
       available_slots: timeSlots
     }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
     });
 
   } catch (error) {
@@ -129,7 +141,10 @@ export const GET = async ({ request, url }) => {
       details: error.message
     }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
     });
   }
 };
