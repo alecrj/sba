@@ -3,8 +3,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Use the same Supabase connection as your CRM
-const supabaseUrl = import.meta.env.SUPABASE_URL || 'https://otdstubixarpsirhcpcq.supabase.co';
-const supabaseKey = import.meta.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90ZHN0dWJpeGFycHNpcmhjcGNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0MTk0OTAsImV4cCI6MjA3Mzk5NTQ5MH0.K3mftgyz41BtZ-7GxLHzKapoGN7xK0foXEFFyIYOaBI';
+const supabaseUrl = 'https://otdstubixarpsirhcpcq.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90ZHN0dWJpeGFycHNpcmhjcGNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0MTk0OTAsImV4cCI6MjA3Mzk5NTQ5MH0.K3mftgyz41BtZ-7GxLHzKapoGN7xK0foXEFFyIYOaBI';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const GET = async ({ request, url }) => {
@@ -36,9 +36,23 @@ export const GET = async ({ request, url }) => {
       .from('property_calendars')
       .select('id, is_active')
       .eq('property_id', propertyId)
-      .single();
+      .maybeSingle();
 
-    if (calendarError || !calendar || !calendar.is_active) {
+    if (calendarError) {
+      console.error('Calendar lookup error:', calendarError);
+      return new Response(JSON.stringify({
+        success: false,
+        available: false,
+        reason: 'Database error',
+        error: calendarError.message
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    if (!calendar || !calendar.is_active) {
+      console.log('No calendar found or inactive for property:', propertyId);
       return new Response(JSON.stringify({
         success: false,
         available: false,
@@ -56,7 +70,7 @@ export const GET = async ({ request, url }) => {
       .eq('property_id', propertyId)
       .eq('day_of_week', dayOfWeek)
       .eq('is_active', true)
-      .single();
+      .maybeSingle();
 
     if (availError || !availability) {
       return new Response(JSON.stringify({
