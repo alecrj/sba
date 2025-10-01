@@ -7,16 +7,19 @@ const supabaseUrl = 'https://otdstubixarpsirhcpcq.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90ZHN0dWJpeGFycHNpcmhjcGNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0MTk0OTAsImV4cCI6MjA3Mzk5NTQ5MH0.K3mftgyz41BtZ-7GxLHzKapoGN7xK0foXEFFyIYOaBI';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Make this route server-rendered so it can access query parameters
+export const prerender = false;
+
 export const GET = async ({ request, url }) => {
   try {
-    console.log('🟢 LOCAL CALENDAR API CALLED - NEW VERSION v2.0');
+    console.log('🟢 LOCAL CALENDAR API CALLED - NEW VERSION v2.4 - SERVER RENDERED');
 
-    // Parse query parameters from the URL
-    const requestUrl = new URL(request.url);
-    const propertyId = requestUrl.searchParams.get('propertyId');
-    const date = requestUrl.searchParams.get('date');
+    // With server-side rendering enabled, we can access query parameters properly
+    const propertyId = url.searchParams.get('propertyId');
+    const date = url.searchParams.get('date');
 
-    console.log('Parsed parameters:', { propertyId, date });
+    console.log('Query parameters:', { propertyId, date });
+    console.log('Full URL:', url.toString());
 
     if (!propertyId || !date) {
       return new Response(JSON.stringify({
