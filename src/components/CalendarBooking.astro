@@ -321,7 +321,7 @@ const propertiesByCounty = {
       timeSelect.disabled = true;
 
       try {
-        const response = await fetch(`${CRM_API_BASE}/appointments/availability?propertyId=${propertyId}&date=${selectedDate}`);
+        const response = await fetch(`${CRM_API_BASE}/public/appointments/availability?propertyId=${propertyId}&date=${selectedDate}`);
 
         timeSelect.innerHTML = '<option value="">Select time...</option>';
 
@@ -395,7 +395,7 @@ const propertiesByCounty = {
       }
 
       try {
-        const url = `${CRM_API_BASE}/appointments/availability?propertyId=${propertyId}&date=${date}`;
+        const url = `${CRM_API_BASE}/public/appointments/availability?propertyId=${propertyId}&date=${date}`;
 
         const response = await fetch(url);
 

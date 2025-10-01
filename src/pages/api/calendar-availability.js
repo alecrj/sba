@@ -13,9 +13,18 @@ export const GET = async ({ request, url }) => {
     console.log('Request URL:', request?.url);
 
     // Try to get parameters from both url and request.url
-    const urlObj = new URL(request.url);
-    const propertyId = urlObj.searchParams.get('propertyId');
-    const date = urlObj.searchParams.get('date');
+    let urlObj;
+    let propertyId, date;
+
+    if (url) {
+      propertyId = url.searchParams.get('propertyId');
+      date = url.searchParams.get('date');
+    } else if (request.url) {
+      urlObj = new URL(request.url);
+      propertyId = urlObj.searchParams.get('propertyId');
+      date = urlObj.searchParams.get('date');
+    }
+
     console.log('Parsed parameters:', { propertyId, date });
 
     if (!propertyId || !date) {
