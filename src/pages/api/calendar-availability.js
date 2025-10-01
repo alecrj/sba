@@ -9,21 +9,12 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const GET = async ({ request, url }) => {
   try {
-    console.log('Calendar availability API called with URL:', url?.toString());
-    console.log('Request URL:', request?.url);
+    console.log('Calendar availability API called');
 
-    // Try to get parameters from both url and request.url
-    let urlObj;
-    let propertyId, date;
-
-    if (url) {
-      propertyId = url.searchParams.get('propertyId');
-      date = url.searchParams.get('date');
-    } else if (request.url) {
-      urlObj = new URL(request.url);
-      propertyId = urlObj.searchParams.get('propertyId');
-      date = urlObj.searchParams.get('date');
-    }
+    // Parse query parameters from the URL
+    const requestUrl = new URL(request.url);
+    const propertyId = requestUrl.searchParams.get('propertyId');
+    const date = requestUrl.searchParams.get('date');
 
     console.log('Parsed parameters:', { propertyId, date });
 
@@ -36,7 +27,7 @@ export const GET = async ({ request, url }) => {
       });
     }
 
-    // Get the day of week for the requested date
+    // Get the day of week for the requested date (0 = Sunday, 1 = Monday, etc.)
     const requestDate = new Date(date);
     const dayOfWeek = requestDate.getDay();
 
@@ -49,8 +40,9 @@ export const GET = async ({ request, url }) => {
 
     if (calendarError || !calendar || !calendar.is_active) {
       return new Response(JSON.stringify({
+        success: false,
         available: false,
-        reason: 'No calendar configured or calendar inactive'
+        reason: 'Property not found or no calendar configured'
       }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
@@ -68,6 +60,7 @@ export const GET = async ({ request, url }) => {
 
     if (availError || !availability) {
       return new Response(JSON.stringify({
+        success: false,
         available: false,
         reason: 'Day not available'
       }), {
@@ -76,32 +69,37 @@ export const GET = async ({ request, url }) => {
       });
     }
 
-    // Check for blocked dates
-    const { data: blocked } = await supabase
-      .from('calendar_blocked_dates')
-      .select('id')
-      .eq('calendar_id', calendar.id)
-      .eq('blocked_date', date)
-      .eq('is_active', true);
+    // Generate time slots based on start and end time
+    const timeSlots = [];
+    const startHour = parseInt(availability.start_time.split(':')[0]);
+    const endHour = parseInt(availability.end_time.split(':')[0]);
 
-    if (blocked && blocked.length > 0) {
-      return new Response(JSON.stringify({
-        available: false,
-        reason: 'Date is blocked'
-      }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
+    for (let hour = startHour; hour < endHour; hour++) {
+      const time12 = hour > 12 ? `${hour - 12}:00 PM` : hour === 12 ? '12:00 PM' : `${hour}:00 AM`;
+      const timeHalf12 = hour > 12 ? `${hour - 12}:30 PM` : hour === 12 ? '12:30 PM' : `${hour}:30 AM`;
+
+      timeSlots.push({
+        time: `${hour.toString().padStart(2, '0')}:00:00`,
+        display_time: time12,
+        available: true
       });
+
+      if (hour + 0.5 < endHour) {
+        timeSlots.push({
+          time: `${hour.toString().padStart(2, '0')}:30:00`,
+          display_time: timeHalf12,
+          available: true
+        });
+      }
     }
 
-    // Return availability with time slots
     return new Response(JSON.stringify({
+      success: true,
       available: true,
       property_id: propertyId,
       date: date,
       day_of_week: dayOfWeek,
-      start_time: availability.start_time,
-      end_time: availability.end_time
+      available_slots: timeSlots
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
@@ -110,11 +108,11 @@ export const GET = async ({ request, url }) => {
   } catch (error) {
     console.error('Calendar availability error:', error);
     return new Response(JSON.stringify({
-      available: false,
-      error: 'Internal server error'
+      error: 'Internal server error',
+      details: error.message
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
   }
-}
+};
