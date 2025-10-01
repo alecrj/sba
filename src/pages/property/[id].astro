@@ -38,13 +38,17 @@ export async function getStaticPaths() {
         };
         const typeValue = typeMapping[property.type?.toLowerCase()] || 'warehouse';
 
+        // Format price - clean up any existing formatting and just use the number
+        const priceNumber = property.price.toString().replace(/[^\d.]/g, '');
+        const formattedPrice = `$${priceNumber}`;
+
         return {
           id: property.id,
           title: property.title,
           location: property.location,
           size: displaySize,
           sizeValue: sizeValue,
-          price: `$${property.price}`,
+          price: formattedPrice,
           type: property.type,
           typeValue: typeValue,
           image: property.image || "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
@@ -99,13 +103,17 @@ try {
       };
       const typeValue = typeMapping[property.type?.toLowerCase()] || 'warehouse';
 
+      // Format price - clean up any existing formatting and just use the number
+      const priceNumber = property.price.toString().replace(/[^\d.]/g, '');
+      const formattedPrice = `$${priceNumber}`;
+
       return {
         id: property.id,
         title: property.title,
         location: property.location,
         size: displaySize,
         sizeValue: sizeValue,
-        price: `$${property.price}`,
+        price: formattedPrice,
         type: property.type,
         typeValue: typeValue,
         image: property.image || "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
@@ -174,7 +182,7 @@ const relatedProperties = allWarehouses
           </div>
           <div class="flex items-center gap-4">
             <div class="text-right">
-              <div class="text-2xl font-bold text-gray-900">{warehouse.price}<span class="text-lg font-normal">/SF</span></div>
+              <div class="text-2xl font-bold text-gray-900">{warehouse.price}<span class="text-lg font-normal"> SF/Year</span></div>
               <div class="text-sm text-gray-600">{warehouse.size} • {warehouse.type}</div>
             </div>
             <div class={`px-3 py-1 rounded-full text-sm font-medium ${warehouse.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
@@ -239,7 +247,7 @@ const relatedProperties = allWarehouses
                 </div>
                 <div class="bg-white rounded-lg border border-gray-200 p-4 text-center">
                   <div class="text-sm text-gray-600 mb-1">Lease Rate</div>
-                  <div class="text-lg font-semibold text-gray-900">{warehouse.price}/SF annually</div>
+                  <div class="text-lg font-semibold text-gray-900">{warehouse.price} SF/Year</div>
                 </div>
                 <div class="bg-white rounded-lg border border-gray-200 p-4 text-center">
                   <div class="text-sm text-gray-600 mb-1">County</div>
@@ -413,7 +421,7 @@ const relatedProperties = allWarehouses
                     <p class="text-gray-600 mb-3">{property.location}</p>
                     <div class="flex justify-between items-center">
                       <span class="text-sm text-gray-500">{property.size} • {property.type}</span>
-                      <span class="font-semibold text-sba-navy">{property.price}/SF</span>
+                      <span class="font-semibold text-sba-navy">{property.price} SF/Year</span>
                     </div>
                   </div>
                 </div>

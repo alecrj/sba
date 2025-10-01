@@ -33,15 +33,11 @@ try {
       // Format size for display
       const displaySize = sizeValue > 0 ? `${sizeValue.toLocaleString()} SF` : property.size || 'N/A';
 
-      // Format price correctly - avoid double dollar signs
+      // Format price - clean up any existing formatting and just use the number
       let formattedPrice = property.price || '0';
-      if (!formattedPrice.toString().includes('$')) {
-        formattedPrice = `$${formattedPrice}`;
-      }
-      // Ensure consistent format - if it doesn't have /SF/YR, add it
-      if (!formattedPrice.includes('/') && !formattedPrice.toLowerCase().includes('year')) {
-        formattedPrice = `${formattedPrice}/SF/YR`;
-      }
+      // Strip out any existing formatting ($/SF/YR etc)
+      const priceNumber = formattedPrice.toString().replace(/[^\d.]/g, '');
+      formattedPrice = `$${priceNumber}`;
 
       // Map property type to typeValue for filtering
       const typeMapping = {
@@ -110,257 +106,7 @@ try {
   console.log('Error fetching properties from CRM:', error);
 }
 
-// Fallback static data if CRM fails
-if (Object.keys(warehousesByCounty).length === 0) {
-  warehousesByCounty = {
-  "Miami-Dade": [
-    {
-      id: 1,
-      title: "Modern Distribution Center",
-      location: "Doral, FL",
-      size: "85,000 SF",
-      sizeValue: 85000,
-      price: "$12.50",
-      type: "Distribution",
-      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
-      available: true,
-      county: "Miami-Dade",
-      description: "Premium distribution center featuring modern dock-high loading, 32-foot clear heights, and excellent highway access.",
-      features: ["Dock High Loading", "32' Clear Height", "Highway Access", "LED Lighting", "ESFR Sprinkler System"],
-      address: "8200 NW 36th St, Doral, FL 33166",
-      lat: 25.8198,
-      lng: -80.3565
-    },
-    {
-      id: 2,
-      title: "Prime Warehouse Space",
-      location: "Hialeah, FL",
-      size: "45,000 SF",
-      sizeValue: 45000,
-      price: "$10.75",
-      type: "Warehouse",
-      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
-      available: true,
-      county: "Miami-Dade",
-      description: "Well-maintained warehouse space in prime Hialeah location. Features grade-level and dock-high doors.",
-      features: ["Grade Level Doors", "Dock High Doors", "Flexible Layout", "Ample Parking"],
-      address: "1150 W 29th St, Hialeah, FL 33012",
-      lat: 25.8576,
-      lng: -80.3017
-    },
-    {
-      id: 3,
-      title: "Manufacturing Facility",
-      location: "Miami, FL",
-      size: "120,000 SF",
-      sizeValue: 120000,
-      price: "$15.00",
-      type: "Manufacturing",
-      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
-      available: true,
-      county: "Miami-Dade",
-      description: "Large-scale manufacturing facility with heavy power and crane-ready infrastructure.",
-      features: ["Heavy Power", "Crane Ready", "High Ceilings", "Rail Access"],
-      address: "3800 NW 25th St, Miami, FL 33142",
-      lat: 25.7717,
-      lng: -80.3018
-    },
-    {
-      id: 7,
-      title: "Cold Storage Facility",
-      location: "Miami Beach, FL",
-      size: "35,000 SF",
-      sizeValue: 35000,
-      price: "$18.00",
-      type: "Cold Storage",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
-      available: true,
-      county: "Miami-Dade",
-      description: "State-of-the-art cold storage facility with temperature-controlled environments and food-grade standards.",
-      features: ["Temperature Controlled", "Food Grade", "24/7 Security", "Loading Docks"],
-      address: "500 Alton Rd, Miami Beach, FL 33139",
-      lat: 25.7907,
-      lng: -80.1300
-    }
-  ],
-  "Broward": [
-    {
-      id: 4,
-      title: "Flex Industrial Space",
-      location: "Pompano Beach, FL",
-      size: "25,000 SF",
-      sizeValue: 25000,
-      price: "$14.25",
-      type: "Flex Space",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
-      available: true,
-      county: "Broward",
-      description: "Versatile flex industrial space perfect for light manufacturing, assembly, or warehouse operations with office component.",
-      features: ["Office Space", "Drive-In Doors", "Flexible Layout", "Good Highway Access"],
-      address: "1200 N Federal Hwy, Pompano Beach, FL 33062",
-      lat: 26.2379,
-      lng: -80.1248
-    },
-    {
-      id: 5,
-      title: "Logistics Hub",
-      location: "Fort Lauderdale, FL",
-      size: "95,000 SF",
-      sizeValue: 95000,
-      price: "$11.80",
-      type: "Distribution",
-      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
-      available: true,
-      county: "Broward",
-      description: "Large-scale logistics and distribution facility with excellent interstate access and modern dock facilities.",
-      features: ["Multiple Dock Doors", "Interstate Access", "Cross-Dock Design", "24-Hour Operations"],
-      address: "3600 Davie Blvd, Fort Lauderdale, FL 33312",
-      lat: 26.1224,
-      lng: -80.1918
-    },
-    {
-      id: 9,
-      title: "Distribution Warehouse",
-      location: "Hollywood, FL",
-      size: "75,000 SF",
-      sizeValue: 75000,
-      price: "$13.25",
-      type: "Distribution",
-      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
-      available: true,
-      county: "Broward",
-      description: "Modern distribution warehouse with high-efficiency LED lighting and climate-controlled office areas.",
-      features: ["LED Lighting", "Climate Controlled Office", "Clear Span Design", "Ample Trailer Parking"],
-      address: "2850 Stirling Rd, Hollywood, FL 33312",
-      lat: 26.0179,
-      lng: -80.1956
-    },
-    {
-      id: 11,
-      title: "Port Access Facility",
-      location: "Dania Beach, FL",
-      size: "60,000 SF",
-      sizeValue: 60000,
-      price: "$12.75",
-      type: "Warehouse",
-      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
-      available: true,
-      county: "Broward",
-      description: "Strategic warehouse location with direct port access for import/export operations and container storage.",
-      features: ["Port Access", "Container Storage", "Customs Bonded", "Security Fencing"],
-      address: "101 SE 2nd Ave, Dania Beach, FL 33004",
-      lat: 26.0523,
-      lng: -80.1439
-    }
-  ],
-  "Palm Beach": [
-    {
-      id: 6,
-      title: "Industrial Complex",
-      location: "Boca Raton, FL",
-      size: "65,000 SF",
-      sizeValue: 65000,
-      price: "$13.50",
-      type: "Warehouse",
-      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
-      available: true,
-      county: "Palm Beach",
-      description: "Premium industrial complex in Boca Raton with modern amenities and professional office spaces.",
-      features: ["Professional Offices", "Modern Loading", "Secure Access", "Landscaped Grounds"],
-      address: "6500 Park of Commerce Blvd, Boca Raton, FL 33487",
-      lat: 26.3683,
-      lng: -80.1289
-    },
-    {
-      id: 10,
-      title: "Tech Manufacturing Hub",
-      location: "Delray Beach, FL",
-      size: "110,000 SF",
-      sizeValue: 110000,
-      price: "$16.75",
-      type: "Manufacturing",
-      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop",
-      available: true,
-      county: "Palm Beach",
-      description: "High-tech manufacturing facility with clean room capabilities and advanced utilities for precision operations.",
-      features: ["Clean Room Ready", "Advanced Utilities", "High Power Load", "Precision HVAC"],
-      address: "15000 Jog Rd, Delray Beach, FL 33446",
-      lat: 26.4615,
-      lng: -80.1918
-    },
-    {
-      id: 12,
-      title: "Multi-Use Industrial",
-      location: "West Palm Beach, FL",
-      size: "80,000 SF",
-      sizeValue: 80000,
-      price: "$14.50",
-      type: "Flex Space",
-      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
-      available: true,
-      county: "Palm Beach",
-      description: "Multi-use industrial facility combining warehouse, light manufacturing, and office space in one location.",
-      features: ["Mixed Use Design", "Office Component", "Flexible Zoning", "Convenient Location"],
-      address: "2800 Corporate Way, West Palm Beach, FL 33407",
-      lat: 26.7153,
-      lng: -80.0533
-    },
-    {
-      id: 13,
-      title: "Distribution Center",
-      location: "Boynton Beach, FL",
-      size: "90,000 SF",
-      sizeValue: 90000,
-      price: "$13.25",
-      type: "Distribution",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
-      available: true,
-      county: "Palm Beach",
-      description: "Efficient distribution center with modern material handling systems and excellent transportation access.",
-      features: ["Material Handling Systems", "Transportation Access", "Energy Efficient", "Expansion Ready"],
-      address: "1500 Old Boynton Rd, Boynton Beach, FL 33426",
-      lat: 26.5312,
-      lng: -80.0756
-    }
-  ],
-  "St. Lucie": [
-    {
-      id: 14,
-      title: "Port Industrial Center",
-      location: "Port St. Lucie, FL",
-      size: "55,000 SF",
-      sizeValue: 55000,
-      price: "$11.25",
-      type: "Warehouse",
-      image: "https://images.unsplash.com/photo-1565884280-4e2b1f6b1b1e?w=800&h=600&fit=crop",
-      available: true,
-      county: "St. Lucie",
-      description: "Modern warehouse facility in the growing Port St. Lucie industrial corridor with excellent highway access.",
-      features: ["Highway Access", "Modern Loading", "Flexible Layout", "Expansion Ready"],
-      address: "2500 SW Gatlin Blvd, Port St. Lucie, FL 34953",
-      lat: 27.2730,
-      lng: -80.3582
-    },
-    {
-      id: 15,
-      title: "Treasure Coast Distribution",
-      location: "Fort Pierce, FL",
-      size: "85,000 SF",
-      sizeValue: 85000,
-      price: "$10.50",
-      type: "Distribution",
-      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop",
-      available: true,
-      county: "St. Lucie",
-      description: "Large distribution facility serving the Treasure Coast with rail and highway access for efficient logistics.",
-      features: ["Rail Access", "Highway Access", "Cross-Dock Design", "24-Hour Security"],
-      address: "1200 Industrial Blvd, Fort Pierce, FL 34982",
-      lat: 27.4467,
-      lng: -80.3256
-    }
-  ]
-  };
-}
+// No fallback data - only show properties from CRM
 ---
 
 <BaseLayout title="South Florida to Port St. Lucie Warehouses | Shallow Bay Advisors">
@@ -561,7 +307,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
 
                       <!-- Price -->
                       <div class="text-sm font-semibold text-gray-900">
-                        {warehouse.price}<span class="font-normal">/SF</span>
+                        {warehouse.price}<span class="font-normal"> SF/Year</span>
                         {warehouse.available && (
                           <span class="text-green-600 font-medium ml-2">Available</span>
                         )}
@@ -607,7 +353,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
 
                     <!-- Price -->
                     <div class="text-base font-semibold text-gray-900 mb-2">
-                      {warehouse.price}<span class="font-normal text-sm">/SF</span>
+                      {warehouse.price}<span class="font-normal text-sm"> SF/Year</span>
                     </div>
 
                     <!-- Location - Allow more space -->
@@ -1046,7 +792,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
                 <span class="truncate">${warehouse.size} • ${warehouse.type}</span>
               </div>
               <div class="text-sm font-semibold text-gray-900">
-                ${warehouse.price}<span class="font-normal">/SF</span>
+                ${warehouse.price}<span class="font-normal"> SF/Year</span>
                 ${warehouse.available ? '<span class="text-green-600 font-medium ml-2">Available</span>' : ''}
               </div>
             </div>
@@ -1070,7 +816,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
                 ${warehouse.title}
               </h3>
               <div class="text-sm font-semibold text-gray-900 mb-1">
-                ${warehouse.price}<span class="font-normal">/SF</span>
+                ${warehouse.price}<span class="font-normal"> SF/Year</span>
               </div>
               <p class="text-gray-500 text-xs mb-1 truncate">
                 ${warehouse.location}
@@ -1312,7 +1058,7 @@ if (Object.keys(warehousesByCounty).length === 0) {
               <div class="font-semibold text-gray-900">${property.title}</div>
               <div class="text-gray-600">${property.location}</div>
               <div class="text-gray-500">${property.size} • ${property.type}</div>
-              <div class="font-semibold text-sba-navy">${property.price}/SF</div>
+              <div class="font-semibold text-sba-navy">${property.price} SF/Year</div>
             </div>
           `, {
             permanent: false,
