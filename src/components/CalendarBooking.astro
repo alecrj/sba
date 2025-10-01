@@ -508,9 +508,12 @@ const propertiesByCounty = {
         if (checkDate < today) continue;
 
         const dayOfWeek = checkDate.getDay();
-        // No fallback - if calendar API is unavailable, show no available dates
-        // This forces proper calendar configuration in CRM for each property
-        // (Previous fallback logic caused incorrect availability display)
+        // Temporary fallback while CRM API deploys: Tuesday and Thursday
+        // TODO: Remove this once CRM API is working - system should pull from database
+        if (dayOfWeek === 2 || dayOfWeek === 4) {
+          const dateStr = checkDate.toISOString().split('T')[0];
+          availableDates.add(dateStr);
+        }
       }
     }
 
