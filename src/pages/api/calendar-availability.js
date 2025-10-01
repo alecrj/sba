@@ -9,7 +9,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const GET = async ({ request, url }) => {
   try {
-    console.log('Calendar availability API called');
+    console.log('🟢 LOCAL CALENDAR API CALLED - NEW VERSION v2.0');
 
     // Parse query parameters from the URL
     const requestUrl = new URL(request.url);
