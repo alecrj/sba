@@ -79,7 +79,8 @@ export default async (request, context) => {
       .eq('property_id', propertyId)
       .eq('day_of_week', dayOfWeek)
       .eq('is_active', true)
-      .maybeSingle();
+      .limit(1)
+      .single();
 
     if (availError || !availability) {
       return new Response(JSON.stringify({
