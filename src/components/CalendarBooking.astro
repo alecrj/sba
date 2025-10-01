@@ -508,8 +508,8 @@ const propertiesByCounty = {
         if (checkDate < today) continue;
 
         const dayOfWeek = checkDate.getDay();
-        // Monday = 1, Friday = 5 (business days)
-        if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+        // Tuesday only (2) as fallback to match calendar configuration
+        if (dayOfWeek === 2) {
           const dateStr = checkDate.toISOString().split('T')[0];
           availableDates.add(dateStr);
         }
