@@ -159,7 +159,7 @@ const relatedProperties = allWarehouses
     <div class="bg-white border-b border-gray-200">
       <div class="max-w-7xl mx-auto px-6 py-4">
         <nav class="text-sm">
-          <a href="/" class="text-gray-600 hover:text-sba-navy">Home</a>
+          <a href="/" class="text-gray-600 hover:text-sba-navy">Find</a>
           <span class="mx-2 text-gray-400">></span>
           <span class="text-sba-navy font-medium">{warehouse.title}</span>
         </nav>
@@ -206,9 +206,10 @@ const relatedProperties = allWarehouses
             <!-- Main Large Image -->
             <div class="relative aspect-[4/3] rounded-xl overflow-hidden mb-4">
               <img
+                id="main-property-image"
                 src={warehouse.image}
                 alt={warehouse.title}
-                class="w-full h-full object-cover"
+                class="w-full h-full object-cover transition-all duration-500"
               />
               <button class="absolute bottom-4 right-4 bg-white text-gray-900 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 shadow-lg">
                 <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -221,7 +222,7 @@ const relatedProperties = allWarehouses
             <!-- Horizontal Gallery Under Main Image -->
             <div class="flex gap-3 overflow-x-auto scrollbar-hide pb-4 mb-8" style="scroll-snap-type: x mandatory;">
               {(warehouse.photos || [warehouse.image]).map((photo, index) => (
-                <div class="flex-none w-24 aspect-[4/3] rounded-lg overflow-hidden" style="scroll-snap-align: start;">
+                <div class="flex-none w-24 aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all duration-300 gallery-thumbnail" style="scroll-snap-align: start;" data-src={photo}>
                   <img
                     src={photo}
                     alt={`${warehouse.title} - Photo ${index + 1}`}
@@ -436,3 +437,69 @@ const relatedProperties = allWarehouses
 
   <Footer />
 </BaseLayout>
+
+<style>
+  /* Gallery thumbnail styles */
+  .gallery-thumbnail {
+    border-color: transparent;
+  }
+
+  .gallery-thumbnail:hover {
+    border-color: #e5e7eb;
+    transform: scale(1.05);
+  }
+
+  .gallery-thumbnail.active {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px #3b82f6;
+  }
+
+  /* Smooth scrolling for gallery */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const mainImage = document.getElementById('main-property-image');
+    const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+
+    if (!mainImage || !thumbnails.length) return;
+
+    // Set initial active state on first thumbnail
+    if (thumbnails[0]) {
+      thumbnails[0].classList.add('active');
+    }
+
+    // Add click handlers to thumbnails
+    thumbnails.forEach((thumbnail, index) => {
+      thumbnail.addEventListener('click', function() {
+        // Remove active class from all thumbnails
+        thumbnails.forEach(t => t.classList.remove('active'));
+
+        // Add active class to clicked thumbnail
+        this.classList.add('active');
+
+        // Get the image source from data attribute
+        const newImageSrc = this.dataset.src;
+
+        if (newImageSrc && mainImage) {
+          // Add fade effect
+          mainImage.style.opacity = '0.5';
+
+          // Change the image source after short delay for smooth transition
+          setTimeout(() => {
+            mainImage.src = newImageSrc;
+            mainImage.style.opacity = '1';
+          }, 150);
+        }
+      });
+    });
+  });
+</script>

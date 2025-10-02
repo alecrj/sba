@@ -3,31 +3,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
-import { getCollection } from 'astro:content';
+import CalendarBooking from '../components/CalendarBooking.astro';
 
-// Get available properties for the dropdown
-let availableProperties = [];
-try {
-  const allWarehouses = await getCollection('warehouses');
-  availableProperties = allWarehouses
-    .filter(w => w.data.availability === 'available')
-    .map(w => ({ title: w.data.title, slug: w.data.slug }));
-} catch (error) {
-  console.log('No properties available for booking');
-}
-
-// Time slots for booking
-const timeSlots = [
-  '9:00 AM',
-  '10:00 AM',
-  '11:00 AM',
-  '12:00 PM',
-  '1:00 PM',
-  '2:00 PM',
-  '3:00 PM',
-  '4:00 PM',
-  '5:00 PM'
-];
 ---
 
 <BaseLayout
@@ -60,7 +37,7 @@ const timeSlots = [
       </div>
     </section>
 
-    <!-- Booking Form Section -->
+    <!-- Calendar Booking Section -->
     <section class="py-20 bg-white">
       <div class="container mx-auto px-4">
         <div class="max-w-4xl mx-auto">
@@ -75,119 +52,14 @@ const timeSlots = [
             </p>
           </div>
 
-          <!-- Booking Form -->
-          <form id="booking-form" class="space-y-8">
-            <!-- Contact Information -->
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <label class="block text-sm font-black text-black mb-3 uppercase tracking-wider">Name *</label>
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  class="w-full h-14 bg-white border-2 border-neutral-200 rounded-xl text-black px-4 focus:border-electric-500 focus:ring-0 focus:outline-none transition-all duration-200 font-semibold"
-                  placeholder="Your Name"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-black text-black mb-3 uppercase tracking-wider">Email *</label>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  class="w-full h-14 bg-white border-2 border-neutral-200 rounded-xl text-black px-4 focus:border-electric-500 focus:ring-0 focus:outline-none transition-all duration-200 font-semibold"
-                  placeholder="your@email.com"
-                />
-              </div>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <label class="block text-sm font-black text-black mb-3 uppercase tracking-wider">Phone *</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  required
-                  class="w-full h-14 bg-white border-2 border-neutral-200 rounded-xl text-black px-4 focus:border-electric-500 focus:ring-0 focus:outline-none transition-all duration-200 font-semibold"
-                  placeholder="(555) 123-4567"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-black text-black mb-3 uppercase tracking-wider">Company</label>
-                <input
-                  type="text"
-                  name="company"
-                  class="w-full h-14 bg-white border-2 border-neutral-200 rounded-xl text-black px-4 focus:border-electric-500 focus:ring-0 focus:outline-none transition-all duration-200 font-semibold"
-                  placeholder="Company Name"
-                />
-              </div>
-            </div>
-
-            <!-- Property Selection -->
-            <div>
-              <label class="block text-sm font-black text-black mb-3 uppercase tracking-wider">Property Interest</label>
-              <select
-                name="property"
-                class="w-full h-14 bg-white border-2 border-neutral-200 rounded-xl text-black px-4 focus:border-electric-500 focus:ring-0 focus:outline-none transition-all duration-200 font-semibold"
-              >
-                <option value="">General Tour - Show me what's available</option>
-                {availableProperties.map(property => (
-                  <option value={property.slug}>{property.title}</option>
-                ))}
-              </select>
-            </div>
-
-            <!-- Date and Time Selection -->
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <label class="block text-sm font-black text-black mb-3 uppercase tracking-wider">Preferred Date *</label>
-                <input
-                  type="date"
-                  name="date"
-                  required
-                  min={new Date().toISOString().split('T')[0]}
-                  class="w-full h-14 bg-white border-2 border-neutral-200 rounded-xl text-black px-4 focus:border-electric-500 focus:ring-0 focus:outline-none transition-all duration-200 font-semibold"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-black text-black mb-3 uppercase tracking-wider">Preferred Time *</label>
-                <select
-                  name="time"
-                  required
-                  class="w-full h-14 bg-white border-2 border-neutral-200 rounded-xl text-black px-4 focus:border-electric-500 focus:ring-0 focus:outline-none transition-all duration-200 font-semibold"
-                >
-                  <option value="">Select a time</option>
-                  {timeSlots.map(time => (
-                    <option value={time}>{time}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <!-- Additional Information -->
-            <div>
-              <label class="block text-sm font-black text-black mb-3 uppercase tracking-wider">Requirements & Notes</label>
-              <textarea
-                name="notes"
-                rows="4"
-                class="w-full bg-white border-2 border-neutral-200 rounded-xl text-black p-4 focus:border-electric-500 focus:ring-0 focus:outline-none transition-all duration-200 resize-none font-semibold"
-                placeholder="Tell us about your space requirements, timeline, special needs, etc."
-              ></textarea>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="text-center pt-8">
-              <button
-                type="submit"
-                class="btn-primary rounded-xl text-lg px-16 py-4 hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-              >
-                BOOK MY TOUR
-              </button>
-              <p class="text-sm text-neutral-500 mt-4">
-                We'll confirm your tour within 2 hours and send calendar reminders
-              </p>
-            </div>
-          </form>
+          <!-- Calendar Booking Component -->
+          <div class="bg-white rounded-xl p-8 shadow-lg border border-gray-200">
+            <CalendarBooking
+              title=""
+              subtitle=""
+              buttonText="BOOK MY TOUR"
+            />
+          </div>
         </div>
       </div>
     </section>
@@ -307,79 +179,3 @@ const timeSlots = [
   }
 </style>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const bookingForm = document.getElementById('booking-form');
-
-    if (bookingForm) {
-      bookingForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        const submitBtn = bookingForm.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-
-        // Show loading state
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'BOOKING YOUR TOUR...';
-
-        try {
-          // Collect form data
-          const formData = new FormData(bookingForm);
-          const data = Object.fromEntries(formData.entries());
-
-          // Add source and timestamp
-          data.source = 'tour_booking';
-          data.timestamp = new Date().toISOString();
-
-          // In a real implementation, submit to your booking system
-          console.log('Tour booking data:', data);
-
-          // Simulate API call
-          await new Promise(resolve => setTimeout(resolve, 2000));
-
-          // Show success message
-          const successMessage = document.createElement('div');
-          successMessage.className = 'fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4';
-          successMessage.innerHTML = `
-            <div class="bg-white rounded-2xl p-8 max-w-md w-full text-center">
-              <div class="w-16 h-16 bg-success-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-              </div>
-              <h3 class="text-2xl font-black text-black mb-4">TOUR BOOKED!</h3>
-              <p class="text-neutral-600 mb-6">We'll confirm your tour within 2 hours and send calendar reminders.</p>
-              <button onclick="this.parentElement.parentElement.remove()" class="btn-primary rounded-xl px-8 py-3">
-                CLOSE
-              </button>
-            </div>
-          `;
-          document.body.appendChild(successMessage);
-
-          // Reset form
-          bookingForm.reset();
-
-        } catch (error) {
-          console.error('Error booking tour:', error);
-          alert('There was an error booking your tour. Please try again or call us directly at (***) ***-****.');
-        } finally {
-          // Reset button state
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalText;
-        }
-      });
-    }
-
-    // Set minimum date to today
-    const dateInput = document.querySelector('input[type="date"]');
-    if (dateInput) {
-      const today = new Date().toISOString().split('T')[0];
-      dateInput.min = today;
-
-      // Set default date to tomorrow
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      dateInput.value = tomorrow.toISOString().split('T')[0];
-    }
-  });
-</script>
