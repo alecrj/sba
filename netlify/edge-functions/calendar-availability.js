@@ -96,6 +96,33 @@ export default async (request, context) => {
       });
     }
 
+    // Check if this specific date is blocked
+    const { data: blockedDate, error: blockedError } = await supabase
+      .from('calendar_blocked_dates')
+      .select('id, reason')
+      .eq('property_id', propertyId)
+      .eq('blocked_date', date)
+      .maybeSingle();
+
+    if (blockedError) {
+      console.error('Error checking blocked dates:', blockedError);
+      // Continue execution - don't fail if blocked dates check fails
+    }
+
+    if (blockedDate) {
+      return new Response(JSON.stringify({
+        success: false,
+        available: false,
+        reason: blockedDate.reason || 'Date blocked'
+      }), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
+      });
+    }
+
     // Generate time slots based on start and end time
     const timeSlots = [];
     const startHour = parseInt(availability.start_time.split(':')[0]);
