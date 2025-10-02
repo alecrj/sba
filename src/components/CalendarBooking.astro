@@ -780,8 +780,8 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
           data.source = 'appointment_booking';
           data.appointment_type = 'consultation';
 
-          // Submit to CRM appointment booking API (not leads API)
-          const response = await fetch(`${CRM_API_BASE}/appointments`, {
+          // Submit to CRM leads API
+          const response = await fetch(`${CRM_BASE_URL}/api/public/leads`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -801,7 +801,7 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
           }
         } catch (error) {
           console.error('Error booking appointment:', error);
-          alert('There was an error booking your appointment. Please try again or call us directly at (954) 937-9667.');
+          alert('There was an error booking your appointment. Please try again or call us directly at (323) 810-7241.');
 
           // Reset button state
           submitBtn.disabled = false;
