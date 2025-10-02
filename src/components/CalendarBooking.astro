@@ -24,7 +24,7 @@ const fallbackTimeSlots = [
 ];
 
 // Properties will be loaded dynamically from CRM API
-const CRM_BASE_URL = 'https://sbay-crm.netlify.app';
+const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
 ---
 
 <div class="p-0">
@@ -258,7 +258,7 @@ const CRM_BASE_URL = 'https://sbay-crm.netlify.app';
 <script is:inline>
   document.addEventListener('DOMContentLoaded', function() {
     const CRM_API_BASE = '/api'; // Use Netlify Edge Functions
-    const CRM_BASE_URL = 'https://sbay-crm.netlify.app';
+    const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
     let availableDates = new Set();
     let currentSelectedDate = null;
     let currentMonth = new Date().getMonth();
