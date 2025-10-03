@@ -787,6 +787,9 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
           data.source = 'website';
           data.appointment_type = 'consultation';
 
+          // Remove conflicting property_id field (keep only propertyId)
+          delete data.property_id;
+
           // Submit to CRM leads API
           const response = await fetch(`${CRM_BASE_URL}/api/public/leads`, {
             method: 'POST',
