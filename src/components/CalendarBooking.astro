@@ -518,7 +518,7 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
             .then(response => {
               if (response.ok) {
                 return response.json().then(data => {
-                  if (data.available) {
+                  if (data.success && data.available_slots && data.available_slots.length > 0) {
                     availableDates.add(dateStr);
                   }
                 });
