@@ -790,6 +790,9 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
           // Remove conflicting property_id field (keep only propertyId)
           delete data.property_id;
 
+          // Debug: Log what we're actually sending
+          console.log('About to send this data:', JSON.stringify(data, null, 2));
+
           // Submit to CRM leads API
           const response = await fetch(`${CRM_BASE_URL}/api/public/leads`, {
             method: 'POST',
