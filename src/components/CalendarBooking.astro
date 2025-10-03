@@ -773,8 +773,8 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
           }
 
           // Map date and time for appointment booking
-          data.appointmentDate = data.appointment_date;
-          data.appointmentTime = data.appointment_time;
+          data.appointmentDate = currentSelectedDate;
+          data.appointmentTime = timeSelect.value;
 
           // Split name into first_name and last_name
           if (data.name) {
