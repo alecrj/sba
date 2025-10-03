@@ -303,7 +303,7 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
       timeSelect.disabled = true;
 
       try {
-        const response = await fetch(`${CRM_API_BASE}/calendar-availability?propertyId=${propertyId}&date=${selectedDate}`);
+        const response = await fetch(`${CRM_BASE_URL}/api/public/appointments/availability?propertyId=${propertyId}&date=${selectedDate}`);
 
         timeSelect.innerHTML = '<option value="">Select time...</option>';
 
@@ -377,7 +377,7 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
       }
 
       try {
-        const url = `${CRM_API_BASE}/calendar-availability?propertyId=${propertyId}&date=${date}`;
+        const url = `${CRM_BASE_URL}/api/public/appointments/availability?propertyId=${propertyId}&date=${date}`;
 
         const response = await fetch(url);
 
@@ -462,7 +462,7 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
         testDate.setDate(testDate.getDate() + 1); // Tomorrow
         const dateStr = testDate.toISOString().split('T')[0];
 
-        const response = await fetch(`${CRM_API_BASE}/calendar-availability?propertyId=${propertyId}&date=${dateStr}`);
+        const response = await fetch(`${CRM_BASE_URL}/api/public/appointments/availability?propertyId=${propertyId}&date=${dateStr}`);
 
         const hasCalendar = response.ok && response.status !== 404;
 
@@ -514,7 +514,7 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
 
         // Check availability for this specific date
         promises.push(
-          fetch(`${CRM_API_BASE}/calendar-availability?propertyId=${propertyId}&date=${dateStr}`)
+          fetch(`${CRM_BASE_URL}/api/public/appointments/availability?propertyId=${propertyId}&date=${dateStr}`)
             .then(response => {
               if (response.ok) {
                 return response.json().then(data => {
@@ -780,8 +780,8 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
           data.source = 'appointment_booking';
           data.appointment_type = 'consultation';
 
-          // Submit to CRM leads API
-          const response = await fetch(`${CRM_BASE_URL}/api/public/leads`, {
+          // Submit to Netlify function (consistent with requirements form)
+          const response = await fetch('/.netlify/functions/process-requirements', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
