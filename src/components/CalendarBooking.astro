@@ -776,6 +776,13 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
           data.appointmentDate = data.appointment_date;
           data.appointmentTime = data.appointment_time;
 
+          // Split name into first_name and last_name
+          if (data.name) {
+            const nameParts = data.name.trim().split(' ');
+            data.first_name = nameParts[0] || '';
+            data.last_name = nameParts.slice(1).join(' ') || '';
+          }
+
           // Set appointment booking flags
           data.source = 'website';
           data.appointment_type = 'consultation';
