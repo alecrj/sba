@@ -74,7 +74,7 @@ window.handleFormSubmission = async (event, source = 'unknown') => {
     }
   } catch (error) {
     console.error('Submission failed:', error);
-    alert('There was an error submitting your form. Please try again or call us at (954) 937-9667.');
+    alert('There was an error submitting your form. Please try again or call us at (323) 810-7241.');
     
     // Reset button
     submitButton.disabled = false;
