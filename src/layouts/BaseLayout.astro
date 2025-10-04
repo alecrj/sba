@@ -1,6 +1,5 @@
 ---
 // Clean BaseLayout with proper TypeScript and Mobile App Experience
-import ContactModal from '../components/ContactModal.astro';
 import MobileBottomNav from '../components/MobileBottomNav.astro';
 
 export interface Props {
@@ -245,9 +244,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <!-- Mobile Bottom Navigation -->
     <MobileBottomNav />
-
-    <!-- Contact Modal - Include at the end of body -->
-    <ContactModal />
     
     <!-- Global Language System -->
     <script is:inline>
