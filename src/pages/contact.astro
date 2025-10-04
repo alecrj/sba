@@ -267,18 +267,6 @@ import CalendarBooking from '../components/CalendarBooking.astro';
                 </button>
               </div>
 
-              <!-- Success Message -->
-              <div id="req-success" class="hidden bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                  </svg>
-                </div>
-                <h4 class="font-semibold text-green-900 mb-2">Requirements Received!</h4>
-                <p class="text-green-700 text-sm">
-                  We'll search our database and contact you within 24 hours with matching properties.
-                </p>
-              </div>
             </form>
           </div>
 
@@ -289,6 +277,38 @@ import CalendarBooking from '../components/CalendarBooking.astro';
   </main>
 
   <Footer />
+
+  <!-- Requirements Success Modal -->
+  <div id="req-success-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+
+    <!-- Modal Content -->
+    <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
+      <!-- Success Icon -->
+      <div class="w-16 h-16 bg-green-100 dark:bg-green-900/40 rounded-full flex items-center justify-center mx-auto mb-6">
+        <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+
+      <!-- Success Message -->
+      <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
+        Requirements Received!
+      </h2>
+      <p class="text-gray-600 dark:text-gray-300 mb-8">
+        We'll search our database and contact you within 24 hours with matching properties.
+      </p>
+
+      <!-- Browse More Button -->
+      <a
+        href="/find"
+        class="inline-block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+      >
+        Browse More Properties
+      </a>
+    </div>
+  </div>
 </BaseLayout>
 
 <style>
@@ -317,7 +337,7 @@ import CalendarBooking from '../components/CalendarBooking.astro';
         const submitBtn = document.getElementById('req-submit-btn');
         const submitText = submitBtn.querySelector('.submit-text');
         const loadingText = submitBtn.querySelector('.loading-text');
-        const successDiv = document.getElementById('req-success');
+        const successModal = document.getElementById('req-success-modal');
 
         // Show loading state
         submitBtn.disabled = true;
@@ -353,12 +373,8 @@ import CalendarBooking from '../components/CalendarBooking.astro';
           });
 
           if (response.ok) {
-            // Show success message
-            requirementsForm.classList.add('hidden');
-            successDiv.classList.remove('hidden');
-
-            // Scroll to success message
-            successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Show success modal
+            successModal.classList.remove('hidden');
           } else {
             throw new Error('Requirements submission failed');
           }
