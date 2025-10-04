@@ -68,10 +68,13 @@ try {
       const tempLat = coords.baseLat;
       const tempLng = coords.baseLng;
 
+      // Extract just the city name from location (e.g., "Coral Gables" from "Coral Gables, Miami-Dade, FL")
+      const cityName = property.location?.split(',')[0]?.trim() || property.location;
+
       return {
         id: property.id,
         title: property.title,
-        location: property.location,
+        location: cityName,
         size: displaySize,
         sizeValue: sizeValue,
         price: formattedPrice,
