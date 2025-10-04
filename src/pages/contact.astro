@@ -344,8 +344,8 @@ import CalendarBooking from '../components/CalendarBooking.astro';
           data.appointmentDate = new Date().toISOString().split('T')[0]; // Required by CRM API
           data.appointmentTime = '12:00 PM'; // Default time for non-tour leads
 
-          // Submit to CRM function
-          const response = await fetch('/.netlify/functions/process-requirements', {
+          // Submit directly to CRM API
+          const response = await fetch('https://sbaycrm.netlify.app/api/public/leads', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
