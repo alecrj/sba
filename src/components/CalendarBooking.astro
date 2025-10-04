@@ -332,21 +332,11 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
           const errorText = await response.text();
           console.error('Time slots API error:', response.status, errorText);
 
-          // If no calendar configured, provide default business hours
+          // If no calendar configured, show error - don't allow booking without availability data
           if (response.status === 404 || errorText.includes('Property not found or no calendar configured')) {
-            console.log('No calendar configured, providing default business hours');
-            const businessHours = [
-              "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
-              "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM"
-            ];
-
-            businessHours.forEach(time => {
-              const option = document.createElement('option');
-              option.value = time;
-              option.textContent = time;
-              timeSelect.appendChild(option);
-            });
-            timeSelect.disabled = false;
+            console.log('No calendar configured for this property');
+            timeSelect.innerHTML = '<option value="">No calendar configured for this property</option>';
+            timeSelect.disabled = true;
             return;
           }
 
@@ -368,20 +358,9 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
         }
       } catch (error) {
         console.error('Error loading time slots:', error);
-        // Fallback to default business hours
-        timeSelect.innerHTML = '<option value="">Select time...</option>';
-        const businessHours = [
-          "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
-          "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM"
-        ];
-
-        businessHours.forEach(time => {
-          const option = document.createElement('option');
-          option.value = time;
-          option.textContent = time;
-          timeSelect.appendChild(option);
-        });
-        timeSelect.disabled = false;
+        // Don't fallback to default hours - require proper availability data
+        timeSelect.innerHTML = '<option value="">Error loading availability. Please try again.</option>';
+        timeSelect.disabled = true;
       }
     }
 
