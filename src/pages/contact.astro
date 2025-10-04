@@ -329,10 +329,20 @@ import CalendarBooking from '../components/CalendarBooking.astro';
           const formData = new FormData(requirementsForm);
           const data = Object.fromEntries(formData.entries());
 
+          // Split name into first_name and last_name for CRM API
+          if (data.name) {
+            const nameParts = data.name.trim().split(' ');
+            data.first_name = nameParts[0] || '';
+            data.last_name = nameParts.slice(1).join(' ') || '';
+          }
+
           // Add requirements-specific metadata
           data.source = 'custom_requirements_form';
           data.type = 'custom_requirements';
           data.lead_source = 'contact_page_requirements';
+          data.status = 'new';
+          data.appointmentDate = new Date().toISOString().split('T')[0]; // Required by CRM API
+          data.appointmentTime = '12:00 PM'; // Default time for non-tour leads
 
           // Submit to CRM function
           const response = await fetch('/.netlify/functions/process-requirements', {

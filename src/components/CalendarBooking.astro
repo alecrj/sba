@@ -786,6 +786,7 @@ const CRM_BASE_URL = 'https://sbaycrm.netlify.app';
           // Set appointment booking flags
           data.source = 'website';
           data.appointment_type = 'consultation';
+          data.status = 'tour-scheduled';
 
           // Remove conflicting property_id field (keep only propertyId)
           delete data.property_id;
